@@ -1,0 +1,33 @@
+# Table of content
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+- file: index
+
+- part: 👨‍🎓 Tutorials
+  chapters:
+  - file: tutorials/getting_started
+  - file: tutorials/overview
+    title: Overview
+  - file: content
+    sections:
+    - file: markdown
+    - file: notebooks
+
+- part: 👩‍🍳 User guide
+  chapters:
+  - file: guide/amortization/amortization
+  - file: guide/circular/circular
+    sections:
+      - file: guide/circular/toy
+
+- part: 🕵️‍♀️ Explanation
+  chapters:
+  - file: explanation/amortization
+
+- part: 🦸 Reference
+  chapters:
+  - file: content
+
+- part: About
+  chapters:
+  - file: content

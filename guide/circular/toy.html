@@ -44,6 +44,7 @@
     <script src="../../_static/togglebutton.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -109,24 +110,10 @@
    Overview
   </a>
  </li>
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="../../content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../tutorials/cc2.html">
+   On all genes
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 <p class="caption collapsible-parent">
@@ -136,7 +123,17 @@
 </p>
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../amortization/amortization.html">
+  <a class="reference internal" href="../variables.html">
+   Variables
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../variational/variational.html">
+   Variational distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../variational/amortization.html">
    Amortization
   </a>
  </li>
@@ -173,24 +170,10 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="../../content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reference/overview.html">
+   Reference
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 <p class="caption collapsible-parent">
@@ -199,24 +182,10 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="../../content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../about/acknowledgements.html">
+   Acknowledgements
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 
@@ -299,7 +268,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/master?urlpath=lab/tree/./guide/circular/toy.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./guide/circular/toy.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -387,7 +356,7 @@
 <span class="n">sample_ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)]</span>
 <span class="n">sample_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">sample_ids</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cell&quot;</span><span class="p">)</span>
 
-<span class="n">angle_value</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="n">n_samples</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">sample_index</span><span class="p">)</span>
+<span class="n">angle_value</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="n">n_samples</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">tau</span><span class="p">),</span> <span class="n">index</span> <span class="o">=</span> <span class="n">sample_index</span><span class="p">)</span>
 <span class="n">angle_value</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
 <span class="n">angle_value</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cell&quot;</span>
 <span class="n">angle</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">angle_value</span><span class="p">,</span> <span class="n">distribution</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">CircularUniform</span><span class="p">(),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;circular&quot;</span><span class="p">)</span>
@@ -827,8 +796,8 @@ SyntaxError: invalid syntax
 <span class="p">)</span>
 <span class="n">seq</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">NN</span><span class="p">(</span><span class="n">inpu</span><span class="p">,</span> <span class="n">nn</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">(</span><span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;virtual&quot;</span><span class="p">],</span> <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">25</span><span class="p">]),</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;■&quot;</span><span class="p">)</span>
 
-<span class="n">seq_loc</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">old_loc</span><span class="o">.</span><span class="n">debroadcast</span><span class="p">(</span><span class="n">old_loc</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="n">seq_scale</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">old_scale</span><span class="o">.</span><span class="n">debroadcast</span><span class="p">(</span><span class="n">old_loc</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">seq_loc</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">old_loc</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">old_loc</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">seq_scale</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">old_scale</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">old_loc</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -957,7 +926,7 @@ SyntaxError: invalid syntax
     <div class="container">
       <p>
         
-          By Latenta team<br/>
+          By Wouter Saelens<br/>
         
             &copy; Copyright 2020.<br/>
       </p>

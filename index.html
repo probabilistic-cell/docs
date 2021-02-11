@@ -44,6 +44,7 @@
     <script src="_static/togglebutton.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
+    <script src="_static/js/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -108,24 +109,10 @@
    Overview
   </a>
  </li>
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorials/cc2.html">
+   On all genes
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 <p class="caption collapsible-parent">
@@ -135,7 +122,17 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="guide/amortization/amortization.html">
+  <a class="reference internal" href="guide/variables.html">
+   Variables
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide/variational/variational.html">
+   Variational distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide/variational/amortization.html">
    Amortization
   </a>
  </li>
@@ -172,24 +169,10 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="reference/overview.html">
+   Reference
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 <p class="caption collapsible-parent">
@@ -198,24 +181,10 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="content.html">
-   Content in Jupyter Book
+ <li class="toctree-l1">
+  <a class="reference internal" href="about/acknowledgements.html">
+   Acknowledgements
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="markdown.html">
-     Markdown Files
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="notebooks.html">
-     Content with notebooks
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 
@@ -305,7 +274,8 @@
         
               <div>
                 
-  <div class="row full-width">
+  <div class="container">
+<div class="row full-width">
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
@@ -364,21 +334,36 @@
         </div>
     </div>
 </div>
+</div>
 <br>
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>Latenta models the cell as a combination of different <em>cellular processes</em> (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, …). Each of these processes influence <em>observations</em> (transcriptome, surface proteome, phenotype, …). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Through a Bayesian inference framework, latenta makes it possible to determine which of these processes interact, and select interpretable, mechanistic and statistically significant models of how these interactions affect the cellular state. In this way, it allows you to answer questions such as:</p>
+<p>Latenta models the cell as a combination of different <em>cellular processes</em> (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, …). Each of these processes influence <em>observations</em> (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, …). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable <em>mechanistic</em> models. In this way, it allows you to answer questions such as:</p>
 <ul class="simple">
+<li><p>How does the remaining variation look like once I model («regress out») my time series, batch effect and cell cycle?</p></li>
 <li><p>Does my genetic perturbation affect target gene expression in a linear, sigmoid, exponential or more complex manner?</p></li>
-<li><p>Is my genetic perturbation inducing two or three cellular states?</p></li>
 <li><p>How is the cell cycle distributed with zonation?</p></li>
-<li><p>Are there genes that are induced after 6 hours in all celltypes?</p></li>
+<li><p>Are there genes that are induced after 6 hours commonly in all celltypes?</p></li>
 <li><p>Does the surgery «interact» with the cell cycle?</p></li>
 <li><p>Do my genetic perturbations interact? Is this in an additive, synergistic, or more complex <em>epistatic</em> manner?</p></li>
 <li><p>How many cells are cycling in a spatial spot, and in which phases are these cells?</p></li>
-<li><p>How does the remaining variation look like once I model («regress out») my time series, batch effect and cell cycle?</p></li>
+<li><p>Is my genetic perturbation inducing two or three cellular states?</p></li>
 </ul>
-<p>Latenta is modular by design, and this is particularly useful when working on larger projects or multimodal datasets. For example, a cell cycle model can be fitted once and then reused across single-cell and spatial datasets. Or, a latent variable can be fit on one modality (e.g. the transcriptome) and then used to model other modalities. But most importantly, having one unified framework allows the simultaneous modelling different processes, whether you are modelling scalar variables (trajectories, zonation, time), circular variables (cell cycle, circadian clock), discrete variables (clustering, cell type, cell state, batch effect), vector variables (embedding, proportions), nuissance variables (batch, ambient mRNA), different modalities (transcriptome, surface proteome) or different ways of sampling (spatial, nuclear, RNA-FISH, …).</p>
+<p>Key concepts are:</p>
+<ul class="simple">
+<li><p><strong>Modular</strong>: Although each biological dataset and question is unique, different processes come up again and again and can thus be reused across models. Latent contains different standard modules to different cellular processes, such as a clustering, a batch effect, a transcriptome, a linear trajectory, … and these can be combined in ways to suit a particular dataset.</p></li>
+<li><p><strong>Flexible</strong>: Technology and biology is still evolving, and we cannot predict what kind of models will be necessary to model these new data types. Moreover, most technical parameters, such as a transcriptome’s library size, can also have a biological meaning. Latenta provides the flexibility to adapt a model to a particular use case, and to extend</p></li>
+<li><p><strong>Scalable</strong>: Single-cell omics datasets are relatively large, both in number of cells and in number of features. Moreover, a user will likely require several modelling steps and iterations ideally done in an interactive fashion.</p></li>
+<li><p><strong>Statistical significance</strong>: Despite large cell numbers, the actual number of biological replicates (tissues, patients, …), is relatively low. Latenta therefore contains tools to assess statistical significance of your findings.</p></li>
+<li><p><strong>Model selection</strong>: We typically don’t know the underlying biochemical mechanism that drives certain biological processes. In fact, understanding this mechanism is often one desired outcome of the study. Latenta thus contains methods to do model selection, and to check whether some models are more or equally likely than others.</p></li>
+<li><p><strong>Hidden latent variables</strong>: Interesting biological phenomena, such as cell differentiation or the cell cycle, are often unobserved. Latenta allows you to model these hidden latent variables and relate them to observation.</p></li>
+<li><p><strong>Hypothetical latent variables</strong>: If we want to do an unbiased analysis, or want to model any unexplained variation, we can put these into hypothetical latent variables (such as a clustering or an embedding). Latenta contains tools to model these variables and combine them with hidden latent variables (i.e. “regressing out”).</p></li>
+<li><p><strong>Interpretability</strong>: Interpretable models are often preferable, both for the latent space (for example, latent variables that denote the cell cycle) and any functions that connect the latent space to observations (for example, a hill equation). Latenta’s models therefore often focus on interpretability, and only use black-box functions such as neural networks when extreme flexibility is required.</p></li>
+<li><p><strong>Prior information</strong>: A lot is already known about certain biological processes that we’re studying, and it is desirable to include this knowledge so that we can focus on what is unknown. Latenta therefore uses Bayesian modelling to include prior knowledge wherever available.</p></li>
+<li><p><strong>Hierarchical interactions</strong>: Biological processes are tightly integrated and interconnected. For example, a differentiation process almost always affects the activity of the cell cycle. Latenta can therefore not only connect the latent space to observations, but also create connections between latent variables themselves.</p></li>
+<li><p><strong>Minimal analytical mindset</strong>: Any framework that follows the previous principles will likely require considerable mathematical and statistical know-how to implement.</p></li>
+</ul>
+<p>For example, a cell cycle model can be fitted once and then reused across single-cell and spatial datasets. Or, a latent variable can be fit on one modality (e.g. the transcriptome) and then used to model other modalities. But most importantly, having one unified framework allows the simultaneous modelling different processes, whether you are modelling scalar variables (trajectories, zonation, time), circular variables (cell cycle, circadian clock), discrete variables (clustering, cell type, cell state, batch effect), vector variables (embedding, proportions), nuissance variables (batch, ambient mRNA), different modalities (transcriptome, surface proteome) or different ways of sampling (spatial, nuclear, RNA-FISH, …).</p>
 <p>Some variables may be observed (cell types, transcriptome, …), while other <em>latent</em> variables may need to be inferred (cell cycle, cell state, …). Latenta provides tools to model these processes properly, include prior information where needed, do biological and statistical interpretation, and transfer models between datasets.</p>
 <div class="toctree-wrapper compound">
 </div>
@@ -427,7 +412,7 @@
     <div class="container">
       <p>
         
-          By Latenta team<br/>
+          By Wouter Saelens<br/>
         
             &copy; Copyright 2020.<br/>
       </p>

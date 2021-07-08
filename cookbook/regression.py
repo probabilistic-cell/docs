@@ -59,10 +59,62 @@ posterior.sample(1)
 
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
-sns.heatmap(observation_value.iloc[np.argsort(x.prior_xr()).values])
+sns.heatmap(observation_value.iloc[np.argsort(x.prior_pd()).values])
+
+# ## Linear regression with maximum likelihood
+
+# %%
+a = la.Parameter(0., definition = slope, transforms = la.distributions.Normal(scale = 1.).biject_to())
+b = la.Parameter(0., definition = intercept, transforms = la.distributions.Normal(scale = 1.).biject_to())
+s = la.Parameter(1., definition = scale, transforms = la.distributions.Exponential().biject_to())
+
+z = la.links.scalar.Linear(x, a, b)
+
+dist = la.distributions.Normal(loc = z, scale = s)
+
+observation = la.Observation(observation_value, dist, label = "observation")
+
+# %%
+model = la.Model(observation)
+model.plot()
+
+
+# %%
+inference = la.infer.svi.SVI(model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr = 0.01))
+trainer = la.infer.trainer.Trainer(inference)
+trace = trainer.train(1000)
+trace.plot();
+
+
+# %%
+observed = la.posterior.Posterior(observation)
+observed.sample(10, subsample_n = 3)
+
+
+# %%
+sns.heatmap(observation_value)
+
+
+# %%
+modelled_value = observed.samples[dist].sel(sample = 0).to_pandas()
+sns.heatmap(modelled_value)
+
+
+# %%
+slope_actual = slope.prior_pd()
+slope_inferred = observed.samples[a].mean("sample").to_pandas()
+sns.scatterplot(x = slope_actual, y = slope_inferred)
+assert np.corrcoef(slope_actual, slope_inferred)[0, 1] > 0.8
+
+# %%
+intercept_actual = intercept.prior_pd()
+intercept_inferred = observed.samples[b].mean("sample").to_pandas()
+sns.scatterplot(x = intercept_actual, y = intercept_inferred)
+assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
+
 
 # %% [markdown]
-# ## Maximum likelihood
+# ## Linear regression with maximal likelihood and latent x
 
 # %%
 x2 = la.Parameter(0.5, definition = x, transforms = la.distributions.Uniform(0., 1.).biject_to(), label = "x")
@@ -76,12 +128,9 @@ dist2 = la.distributions.Normal(loc = z, scale = s)
 
 observation = la.Observation(observation_value, dist2, label = "observation")
 
-
-# %%
-observation.plot()
-
 # %%
 model = la.Model(observation)
+model.plot()
 
 
 # %%
@@ -95,7 +144,7 @@ trace = trainer.train(1000)
 
 # %%
 observed = la.posterior.Posterior(observation)
-observed.sample(10, subsample_n = 3)
+observed.sample(10)
 
 
 # %%
@@ -108,87 +157,48 @@ sns.heatmap(modelled_value)
 
 
 # %%
-sns.scatterplot(
-    x = x.prior_xr(),
-    y = observed.samples[x2].mean("sample").sel(cell = cell_ids)
-)
+x_actual = x.prior_pd()
+x_inferred = observed.samples[x2].mean("sample").to_pandas()
+sns.scatterplot(x = x_actual, y = x_inferred)
+assert np.corrcoef(x_actual, x_inferred)[0, 1] > 0.8
+
+# %%
+slope_actual = slope.prior_pd()
+slope_inferred = observed.samples[a].mean("sample").to_pandas()
+sns.scatterplot(x = slope_actual, y = slope_inferred)
+assert np.corrcoef(slope_actual, slope_inferred)[0, 1] > 0.8
 
 
 # %%
-sns.scatterplot(
-    x = slope.prior_xr(),
-    y = observed.samples[a].mean("sample")
-)
+intercept_actual = intercept.prior_pd()
+intercept_inferred = observed.samples[b].mean("sample").to_pandas()
+sns.scatterplot(x = intercept_actual, y = intercept_inferred)
+assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 
-
-# %%
-sns.scatterplot(
-    x = intercept.prior_xr(),
-    y = observed.samples[b].mean("sample")
-)
 
 # %% [markdown]
-# ## Variational inference
+# ## Linear regression with variational inference and latent x
 
 # %%
-# a_dist = x.distribution.expand(x.dims, x.shape, x.coords)
-# a_dist = la.distributions.Normal()
 x_dist = la.distributions.Uniform(0., 3.)
+x2 = la.Latent(x_dist, definition = x, initial = x.prior_pd())
 
-x2 = la.Latent(x_dist, definition = x, initial = x.prior_xr())
-# a = x
-
-
-# %%
-graph = la.interpretation.ComponentGraph(x2)
-graph.display_graphviz(legend = False)
-
-
-# %%
 a_dist = la.distributions.Normal(0., 10., definition = slope)
-# b_dist = slope.distribution
-
 a = la.Latent(a_dist, definition = slope)
-# b = slope
 
-
-# %%
-graph = la.interpretation.ComponentGraph(a)
-graph.display_graphviz(legend = False)
-
-
-# %%
 s_dist = la.distributions.LogNormal(0.5, 0.5)
-# s_dist = scale.distribution
-
 s = la.Latent(s_dist, label = "scale")
 
-# s = scale
-
-
-# %%
-graph = la.interpretation.ComponentGraph(s)
-graph.display_graphviz(legend = False)
-
-
-# %%
 z = la.links.scalar.Linear(x2, a, b = True, scale_x = True, output = observation.clean)
-# z = la.links.scalar.Spline(a, output = observed.clean, n_knots = 10)
 
+dist = la.distributions.Normal(loc = z, scale = s)
 
-# %%
-dist2 = la.distributions.Normal(loc = z, scale = s)
-
-observation = la.Observation(observation_value, dist2, label = "observed")
-
-
-# %%
-graph = la.interpretation.ComponentGraph(observation)
-graph.display_graphviz(legend = True)
+observation = la.Observation(observation_value, dist, label = "observed")
 
 
 # %%
 model = la.Model(observation)
+model.plot()
 
 
 # %%
@@ -206,26 +216,22 @@ observed.sample(10)
 
 
 # %%
-sns.heatmap(observation_value)
-
-
-# %%
-modelled_value = observed.samples[dist2].sel(sample = 0).to_pandas()
-sns.heatmap(modelled_value)
-
+x_actual = x.prior_pd()
+x_inferred = observed.samples[x2].mean("sample").to_pandas()
+sns.scatterplot(x = x_actual, y = x_inferred)
+assert np.corrcoef(x_actual, x_inferred)[0, 1] > 0.8
 
 # %%
-sns.scatterplot(
-    x = x.prior_xr().to_pandas(),
-    y = observed.samples[x2].mean("sample").sel(cell = cell_ids)
-)
-
+slope_actual = slope.prior_pd()
+slope_inferred = observed.samples[a].mean("sample").to_pandas()
+sns.scatterplot(x = slope_actual, y = slope_inferred)
+assert np.corrcoef(slope_actual, slope_inferred)[0, 1] > 0.8
 
 # %%
-sns.scatterplot(
-    x = slope.prior_xr().to_pandas(),
-    y = observed.samples[a].mean("sample")
-)
+intercept_actual = intercept.prior_pd()
+intercept_inferred = observed.samples[z.b].mean("sample").to_pandas()
+sns.scatterplot(x = intercept_actual, y = intercept_inferred)
+assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 
 
 # %%
@@ -239,7 +245,7 @@ causal.sample_random(10)
 causal.plot_features();
 
 # %% [markdown]
-# ## Amortization
+# ## Linear regression with variational inference and amortized latent x
 
 # %%
 amortization_input = la.Fixed(observation_value, label = "observed")
@@ -248,13 +254,9 @@ amortization_input = la.Fixed(observation_value, label = "observed")
 # %%
 nn = la.amortization.Encoder(amortization_input, x2)
 
-
-# %%
-observation.plot()
-
-
 # %%
 model = la.Model(observation)
+model.plot()
 
 
 # %%
@@ -267,31 +269,26 @@ trace = trainer.train(3000)
 
 
 # %%
-observed = la.posterior.Observed(observation)
-observed.sample(50)
-
-
-# %%
-sns.heatmap(observation_value)
-
+observed = la.posterior.vector.VectorObserved(observation)
+observed.sample(10)
 
 # %%
-modelled_value = observed.samples[dist2].mean("sample").to_pandas()
-sns.heatmap(modelled_value)
-
-
-# %%
-sns.scatterplot(
-    x = x.prior_xr().to_pandas(),
-    y = observed.samples[x2].mean("sample")
-)
-
+x_actual = x.prior_pd()
+x_inferred = observed.samples[x2].mean("sample").to_pandas()
+sns.scatterplot(x = x_actual, y = x_inferred)
+assert np.corrcoef(x_actual, x_inferred)[0, 1] > 0.8
 
 # %%
-sns.scatterplot(
-    x = slope.prior_xr().to_pandas(),
-    y = observed.samples[a].mean("sample")
-)
+slope_actual = slope.prior_pd()
+slope_inferred = observed.samples[a].mean("sample").to_pandas()
+sns.scatterplot(x = slope_actual, y = slope_inferred)
+assert np.corrcoef(slope_actual, slope_inferred)[0, 1] > 0.8
+
+# %%
+intercept_actual = intercept.prior_pd()
+intercept_inferred = observed.samples[z.b].mean("sample").to_pandas()
+sns.scatterplot(x = intercept_actual, y = intercept_inferred)
+assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 
 
 # %%
@@ -303,8 +300,4 @@ causal = la.posterior.scalar.ScalarVectorCausal(x2, observation, observed = obse
 causal.sample(10)
 causal.plot_features();
 
-
 # %%
-
-
-

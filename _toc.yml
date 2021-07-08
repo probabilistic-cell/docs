@@ -8,14 +8,13 @@
   - file: tutorials/getting_started
   - file: tutorials/overview
     title: Overview
-  - file: content
-    sections:
-    - file: markdown
-    - file: notebooks
+  - file: tutorials/cc2
 
 - part: 👩‍🍳 User guide
   chapters:
-  - file: guide/amortization/amortization
+  - file: guide/variables
+  - file: guide/variational/variational
+  - file: guide/variational/amortization
   - file: guide/circular/circular
     sections:
       - file: guide/circular/toy
@@ -26,8 +25,8 @@
 
 - part: 🦸 Reference
   chapters:
-  - file: content
+  - file: reference/overview
 
 - part: About
   chapters:
-  - file: content
+  - file: about/acknowledgements

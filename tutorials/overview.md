@@ -51,14 +51,14 @@
     <label for="inputEmail3" class="col-sm-2 col-form-label">Modality</label>
     <div class="col-sm-10">
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="cell_cycle" value="cell_cycle">
-            <label class="form-check-label" for="cell_cycle">
+            <input class="form-check-input" type="checkbox" id="transcriptome" value="transcriptome">
+            <label class="form-check-label" for="transcriptome">
                 <span class="badge badge-light">Transcriptome</span>
             </label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="differentiation" value="differentiation">
-            <label class="form-check-label" for="differentiation">
+            <input class="form-check-input" type="checkbox" id="unspliced" value="unspliced">
+            <label class="form-check-label" for="unspliced">
                 <span class="badge badge-light">Unspliced transcriptome</span>
             </label>
         </div>

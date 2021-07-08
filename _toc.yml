@@ -1,32 +1,27 @@
-# Table of content
-# Learn more at https://jupyterbook.org/customize/toc.html
-
-- file: index
-
-- part: 👨‍🎓 Tutorials
+format: jb-book
+root: index
+parts:
+- caption: "Tutorials"
   chapters:
   - file: tutorials/getting_started
   - file: tutorials/overview
     title: Overview
   - file: tutorials/cc2
-
-- part: 👩‍🍳 User guide
+- caption: "User guide"
   chapters:
   - file: guide/variables
   - file: guide/variational/variational
   - file: guide/variational/amortization
   - file: guide/circular/circular
     sections:
-      - file: guide/circular/toy
-
-- part: 🕵️‍♀️ Explanation
+    - file: guide/circular/toy
+    - file: guide/circular/cc2
+- caption: "Explanation"
   chapters:
   - file: explanation/amortization
-
-- part: 🦸 Reference
+- caption: "Reference"
   chapters:
   - file: reference/overview
-
-- part: About
+- caption: About
   chapters:
   - file: about/acknowledgements

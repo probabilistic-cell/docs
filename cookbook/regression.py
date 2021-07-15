@@ -118,6 +118,7 @@ assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 
 # %%
 x2 = la.Parameter(0.5, definition = x, transforms = la.distributions.Uniform(0., 1.).biject_to(), label = "x")
+x2.distribution = la.distributions.Uniform(0., 1.)
 a = la.Parameter(0., definition = slope, transforms = la.distributions.Normal(scale = 1.).biject_to())
 b = la.Parameter(0., definition = intercept, transforms = la.distributions.Normal(scale = 1.).biject_to())
 s = la.Parameter(1., definition = scale, transforms = la.distributions.Exponential().biject_to())
@@ -183,7 +184,7 @@ assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 x_dist = la.distributions.Uniform(0., 3.)
 x2 = la.Latent(x_dist, definition = x, initial = x.prior_pd())
 
-a_dist = la.distributions.Normal(0., 10., definition = slope)
+a_dist = la.distributions.Normal(0., 10., definition = slope.clean)
 a = la.Latent(a_dist, definition = slope)
 
 s_dist = la.distributions.LogNormal(0.5, 0.5)
@@ -298,6 +299,7 @@ z.empirical = xr.DataArray(observation_value)
 # %%
 causal = la.posterior.scalar.ScalarVectorCausal(x2, observation, observed = observed)
 causal.sample(10)
+causal.sample_random(1)
 causal.plot_features();
 
 # %%

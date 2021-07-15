@@ -1,5 +1,3 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
 # %%
 from IPython import get_ipython
 
@@ -7,8 +5,9 @@ from IPython import get_ipython
 # # Mixture distributions
 
 # %%
-get_ipython().run_line_magic('load_ext', 'autoreload')
-get_ipython().run_line_magic('autoreload', '2')
+if get_ipython():
+    get_ipython().run_line_magic('load_ext', 'autoreload')
+    get_ipython().run_line_magic('autoreload', '2')
 
 import numpy as np
 import pandas as pd
@@ -25,11 +24,6 @@ import collections
 import latenta as la
 
 
-# %%
-# torch.autograd.set_detect_anomaly(True)
-
-# %% [markdown]
-# --------------
 # %% [markdown]
 # ## Generative model
 
@@ -63,7 +57,7 @@ w = la.Fixed(w)
 
 
 # %%
-mixture = la.distributions.Mixture(distributions, weights = w)
+mixture = la.distributions.Mixture(weights = w, **distributions, label = "mixture")
 
 
 # %%
@@ -76,7 +70,7 @@ posterior.sample(1)
 
 
 # %%
-observation_value = posterior.cells[mixture].sel(sample = 0).to_pandas()
+observation_value = posterior.samples[mixture].sel(sample = 0).to_pandas()
 sns.scatterplot(x = x_value, y = observation_value)
 sns.kdeplot(x = x_value, y = observation_value)
 
@@ -85,19 +79,8 @@ sns.kdeplot(x = x_value, y = observation_value)
 
 # %%
 coefficients = la.links.scalar.Spline(x, output = w, label = "coefficients", transforms = [la.transforms.Softmax(components)], output_distribution = la.distributions.Normal())
-# coefficients = la.links.scalar.Switch(x, output = w, label = "coefficients", transforms = [la.transforms.Softmax(components)])
-# coefficients = la.links.scalar.Linear(x, output = w, label = "coefficients", transforms = [la.transforms.Softmax(components)])
-
-
-# %%
-dist = la.distributions.Mixture(distributions, weights = coefficients)
-
-
-# %%
+dist = la.distributions.Mixture(weights = coefficients, **distributions)
 observation = la.Observation(observation_value, dist, label = "observation")
-
-
-# %%
 observation.plot()
 
 
@@ -123,8 +106,8 @@ assert posterior.likelihood / n_cells > -3
 sns.scatterplot(x = x_value, y = observation_value)
 sns.kdeplot(x = x_value, y = observation_value)
 
-modelled_value = posterior.cells[dist].stack(cells=("sample", "cell")).to_pandas()
-modelled_x = posterior.cells[x].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = posterior.samples[dist].stack(cells=("sample", "cell")).to_pandas()
+modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 # sns.scatterplot(x = modelled_x, y = modelled_value)
 sns.kdeplot(x = modelled_x, y = modelled_value)
 
@@ -148,7 +131,7 @@ coefficients = la.links.scalar.Spline(a, output = w, label = "coefficients", tra
 
 
 # %%
-dist = la.distributions.Mixture(distributions, weights = coefficients)
+dist = la.distributions.Mixture(weights = coefficients, **distributions)
 
 
 # %%
@@ -174,8 +157,8 @@ posterior.sample(10)
 
 
 # %%
-modelled_value = posterior.cells[dist].stack(cells=("sample", "cell")).to_pandas()
-modelled_x = posterior.cells[a].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = posterior.samples[dist].stack(cells=("sample", "cell")).to_pandas()
+modelled_x = posterior.samples[a].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x = modelled_x, y = modelled_value)
 
 

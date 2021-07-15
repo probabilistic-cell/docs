@@ -8,3 +8,4 @@ __pychache__
 tmp
 .pytest_cache
 .secrets
+tutorials/essentials/data

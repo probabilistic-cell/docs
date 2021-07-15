@@ -6,9 +6,9 @@ jupyter:
       extension: .md
       format_name: markdown
       format_version: '1.3'
-      jupytext_version: 1.10.3
+      jupytext_version: 1.11.3
   kernelspec:
-    display_name: Python 3
+    display_name: Python 3 (ipykernel)
     language: python
     name: python3
 ---
@@ -20,6 +20,42 @@ jupyter:
 
 # Part 1: Modelling
 
+
+With a background in single-cell biology, chances are high you already created many types of models:
+- Clustering
+- Dimensionality reduction
+- Differential expression
+- Trajectories
+- RNA velocity
+
+
+All these models have several aspects in common: in every case we try to explain what we observe (the transcriptome of many cells), using this we do not know. These unknowns include things like the cluster label of a cell, a cells position in a reduced space, the log-fold change of a gene, the pseudotime of a cell, the gene dynamics during a trajectory, or the future state of a cell.
+
+
+Modelling means explaining what we observe. You as a user can do this with two goals in mind: prediction or understanding. 
+For **prediction**, we often do not care about interpretability. However, we do care about generalisability, i.e. we do not only want a good model that works on the cells we just killed in an experiment, but also want to make good predictions about any future cells.
+For **understanding**, we care both about interpretability and generalisability. For this reason, a model that is useful for understanding is often also good at making predictions. However, in some cases, biology is simply too complex to make an interpretable model, although it's still generalisable and thus useful for making predictions.
+While Latenta is primarily made for understanding, it can also be used for prediction.
+
+
+For example, we may be interested in how a cell responds to the overexpression of a transcription factor. We observe both the cell's transcriptome and the amount of the transcription factor we overexpressed. But despite these observations, we still do not understand many 
+- Are
+- How is the cell cycle affecting all these things?
+
+We are interested in how this transcriptome depends on the , and thus create a model in which we try to explain the transcriptomes of many differentiating cells by fitting a model of gene dynamics along differentiation.
+
+
+Creating and inferring a model consists of several steps:
+1. Creating known and unknown variables
+2. Connect these variables, i.e. creating the model
+3. Infer the value of the unknown variables
+4. Interpret the model
+
+In this tutorial, we go briefly over each step. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
+
+
+# Part 2: Variables
+
 ```python
 import latenta as la
 import scanpy as sc
@@ -28,19 +64,6 @@ import scanpy as sc
 ```python
 adata = sc.datasets.pbmc3k()
 ```
-
-Modelling means explaining what we observe using things we want to know. For example, we may be interested in how a cell differentiates, and thus create a model in which we try to explain the transcriptomes of many differentiating cells by fitting a model of gene dynamics along differentiation.
-
-
-Creating and inferring a model consists of several steps:
-1. Creating known and unknown variables
-2. Connect these variables, i.e. creating the model
-3. Infer the value of the unknown variables
-4. Interpret the model
-5. Go back to step 1, and compare different competing models
-
-In this tutorial, we go briefly over each step. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
-
 
 ## Variables
 
@@ -80,13 +103,21 @@ counts_definition
 Fixed variables never change.
 
 ```python
-la.Fixed(adata.)
+counts = la.Fixed(adata.X, definition = counts_definition)
+```
+
+```python
+counts.run()
+```
+
+```python
+counts
 ```
 
 ### Parameters
 
 
-Parameters are variables that are unknown and have to be inferred (in our case, optimized) based on the data. Parameters do require a starting default value.
+Parameters are variables that are unknown and have to be inferred (optimized) based on the data. Parameters do require a starting default value.
 
 ```python
 la.Parameter()

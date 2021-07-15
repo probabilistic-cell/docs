@@ -78,7 +78,7 @@ coefficients = la.links.scalar.Spline(
     x,
     output=w,
     label="coefficients",
-    transforms=[la.transforms.Softmax(components)],
+    transforms=[la.transforms.Softmax(dimension = components)],
     output_distribution=la.distributions.Normal(),
 )
 dist = la.distributions.Mixture(weights=coefficients, **distributions)
@@ -124,7 +124,9 @@ points = np.array(np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20)))
 evaluated_modelled = kde_modelled.evaluate(points)
 evaluated_groundtruth = kde_groundtruth.evaluate(points)
 
-assert (evaluated_modelled - evaluated_groundtruth).sum() < 0.2
+kl_divergence = (evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))).sum()
+
+assert (evaluated_modelled - evaluated_groundtruth).sum() > -0.5
 
 # %% [markdown]
 # Assess how x changes the observation
@@ -137,7 +139,7 @@ causal.plot_features();
 
 # %% [markdown]
 # ## Modelling the mixture weights with latent x
-
+#
 # A one-dimensional ouput is of course not enough to recapitulate an actual latent x. All we can do is to find an x that can distinguishes the 3 components
 # %%
 a = la.Latent(la.distributions.Uniform(0.0, 5.0), definition=x)
@@ -148,7 +150,7 @@ coefficients = la.links.scalar.Spline(
     a,
     output=w,
     label="coefficients",
-    transforms=[la.transforms.Softmax(components)],
+    transforms=[la.transforms.Softmax(dimension = components)],
     output_distribution=la.distributions.Normal(),
 )
 

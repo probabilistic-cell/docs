@@ -1,7 +1,5 @@
 # %%
 from IPython import get_ipython
-
-# %%
 if get_ipython():
     get_ipython().run_line_magic('load_ext', 'autoreload')
     get_ipython().run_line_magic('autoreload', '2')
@@ -42,7 +40,7 @@ scale = la.Fixed(pd.Series(np.random.uniform(1., 1.2, n_features), index = featu
 
 
 # %%
-y = la.links.scalar.Linear(x, slope, intercept, scale_x = True)
+y = la.links.scalar.Linear(x = x, a = slope, b = intercept, scale_x = True)
 
 
 # %%
@@ -115,6 +113,9 @@ assert np.corrcoef(intercept_actual, intercept_inferred)[0, 1] > 0.8
 
 # %% [markdown]
 # ## Linear regression with maximal likelihood and latent x
+
+# %%
+la.distributions.Uniform(0., 1.).biject_to()
 
 # %%
 x2 = la.Parameter(0.5, definition = x, transforms = la.distributions.Uniform(0., 1.).biject_to(), label = "x")
@@ -190,7 +191,7 @@ a = la.Latent(a_dist, definition = slope)
 s_dist = la.distributions.LogNormal(0.5, 0.5)
 s = la.Latent(s_dist, label = "scale")
 
-z = la.links.scalar.Linear(x2, a, b = True, scale_x = True, output = observation.clean)
+z = la.links.scalar.Linear(x = x2, a = a, b = True, scale_x = True, output = observation.clean)
 
 dist = la.distributions.Normal(loc = z, scale = s)
 

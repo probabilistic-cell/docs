@@ -253,8 +253,7 @@ observed.samples[z.a].mean("sample").sel(gene = genes.coords[0])
 # ## Amortization
 
 # %%
-
-la.amortization.Encoder(
+encoder = la.amortization.Encoder(
     la.Fixed(observation_value, label = "observed"),
     a
 )
@@ -294,10 +293,8 @@ causal = la.posterior.scalar.ScalarVectorCausal(a, observation)
 causal.observed.sample(1)
 causal.sample(100)
 causal.sample_bootstrap(10)
-causal.plot_features(interpretable = observation.p);
+causal.plot_features(interpretable = observation.p.loc);
 
 
 # %%
-
-
 

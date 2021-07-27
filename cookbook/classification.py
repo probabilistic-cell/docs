@@ -38,7 +38,7 @@ bias = la.Fixed(pd.Series([1, 1, -1, -1], index = cluster_index), label = "bias"
 
 
 # %%
-concentration = la.links.scalar.Linear(x, beta, b = bias, scale_x = True, transforms = [la.transforms.Exp()])
+concentration = la.links.scalar.Linear(x, beta, b = bias, transforms = [la.transforms.Exp()])
 
 
 # %%
@@ -66,7 +66,7 @@ cluster_definition = la.Definition.from_xr(observation_value)
 
 
 # %%
-concentration = la.links.scalar.Linear(x, b = True, a = True, scale_x = True, output = cluster_definition, transforms = [la.transforms.Exp()])
+concentration = la.links.scalar.Linear(x, b = True, a = True, output = cluster_definition, transforms = [la.transforms.Exp()])
 
 
 # %%
@@ -118,7 +118,7 @@ causal.plot_features()
 # An example with softmax transform
 
 # %%
-probs = la.links.scalar.Linear(x, b = True, a = True, scale_x = True, output = cluster_definition, transforms = [la.transforms.Softmax()])
+probs = la.links.scalar.Linear(x, b = True, a = True, output = cluster_definition, transforms = [la.transforms.Softmax()])
 
 
 # %%

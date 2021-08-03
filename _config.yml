@@ -2,11 +2,12 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: ""
-author: Wouter Saelens
+author: the latenta team
 logo: _static/logo.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
+only_build_toc_files: true
 execute:
   execute_notebooks: cache
 
@@ -35,5 +36,11 @@ launch_buttons:
 sphinx:
   config:
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  extra_extensions:
-   - sphinx_citel
+  nb_custom_formats:
+    .py:
+      - jupytext.reads
+      - fmt: py
+
+  # extra_extensions:
+  #  - sphinx_citel
+

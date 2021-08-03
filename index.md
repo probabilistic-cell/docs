@@ -3,9 +3,22 @@
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
-                <h3>🎬 Getting started</h3>
-                Installation and first steps
-                <a href="/tutorials/getting-started.html" class="stretched-link"></a>
+                <h3>👩‍💻 Installation</h3>
+                <a href="installation.html" class="stretched-link" ></a>
+                </p>
+                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">conda</a>
+                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">pip</a>
+                <br>
+                <code>pip install latenta lacell</code>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-lg">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3>🎬 The essentials</h3>
+                An introduction at modelling with latenta, with a focus for (computation) biologists
+                <a href="tutorials/essentials" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -14,16 +27,9 @@
             <div class="card-body">
                 <h3>👨‍🎓 Tutorials</h3>
                 Learning latenta by example
-                <a href="/tutorials/overview.html" class="stretched-link"></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-lg">
-        <div class="card h-100">
-            <div class="card-body">
-                <h3>👩‍🍳 User guide</h3>
-                How do I do «…»?
-                <a href="/guide/overview.html" class="stretched-link"></a>
+                <!-- <a class="btn btn-outline-secondary" role="button"></a></a>
+                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">pip</a> -->
+                <a href="tutorials/overview.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -33,9 +39,18 @@
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
+                <h3>👩‍🍳 User guide</h3>
+                How do I do «…»?
+                <a href="guide/overview.html" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-lg">
+        <div class="card h-100">
+            <div class="card-body">
                 <h3>🕵️‍♀️ Explanation</h3>
                 Intro into the maths, statistics and machine learning
-                <a href="/explanation/overview.html" class="stretched-link"></a>
+                <a href="explanation/overview.html" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -44,16 +59,7 @@
             <div class="card-body">
                 <h3>🦸 Reference</h3>
                 How does «…» work?
-                <a href="/reference/overview.html" class="stretched-link"></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-sm-4 col-lg">
-        <div class="card h-100">
-            <div class="card-body">
-                <h3>👩‍💻 Source code</h3>
-                <a class="btn btn-outline-secondary" role="button" href="https://github.com/probabilistic-cell/latenta">latenta</a></a>
-                <a class="btn btn-outline-secondary" role="button" href="https://github.com/probabilistic-cell/lacell">lacell</a>
+                <a href="reference/overview.html" class="stretched-link"></a>
             </div>
         </div>
     </div>

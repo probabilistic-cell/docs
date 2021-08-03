@@ -165,7 +165,6 @@ for model_id, model in models.items():
 #             color = "#333333"
 #         )
     fig.suptitle(model_id)
-    fig.tight_layout()
 
 # %% [markdown]
 # ## Regular spline
@@ -287,7 +286,6 @@ for model_id, model in models.items():
 #             color = "#333333"
 #         )
     fig.suptitle(model_id)
-    fig.tight_layout()
 
 # %% [markdown]
 # Conclusion:

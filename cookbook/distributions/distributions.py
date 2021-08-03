@@ -13,7 +13,7 @@
 #     name: python3
 # ---
 
-# %% [markdown]
+# %% [markdown] tags=[]
 # # Distributions
 
 # %%
@@ -231,12 +231,6 @@ print(dist.likelihood)
 
 # %%
 dist = la.distributions.Dirichlet(concentration = la.Fixed(10., definition = la.Definition([cells, genes])), component_dim = cells, dependent_dims = {genes})
-
-# %%
-torch.ones(dist.value_definition.shape)
-
-# %%
-value
 
 # %%
 dist.reset_recursive()

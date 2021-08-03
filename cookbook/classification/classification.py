@@ -50,13 +50,16 @@ dist = la.distributions.OneHotCategorical(probs)
 
 
 # %%
+dist.plot()
+
+# %%
 posterior = la.posterior.Posterior(dist)
-posterior.sample(1)
+posterior.sample(10)
 
 
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
-sns.heatmap(observation_value.iloc[np.argsort(x.prior().numpy())])
+sns.heatmap(observation_value.iloc[np.argsort(x.prior_pd())])
 
 # %% [markdown]
 # ## Classification based on observed x
@@ -86,9 +89,6 @@ model = la.Model(observation)
 # %%
 inference = la.infer.svi.SVI(model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr = 0.01))
 trainer = la.infer.trainer.Trainer(inference)
-
-
-# %%
 trace = trainer.train(10000)
 
 
@@ -110,7 +110,7 @@ sns.heatmap(modelled_value.iloc[np.argsort(x.prior().numpy())])
 causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.observed.sample(1)
 causal.sample(100)
-causal.plot_features()
+causal.plot_features();
 
 # %% [markdown]
 # ## Classification based on observed x (2)

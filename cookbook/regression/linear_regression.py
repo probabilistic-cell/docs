@@ -1,5 +1,5 @@
 # %% [markdown]
-# # Regression
+# # Linear regression
 
 # %%
 from IPython import get_ipython
@@ -243,7 +243,5 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed = obser
 causal.sample(10)
 causal.sample_random(10)
 causal.plot_features();
-
-# %%
 
 # %%

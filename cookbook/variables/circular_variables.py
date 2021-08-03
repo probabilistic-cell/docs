@@ -218,6 +218,12 @@ sns.scatterplot(
 
 
 # %%
+assert abs(la.math.circular.circular_correlation(
+    la.math.circular_mean(observed.samples[x], "sample").to_pandas().values,
+    angle.prior_pd().values
+)) > 0.8
+
+# %%
 sns.scatterplot(
     x = beta.prior_pd(),
     y = observed.samples[z.b].mean("sample").to_pandas()
@@ -267,6 +273,12 @@ sns.scatterplot(
     y = posterior.samples[x].mean("sample").to_pandas()
 )
 
+
+# %%
+assert abs(la.math.circular.circular_correlation(
+    la.math.circular_mean(observed.samples[x], "sample").to_pandas().values,
+    angle.prior_pd().values
+)) > 0.8
 
 # %%
 causal = la.posterior.scalar.ScalarVectorCausal(x, observation)

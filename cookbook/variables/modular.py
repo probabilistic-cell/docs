@@ -126,5 +126,3 @@ y = la.modular.Multiplicative(linear = y_linear, linear_subset = y_linear_subset
 y.prior_pd()
 
 # %%
-
-# %%

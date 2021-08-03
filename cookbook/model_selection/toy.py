@@ -505,8 +505,6 @@ model["x1_x2_causal"].plot_features_contour(feature_ids = gene_info.query("type 
 # %%
 fig = model["x1_x2_causal"].plot_likelihood_ratio();
 fig.axes[0].legend(bbox_to_anchor=(0.5, 1.1), ncol = 2, title = "coregulatory")
-fig.tight_layout()
-
 
 # %%
 ax = sns.scatterplot(x = "lr_x1", y = "lr_x2", data = model["x1_x2_causal"].scores.join(gene_info), hue = "type")

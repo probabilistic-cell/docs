@@ -183,27 +183,6 @@ trace.plot();
 
 
 # %%
-z.a.value_definition
-
-# %%
-z.a.value_definition
-
-# %%
-z.reset_recursive()
-
-# %%
-z.run_recursive()
-
-# %%
-z.a.value_definition
-
-# %%
-observation.p.loc.a.q
-
-# %%
-observation.p.loc.a.q.value_definition
-
-# %%
 observed = la.posterior.Posterior(observation)
 observed.sample(10, subsample_n = 3)
 

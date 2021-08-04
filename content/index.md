@@ -4,7 +4,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <h3>👩‍💻 Installation</h3>
-                <a href="installation.html" class="stretched-link" ></a>
+                <a href="tutorials/installation.html" class="stretched-link" ></a>
                 </p>
                 <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">conda</a>
                 <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">pip</a>

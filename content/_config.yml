@@ -44,5 +44,6 @@ sphinx:
       - fmt: py
 
   # extra_extensions:
+    # - html_admonition
   #  - sphinx_citel
 

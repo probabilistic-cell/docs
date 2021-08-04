@@ -19,7 +19,7 @@
 # %%
 import pandas as pd
 
-# %% tags=["hide-input"]
+# %% tags=["remove-input"]
 from IPython.display import display, Markdown, Latex, HTML
 cookbooks = pd.DataFrame([
     [
@@ -28,7 +28,11 @@ cookbooks = pd.DataFrame([
     ]
 ], columns = ["id", "description"]).set_index("id")
 cookbooks["url"] = [f"<a href='{id}.html'>{id}</a>" for id in cookbooks.index] 
-display(HTML(cookbooks.to_html(index = False, header = False, escape = False)))
+html = cookbooks.to_html(index = False, header = False, escape = False)
+
+html = '<div class="admonition note" name="html-admonition"><p>' + html + '</p></div>'
+
+display(HTML(html))
 
 
 # %% [markdown]

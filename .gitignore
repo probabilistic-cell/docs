@@ -9,3 +9,4 @@ tmp
 .pytest_cache
 .secrets
 tutorials/essentials/data
+_book

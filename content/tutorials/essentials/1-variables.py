@@ -21,9 +21,11 @@
 import latenta as la
 
 # %% [markdown]
-# A model is a collection of variables, and a description of how these are related in a graph structure. An algorithm will then run through this graph, and will do different things depending on the type of variable it encounters.
+# A model is a:
+# 1. A collection of variables
+# 2. A description of how these variables are related in a graph structure
 
-# %% [markdown]
+# Here we will look at the main types of variables, and how we can connect them within a graph structure.
 # We'll use a small single-cell transcriptomics dataset as demonstration:
 
 # %%
@@ -55,7 +57,7 @@ sc.pl.umap(adata, color = ["CD3D", "CD19", "CD14", "leiden"], title = ["CD3D - A
 # ## Definition
 
 # %% [markdown]
-# A variable in latenta is a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension has coordinates (`.coords`), and identifier (`.id`). Furthermore,a dimension can also be annotation with a label, symbol and/or description.
+# A variable in latenta is mathemtiacally represented by a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore,a dimension can also be annotation with a label, symbol and/or description.
 #
 # A "genes" dimension could be defined as follows:
 
@@ -93,13 +95,13 @@ counts_definition
 # ## Fixed variables
 
 # %% [markdown]
-# Fixed variables never change.
+# Fixed variables contain a tensor that never changes:
 
 # %%
 counts = la.Fixed(adata.X, definition = counts_definition)
 
 # %% [markdown]
-# You can "run" a variable by calling it's run function
+# You can _run_ a variable by calling it's run function:
 
 # %%
 counts.run()
@@ -111,17 +113,15 @@ counts.run()
 counts.value
 
 # %% [markdown]
-# Likewise, if you want to get the value as a dataframe:
+# Because our variable is annotated, we can also get this same value as a dataframe:
 
 # %%
 counts.value_pd
 
 # %% [markdown]
-# Do note that we can also provide pandas and xarray objects to `la.Fixed()`, and the definition of a variable will be inferred from the object's indices. This does require proper annotation of these indices, which is not the case by default in scanpy:
+# Do note that we can also provide pandas and xarray objects to :class:`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
 
 # %%
-adata.obs.index.name = "cell"
-adata.var.index.name = "gene"
 cluster = la.Fixed((adata.obs["leiden"] == 0).astype(float), label = "cluster")
 cluster
 
@@ -132,11 +132,11 @@ cluster
 cluster[0] == counts[0]
 
 # %% [markdown]
-# For discrete fixed variables, we often like to work in a "one-hot" encoding, meaning that we get a binary (True/False) matrix if a sample (cell) is part of a particular group (cluster). We can use `la.discrete.DiscreteFixed` to do this conversion for us by providing it with a Categorical Series:
+# For discrete fixed variables, we often like to work in a "one-hot" encoding, meaning that we get a binary (True/False) matrix if a sample (cell) is part of a particular group (cluster). We can use `la.discrete.DiscreteFixed` to do this conversion by providing it with a categorical pandas series:
 
 # %% [markdown]
 # ```{margin}
-# A pandas categorical variable is equivalent to R's factor
+# A pandas categorical series is equivalent to R's factor
 # ```
 
 # %%
@@ -164,7 +164,7 @@ lfc
 # A combination of fixed and parameter variables form the leaves of our model. Any other types of variables in our models are ultimatily constructed from these leaf variables.
 
 # %% [markdown]
-# Although parameters are "free", they can still have constraints. For example, the average expression of a gene can never go below zero, as this would be non-sensical. However, most algorithms cannot directly cope with these constraints and really like to work with parameters that can go from $-\infty$ to $+\infty$ (especially if you also want flexibility). We can solve this by transforming each parameter to make sure they fit our constraints.
+# Although parameters are _free_, they can still have constraints. For example, the average expression of a gene can never go below zero, as this would be non-sensical. However, most algorithms cannot directly cope with these constraints and really like to work with parameters that can go from $-\infty$ to $+\infty$ (especially if you also want flexibility). We can solve this by transforming each parameter to make sure they fit our constraints.
 
 # %% [markdown]
 # Frequently used transformations are:
@@ -245,7 +245,7 @@ expression.plot()
 # ## Distributions
 
 # %% [markdown]
-# We often are uncertain about the value of some variables, and this uncertainty is encoded as a distribution. A distribution has two characteristics:
+# We are often uncertain about the value of some variables, and this uncertainty is encoded as a distribution. A distribution has two characteristics:
 # - We can take a random sample. For example, we roll a dice and get 3
 # - We can calculate the probability of a particular sample, also known as the likelihood. For example, in a normal dice the probability of observing a 3 is 1/6
 
@@ -329,7 +329,7 @@ observation.likelihood
 # :::
 # ::::
 # 
-# The different cell types in a tissue have different abundances. Each cell we would take from this tissue could have a cell type with different probabilities. Until we have observed something of this cell, we don't know anything about its cell type except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is, i.e. as a probability distribution with some known or unknown upstream components.
+# Let's say we randomly take a cell from a tissue. Until we have observed something of this cell, we don't know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is, i.e. as a probability distribution with some known or unknown upstream components.
 # 
 # This type of uncertainty is often of interest, and can provide  some interesting biological information in more complex models. For example:
 # - How does cell type abundance change across different conditions?

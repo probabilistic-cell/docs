@@ -44,6 +44,8 @@
     <script src="../../_static/js/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -139,6 +141,11 @@
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../overview.html">
+   Overview
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -190,7 +197,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../guide/distributions/count.html">
-     Distributions
+     Count distributions
     </a>
    </li>
   </ul>
@@ -412,13 +419,8 @@
 </div>
 </div>
 </div>
-<p>A model is a:</p>
-<ol class="simple">
-<li><p>A collection of variables</p></li>
-<li><p>A description of how these variables are related in a graph structure</p></li>
-</ol>
-<p>Here we will look at the main types of variables, and how we can connect them within a graph structure.
-We’ll use a small single-cell transcriptomics dataset as demonstration:</p>
+<p>A model is a collection of variables together with a description of how these variables are related. Here, we will first look at the basic types of variables in a model, and how we can connect them with a graph structure.</p>
+<p>We’ll use a small single-cell transcriptomics dataset as demonstration:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
@@ -1755,7 +1757,7 @@ Categories (5, object): [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#3
 <p>In general, we call this <em>aleatoric uncertainty</em>. In bayesian modelling, this type of uncertainty is typically encoded as the prior distribution.</p>
 </div>
 </div>
-<p>Let’s say we randomly take a cell from a tissue. Until we have observed something of this cell, we don’t know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is, i.e. as a probability distribution with some known or unknown upstream components.</p>
+<p>Let’s say we randomly take a cell from a tissue. Until we have observed something of this cell, we don’t know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is: as a probability distribution with some known or unknown upstream components.</p>
 <p>This type of uncertainty is often of interest, and can provide  some interesting biological information in more complex models. For example:</p>
 <ul class="simple">
 <li><p>How does cell type abundance change across different conditions?</p></li>

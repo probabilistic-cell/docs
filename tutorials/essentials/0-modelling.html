@@ -44,6 +44,8 @@
     <script src="../../_static/js/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -137,6 +139,11 @@
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../overview.html">
+   Overview
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -188,7 +195,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../guide/distributions/count.html">
-     Distributions
+     Count distributions
     </a>
    </li>
   </ul>
@@ -370,13 +377,13 @@
 <p>Latenta is primarily made to create models for understanding: to make it easier for the (computational) biologist to create, infer, interpret and share models.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Latenta is very related, and borrows elements, from tools such as stan, tensorflow and torch. However, we focused on making the entry barier much lower, by focussing on:</p>
+<p>Latenta is very related, and borrows elements, from tools such as stan, tensorflow and torch. However, we focused on making the entry barrier much lower, by focussing on:</p>
 <ul class="simple">
 <li><p>Modularity, so that you can easily reuse parts made by others without having to understand them (although it can help!)</p></li>
 <li><p>Dummy-proofing, so that it is obvious what is wrong with a model early on</p></li>
 <li><p>Interpretability, so that we can easily see what our model is doing</p></li>
 </ul>
-<p>Our hope is that these aspects make it easier to bridge machine learning and biology, and to share and compare computational models.</p>
+<p>Our hope is that these aspects make it easier to bridge machine learning and biology</p>
 </div>
 <p>Modelling can sometimes be frustrating if you lack the necessary background. Whatever you do, and whichever tool you use, always keep in mind:</p>
 <ul class="simple">

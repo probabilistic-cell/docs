@@ -1,4 +1,6 @@
 
+/* Make container larger */
+
 div.container-xl {
     max-width: 1800px;
 }
@@ -7,6 +9,23 @@ p.caption > .caption-text {
     font-size:1.2em;
 }
 
+body {
+    overflow: scroll;
+}
+
+div.navbar-brand-box {
+    padding-top:0 !important;
+}
+
+.bd-links {
+    padding-top: 0 !important;
+}
+
+nav.bd-links p.caption {
+    border-top: 1px solid #e5e5e5;
+    margin-top: 0;
+    padding-top:0.25em;
+}
 
 
 /*** fixes to styles ***/
@@ -36,10 +55,11 @@ p.caption > .caption-text {
 .logo {
     padding: 10px;
     transition: transform .2s; /* Animation */
+    transform: scale(0.9)
 }
 
 .logo:hover {
-    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    transform: scale(1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 
@@ -83,7 +103,6 @@ p.caption > .caption-text {
 
 
 /* forms */
-
 .form-check, .form-check-label, .form-check-input {
     cursor:pointer;
 }

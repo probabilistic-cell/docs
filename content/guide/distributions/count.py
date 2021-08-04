@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# # Distributions
+# # Count distributions
 
 # %%
 from IPython import get_ipython
@@ -42,7 +42,7 @@ cells = la.Dim(pd.Series(range(3), name = "cell").astype(str))
 genes = la.Dim(pd.Series(range(4), name = "gene").astype(str))
 
 # %% [markdown]
-# ### Negative Binomial
+# ## Negative Binomial
 
 # %%
 dist = la.distributions.NegativeBinomial1(

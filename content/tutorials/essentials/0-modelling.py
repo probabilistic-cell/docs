@@ -41,12 +41,12 @@
 
 # %% [markdown]
 # ```{note}
-# Latenta is very related, and borrows elements, from tools such as stan, tensorflow and torch. However, we focused on making the entry barier much lower, by focussing on:
+# Latenta is very related, and borrows elements, from tools such as stan, tensorflow and torch. However, we focused on making the entry barrier much lower, by focussing on:
 # - Modularity, so that you can easily reuse parts made by others without having to understand them (although it can help!)
 # - Dummy-proofing, so that it is obvious what is wrong with a model early on
 # - Interpretability, so that we can easily see what our model is doing
 #
-# Our hope is that these aspects make it easier to bridge machine learning and biology, and to share and compare computational models.
+# Our hope is that these aspects make it easier to bridge machine learning and biology
 # ```
 
 # %% [markdown]

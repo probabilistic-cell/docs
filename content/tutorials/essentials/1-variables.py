@@ -21,11 +21,8 @@
 import latenta as la
 
 # %% [markdown]
-# A model is a:
-# 1. A collection of variables
-# 2. A description of how these variables are related in a graph structure
+# A model is a collection of variables together with a description of how these variables are related. Here, we will first look at the basic types of variables in a model, and how we can connect them with a graph structure.
 
-# Here we will look at the main types of variables, and how we can connect them within a graph structure.
 # We'll use a small single-cell transcriptomics dataset as demonstration:
 
 # %%
@@ -329,7 +326,7 @@ observation.likelihood
 # :::
 # ::::
 # 
-# Let's say we randomly take a cell from a tissue. Until we have observed something of this cell, we don't know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is, i.e. as a probability distribution with some known or unknown upstream components.
+# Let's say we randomly take a cell from a tissue. Until we have observed something of this cell, we don't know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is: as a probability distribution with some known or unknown upstream components.
 # 
 # This type of uncertainty is often of interest, and can provide  some interesting biological information in more complex models. For example:
 # - How does cell type abundance change across different conditions?
@@ -344,11 +341,11 @@ observation.likelihood
 # In general, we call this _epistemic uncertainty_. In bayesian modelling, this type of uncertainty is typically encoded as the posterior.
 # :::
 # ::::
-# Let's say we focus on one particular cell, and we want to know it's celltype. Naturally, if we don't observe anything about this cell, our uncertainty will be the same as that of the whole population. However, if we would now observe some gene expression, our uncertainty for this particular cell would decrease. The more genes we observe, the more certain we will become.
+# Let's say we focus on one particular cell, and we want to know it's celltype. Naturally, if we don't observe anything about this cell, our uncertainty will be the same as that inherent to the system as described above. However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.
 #
 # This type of uncertainty is not inherent to the cell. The cell does not change its celltype just because we are uncertain about it. It therefore does not have a direct connection to reality, but is simply an artefact of us knowing not enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
 # - We may be very certain about a cell's cell type, but are very uncertain about the cellular state. This could tell us that we don't have enough sequencing depth to assign a cell's state.
-# - If a gene's fold-change is likely to be both negative, positive or close to 0, we know we don't have enough data. This doesn't mean the gene is not differentially expressed, it simply means we don't have enough data know whether it is.
+# - If a gene's fold-change can be both negative, positive and close to 0, we know we don't have enough data. This doesn't mean the gene is not differentially expressed, it simply means we don't have enough data know whether it is.
 # 
 # :::{seealso}
 # https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty

@@ -1,0 +1,3 @@
+# Posteriors
+
+The main way to explore the results of a latenta model is by constructing posteriors. Different types of posteriors have different functions. An **observed** posterior allows you to explore the actual latent space and any variables that depend on this latent space. A **causal** posterior allows exploration of the effect of one or more latent variables on downstream variables, which are often observed or other latent variables.

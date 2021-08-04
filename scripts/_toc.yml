@@ -1,0 +1,49 @@
+format: jb-book
+root: index
+parts:
+- caption: "Tutorials"
+  chapters:
+  - file: tutorials/installation
+  - file: tutorials/essentials/0-modelling
+    title: Essentials
+    sections:
+    - file: tutorials/essentials/1-variables
+    - file: tutorials/essentials/2-inference
+    - file: tutorials/essentials/3-interpretation
+    - file: tutorials/essentials/4-model_selection
+    - file: tutorials/essentials/5-amortization
+  # - file: tutorials/overview
+    # title: Overview
+- caption: "User guide"
+  chapters:
+  - file: guide/overview
+  - file: guide/variables/index
+    sections:
+    - file: guide/variables/leaf_variables
+    - file: guide/variables/custom_variables
+  - file: guide/distributions/distributions
+    sections:
+    - file: guide/distributions/mixture
+    - file: guide/distributions/discrete
+    - file: guide/distributions/count
+  - file: guide/dynamics/dynamics
+    sections:
+    - file: guide/dynamics/sde
+    # - file: guide/dynamics/transcription
+  - file: guide/model_selection/index
+    sections:
+    - file: guide/model_selection/toy
+  # - file: guide/variational/variational
+  # - file: guide/variational/amortization
+  # - file: guide/circular/circular
+    # sections:
+    # - file: guide/circular/toy
+# - caption: "Explanation"
+  # chapters:
+  # - file: explanation/amortization
+- caption: "Reference"
+  chapters:
+  - file: reference/overview
+# - caption: About
+  # chapters:
+  # - file: about/acknowledgements

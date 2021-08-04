@@ -44,8 +44,6 @@
     <script src="../../_static/js/custom.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -75,7 +73,7 @@
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
       
-      <img src="../../_static/logo.png" class="logo" alt="logo">
+      <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
       
     </a>
@@ -357,29 +355,16 @@
 </div>
 </div>
 </div>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">Latex</span><span class="p">,</span> <span class="n">HTML</span>
-<span class="n">cookbooks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
-    <span class="p">[</span>
-        <span class="s2">&quot;transcription&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;A simple transcription&quot;</span>
-    <span class="p">]</span>
-<span class="p">],</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
-<span class="n">cookbooks</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;&lt;a href=&#39;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">.html&#39;&gt;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&lt;/a&gt;&quot;</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">cookbooks</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> 
-<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">cookbooks</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">escape</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)))</span>
-</pre></div>
-</div>
-</div>
+<div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="output text_html"><table border="1" class="dataframe">
+<div class="output text_html"><div class="admonition note" name="html-admonition"><p><table border="1" class="dataframe">
   <tbody>
     <tr>
       <td>A simple transcription</td>
       <td><a href='transcription.html'>transcription</a></td>
     </tr>
   </tbody>
-</table></div></div>
+</table></p></div></div></div>
 </div>
 <div class="toctree-wrapper compound">
 </div>

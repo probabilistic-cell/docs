@@ -21,7 +21,13 @@
 import latenta as la
 
 # %% [markdown]
-# A model is a collection of variables together with a description of how these variables are related. Here, we will first look at the basic types of variables in a model, and how we can connect them with a graph structure.
+# Modelling typically consists of several steps:
+# 1. Creating known and unknown variables
+# 2. Connect these variables in a graph structure
+# 3. Infer the value of the unknown variables
+# 4. Interpret the model
+#
+# In this tutorial, we give a brief overview of the first two steps. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
 
 # We'll use a small single-cell transcriptomics dataset as demonstration:
 
@@ -54,7 +60,7 @@ sc.pl.umap(adata, color = ["CD3D", "CD19", "CD14", "leiden"], title = ["CD3D - A
 # ## Definition
 
 # %% [markdown]
-# A variable in latenta is mathemtiacally represented by a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore,a dimension can also be annotation with a label, symbol and/or description.
+# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore,a dimension can also be annotation with a label, symbol and/or description.
 #
 # A "genes" dimension could be defined as follows:
 
@@ -79,7 +85,7 @@ cells = la.Dim(adata.obs.index, id = "cell")
 cells
 
 # %% [markdown]
-# We can define how a variable should look like, without any data, using {class}`la.Definition()`:
+# A count matrix is a prototypical example of a variable. We can define how it should look like, without any data, using {class}`la.Definition()`:
 
 # %%
 counts_definition = la.Definition(
@@ -208,7 +214,7 @@ expression.plot()
 
 # %% [markdown]
 # :::{seealso}
-# Visualization and inspection of models is further discussed in the [guide](/guide/inspection)
+# Visualization and introspect of models is further discussed in the [guide](/guide/introspect)
 # :::
 
 # %% [markdown]
@@ -343,7 +349,7 @@ observation.likelihood
 # ::::
 # Let's say we focus on one particular cell, and we want to know it's celltype. Naturally, if we don't observe anything about this cell, our uncertainty will be the same as that inherent to the system as described above. However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.
 #
-# This type of uncertainty is not inherent to the cell. The cell does not change its celltype just because we are uncertain about it. It therefore does not have a direct connection to reality, but is simply an artefact of us knowing not enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
+# This type of uncertainty is not inherent to the cell. The cell does not change its celltype just because we are uncertain about it. It therefore does not have a direct connection to reality, but is simply an artefact of us not knowing enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
 # - We may be very certain about a cell's cell type, but are very uncertain about the cellular state. This could tell us that we don't have enough sequencing depth to assign a cell's state.
 # - If a gene's fold-change can be both negative, positive and close to 0, we know we don't have enough data. This doesn't mean the gene is not differentially expressed, it simply means we don't have enough data know whether it is.
 # 
@@ -358,34 +364,44 @@ observation.likelihood
 # Name | Component | Symbol | Description
 # --- | --- | --- | ----
 # Prior distribution | `.p` | $p$ | The distribution followed by the variable. Note that this distribution can depend on other parameters, latent or fixed variables.
-# Variational distribution | `.q` | $q$ | An approximation of the posterior distribution, i.e. the distribution followed by a variable after observing the data. The parameters of this distribution can be estimated directly (i.e. as one or more Parameter) or through the observed data through amortization
+# Variational distribution | `.q` | $q$ | An approximation of the posterior distribution, i.e. the distribution followed by a variable after observing the data. The parameters of this distribution can be estimated directly (i.e. as one or more Parameter) or through the observed data using amortization
 
 # A prototypical example of a latent variable is the slope (i.e. fold-change) in a linear model:
 
 # %%
 lfc_p = la.distributions.Normal(
-    la.Parameter(0.),
-    la.Parameter(1., transforms = [la.transforms.Exp()])
+    loc = 0.,
+    scale = la.Parameter(1., transforms = [la.transforms.Exp()])
 )
 lfc = la.Latent(
-    lfc_p,
+    p = lfc_p,
     definition = la.Definition([genes])
 )
 expression = la.links.scalar.Linear(cluster, a = lfc, label = "expression")
 expression.plot()
 
 # %% [markdown]
+# The prior distribution $p$ in this case is a normal distribution with one free parameter: the scale $\sigma$. This parameter determines how far the slope _on average_ can be different than 0. The only reason we can estimate this as a parameter is because we are pooling information across many genes. This kind of {term}`multi-level modelling` is very powerful, as it includes multiple testing correction directly within the model {citel}`gelman_why_2009`.
+
+# The variational distribution $q$ on the other hand contains two parameters both specific for each gene. These contain our idea of where the slope of a gene will lie: the location $\mu$ is the average, while the scale $\sigma$ our uncertainty.
+
+# %% [markdown]
 # Note that many link function allow you to automatically create a latent variable, although you have to provide the correct definition if some dimensions cannot be inferred from other components:
 
 # %%
-expression = la.links.scalar.Linear(cluster, a = True, label = "expression", definition = la.Definition([cells, genes]))
+expression = la.links.scalar.Linear(
+    cluster,
+    a = True,                                      # 👈
+    label = "expression",
+    definition = la.Definition([cells, genes])     # ⚠️
+)
 expression.plot()
 
 # %%
 
+# %% [markdown]
+# :::{note}
+# Sometimes components of the prior distribution may themselves depend on a latent variable. In that case, this distribution will encompass both types of uncertainty. This would be the case for [most examples we gave for prior distributions](#uncertainty-inherent-to-the-system).
+# :::
 
 # %%
-expression = la.links.scalar.Linear(cluster, a = lfc, label = "expression")
-
-# %% [markdown]
-# Sometimes components of the prior distribution may themselves depend on a latent variable. In that case, this distribution will encompass both types of uncertainty.

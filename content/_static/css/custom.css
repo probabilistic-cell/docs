@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* Make container larger */
 div.container-xl {
-  max-width: 1800px;
+  max-width: 2000px;
 }
 
 p.caption > .caption-text {

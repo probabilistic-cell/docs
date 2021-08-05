@@ -60,13 +60,4 @@
 # %% [markdown]
 # Any model is a mathematical representation of reality, and building models does require some mathematics. Although latenta may make this easier, it would be unwise to completely abstract away every mathematical concept. Some probability, statistics and machine learning concepts are simply too central for modelling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.
 
-# %% [markdown]
-# Modelling typically consists of several steps:
-# 1. Creating known and unknown variables
-# 2. Connect these variables, i.e. creating the model
-# 3. Infer the value of the unknown variables
-# 4. Interpret the model
-#
-# In this tutorial, we give an overview of each step. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
-
 # %%

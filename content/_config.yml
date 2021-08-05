@@ -42,8 +42,9 @@ sphinx:
     .py:
       - jupytext.reads
       - fmt: py
+  docstitle: hi
 
-  # extra_extensions:
+  extra_extensions:
     # - html_admonition
-  #  - sphinx_citel
+   - sphinx_citel
 

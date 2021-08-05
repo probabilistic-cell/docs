@@ -8,6 +8,7 @@ clean:
 	jb clean ./
 
 compile:
+	cp ../latenta_manuscript/manuscript/latenta_manuscript.bib ./content
 	sass content/_static/css/custom.scss content/_static/css/custom.css
 	python scripts/convert.py
 

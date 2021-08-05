@@ -68,8 +68,8 @@
 <br>
 
 # Overview
-
-Latenta models the cell as a combination of different _cellular processes_ (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, ...). Each of these processes influence _observations_ (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, ...). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable _mechanistic_ models. In this way, it allows you to answer questions such as:
+EEEE
+Latenta models the cell as a combination of different _cellular processes_ (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, ...). Each of these processes influence _observations_ (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, ...). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable _mechanistic_ models. In this way, it allows you to answer questions such as: {citel}`gershman_amortized_2014`
 
 * How does the remaining variation look like once I model («regress out») my time series, batch effect and cell cycle?
 * Does my genetic perturbation affect target gene expression in a linear, sigmoid, exponential or more complex manner?

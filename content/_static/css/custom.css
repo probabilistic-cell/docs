@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* Make container larger */
-div.container-xl {
+div.container-xl, div.container {
   max-width: 2000px;
 }
 
@@ -48,6 +48,15 @@ nav.bd-links p.caption {
   border-color: #6c757d;
 }
 
+/* toc */
+.toc-h2 {
+  font-size: 1rem;
+}
+
+.toc-h2 {
+  font-size: 0.9rem;
+}
+
 /* zoom logo */
 .logo {
   padding: 10px;
@@ -78,6 +87,11 @@ nav.bd-links p.caption {
 
 .card-body {
   box-shadow: inset 0 0 10px #00000011;
+  font-size: 1.2rem;
+}
+
+.card-body code {
+  font-size: 1rem !important;
 }
 
 /* package-tree */

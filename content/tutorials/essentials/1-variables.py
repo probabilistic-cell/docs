@@ -119,10 +119,10 @@ counts.value
 # Because our variable is annotated, we can also get this same value as a dataframe:
 
 # %%
-counts.value_pd
+counts.value_pd.head()
 
 # %% [markdown]
-# Do note that we can also provide pandas and xarray objects to :class:`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
+# Do note that we can also provide pandas and xarray objects to {class}`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
 
 # %%
 cluster = la.Fixed((adata.obs["leiden"] == 0).astype(float), label = "cluster")
@@ -151,7 +151,7 @@ leiden
 
 # %%
 leiden.run()
-leiden.value_pd
+leiden.value_pd.head()
 
 # %% [markdown]
 # ## Parameters
@@ -214,7 +214,7 @@ expression.plot()
 
 # %% [markdown]
 # :::{seealso}
-# Visualization and introspect of models is further discussed in the [guide](/guide/introspect)
+# Visualization and introspection of models is further discussed in the [guide](/guide/introspect)
 # :::
 
 # %% [markdown]
@@ -283,7 +283,7 @@ counts = la.distributions.NegativeBinomial2(mu = expression)
 
 # %%
 counts.run_recursive()
-counts.value_pd
+counts.value_pd.head()
 
 # %% [markdown]
 # Because we model an observation as a distribution, we can calculate how likely this observation is according to this distribution. The goal of any modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
@@ -332,9 +332,9 @@ observation.likelihood
 # :::
 # ::::
 # 
-# Let's say we randomly take a cell from a tissue. Until we have observed something of this cell, we don't know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty in the way it is: as a probability distribution with some known or unknown upstream components.
+# Let's say we randomly take a cell from a tissue. Until we have observed something of this cell, we don't know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty an an appropriate probability distribution, which can have some known or unknown components.
 # 
-# This type of uncertainty is often of interest, and can provide  some interesting biological information in more complex models. For example:
+# This type of uncertainty is often of interest, and can provide some interesting biological information in more complex models. For example:
 # - How does cell type abundance change across different conditions?
 # - The distribution of all cell's pseudotime. Are there more early than late cells? Does this change between conditions?
 # - The distribution of the gene's fold changes. Are there more genes upregulated than downregulated? Are there a couple of genes with massive changes, while all other genes do not change at all?
@@ -358,6 +358,8 @@ observation.likelihood
 # :::
 
 # %% [markdown]
+# ### Constructing a latent variable
+
 # Latent variables combine both types of uncertainty:
 
 # %% [markdown]

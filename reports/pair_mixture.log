@@ -31,7 +31,7 @@ for distribution_id in distributions_dim.coords:
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2963672/1058910777.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_3007007/1058910777.py[0m in [0;36m<module>[0;34m[0m
 [0;32m----> 1[0;31m [0mx[0m [0;34m=[0m [0mtorch[0m[0;34m.[0m[0mtensor[0m[0;34m([0m[0;36m5.[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 [0m[1;32m      2[0m [0;32mfor[0m [0mdistribution_id[0m [0;32min[0m [0mdistributions_dim[0m[0;34m.[0m[0mcoords[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 [1;32m      3[0m     [0mw[0m [0;34m=[0m [0mpd[0m[0;34m.[0m[0mSeries[0m[0;34m([0m[0;36m0.[0m[0;34m,[0m [0mindex[0m [0;34m=[0m [0mdistributions_dim[0m[0;34m.[0m[0mindex[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m

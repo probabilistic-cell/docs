@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* Make container larger */
-div.container-xl {
+div.container-xl, div.container {
   max-width: 2000px;
 }
 
@@ -46,6 +46,15 @@ nav.bd-links p.caption {
   color: #fff !important;
   background-color: #6c757d;
   border-color: #6c757d;
+}
+
+/* toc */
+.toc-h2 {
+  font-size: 1rem;
+}
+
+.toc-h2 {
+  font-size: 0.9rem;
 }
 
 /* zoom logo */

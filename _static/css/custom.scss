@@ -1,7 +1,7 @@
 
 /* Make container larger */
 
-div.container-xl {
+div.container-xl, div.container {
     max-width: 2000px;
 }
 
@@ -50,6 +50,16 @@ nav.bd-links p.caption {
 }
 
 
+
+/* toc */
+
+.toc-h2 {
+    font-size: 1rem;
+}
+
+.toc-h2 {
+    font-size: 0.9rem;
+}
 
 /* zoom logo */
 .logo {

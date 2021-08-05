@@ -334,12 +334,18 @@
         <div class="card h-100">
             <div class="card-body">
                 <h3>👩‍💻 Installation</h3>
-                <a href="tutorials/installation.html" class="stretched-link" ></a>
+                <a href="tutorials/installation.html" class="stretched-link" style="z-index: 1;"></a>
                 </p>
-                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">conda</a>
-                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">pip</a>
+                <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;" >conda</a>
+                <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;">pip</a>
+                <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">github</a>
                 <br>
-                <code>pip install latenta lacell</code>
+                <div style="z-index: 1; position: relative;">
+                    <code>
+                    git clone https://github.com/probabilistic-cell/lacell.git <br>
+                    pip install -e lacell
+                    </code>
+                </div>
             </div>
         </div>
     </div>
@@ -398,15 +404,7 @@
 <br>
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>EEEE
-Latenta models the cell as a combination of different <em>cellular processes</em> (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, …). Each of these processes influence <em>observations</em> (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, …). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable <em>mechanistic</em> models. In this way, it allows you to answer questions such as: 
-    <span style="border-bottom: 1px dotted;cursor: pointer;" data-html="true" data-container="body" data-toggle="popover" data-placement="auto" data-trigger="hover" data-content="
-    <a href='https://escholarship.org/uc/item/34j1h7k5'  target='_blank' class='stretched-link'></a>
-    Gershman, S. &amp; Goodman, N., 2014. Amortized Inference in Probabilistic Reasoning. <i>Proceedings of the Annual Meeting of the Cognitive Science Society</i>, 36(36). Available at: https://escholarship.org/uc/item/34j1h7k5 [Accessed January 24, 2021].
-    " data-original-title="" title="">
-    (Gershman &amp; Goodman 2014)
-    </span>
-    </p>
+<p>Latenta models the cell as a combination of different <em>cellular processes</em> (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, …). Each of these processes influence <em>observations</em> (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, …). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable <em>mechanistic</em> models. In this way, it allows you to answer questions such as:</p>
 <ul class="simple">
 <li><p>How does the remaining variation look like once I model («regress out») my time series, batch effect and cell cycle?</p></li>
 <li><p>Does my genetic perturbation affect target gene expression in a linear, sigmoid, exponential or more complex manner?</p></li>

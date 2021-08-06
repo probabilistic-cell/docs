@@ -1425,13 +1425,18 @@ Categories (5, object): [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#3
 <p>In general, we call this <em>aleatoric uncertainty</em>. In bayesian modelling, this type of uncertainty is typically encoded as the prior distribution.</p>
 </div>
 </div>
-<p>Let’s say we randomly take a cell from a tissue. Until we have observed something of this cell, we don’t know anything what type of cell it is, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is simply inherent to the population, and nothing we do can change that. We model this uncertainty an an appropriate probability distribution, which can have some known or unknown components.</p>
+<p>Let’s say we are randomly taking a cell from a tissue. Every time we take such a sample, we don’t have an idea about what type of cell it will be, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is inherent to the population, and nothing we do can change that. We model this uncertainty an an appropriate probability distribution, which can have some known or unknown components.</p>
 <p>This type of uncertainty is often of interest, and can provide some interesting biological information in more complex models. For example:</p>
 <ul class="simple">
 <li><p>How does cell type abundance change across different conditions?</p></li>
 <li><p>The distribution of all cell’s pseudotime. Are there more early than late cells? Does this change between conditions?</p></li>
 <li><p>The distribution of the gene’s fold changes. Are there more genes upregulated than downregulated? Are there a couple of genes with massive changes, while all other genes do not change at all?</p></li>
+<li><p>The effect of a transcription factor. Does it have many target genes with a subtle effect? Or a few target genes but with a very strong effect?</p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty">https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty</a></p>
+</div>
 </div>
 <div class="section" id="uncertainty-because-of-lack-of-data">
 <h3>Uncertainty because of lack of data<a class="headerlink" href="#uncertainty-because-of-lack-of-data" title="Permalink to this headline">¶</a></h3>
@@ -1442,16 +1447,13 @@ Categories (5, object): [&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#3
 <p>In general, we call this <em>epistemic uncertainty</em>. In bayesian modelling, this type of uncertainty is typically encoded as the posterior.</p>
 </div>
 </div>
-<p>Let’s say we focus on one particular cell, and we want to know it’s celltype. Naturally, if we don’t observe anything about this cell, our uncertainty will be the same as that inherent to the system as described above. However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.</p>
+<p>Let’s say we focus on one particular cell, and we want to know it’s cell type. Naturally, before we hav observed anything about this cell, our uncertainty will be the same as that inherent to the system (as described above). However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.</p>
 <p>This type of uncertainty is not inherent to the cell. The cell does not change its celltype just because we are uncertain about it. It therefore does not have a direct connection to reality, but is simply an artefact of us not knowing enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:</p>
 <ul class="simple">
 <li><p>We may be very certain about a cell’s cell type, but are very uncertain about the cellular state. This could tell us that we don’t have enough sequencing depth to assign a cell’s state.</p></li>
 <li><p>If a gene’s fold-change can be both negative, positive and close to 0, we know we don’t have enough data. This doesn’t mean the gene is not differentially expressed, it simply means we don’t have enough data know whether it is.</p></li>
+<li><p>It may be that two transcription factors can equally regulate in the model, and that we don’t have enough data to say which one is more likely.</p></li>
 </ul>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty">https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty</a></p>
-</div>
 </div>
 <div class="section" id="constructing-a-latent-variable">
 <h3>Constructing a latent variable<a class="headerlink" href="#constructing-a-latent-variable" title="Permalink to this headline">¶</a></h3>

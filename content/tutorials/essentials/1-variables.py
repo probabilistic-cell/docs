@@ -377,10 +377,10 @@ lfc_p = la.distributions.Normal(
 )
 lfc = la.Latent(
     p = lfc_p,
-    definition = la.Definition([genes])
+    definition = la.Definition([genes]),
+    label = "lfc"
 )
-expression = la.links.scalar.Linear(cluster, a = lfc, label = "expression")
-expression.plot()
+lfc.plot()
 
 # %% [markdown]
 # The prior distribution $p$ in this case is a normal distribution with one free parameter: the scale $\sigma$. This parameter determines how far the slope _on average_ can be different than 0. The only reason we can estimate this as a parameter is because we are pooling information across many genes. This kind of {term}`multi-level modelling` is very powerful, as it includes multiple testing correction directly within the model {citel}`gelman_why_2009`.
@@ -388,7 +388,7 @@ expression.plot()
 # The variational distribution $q$ on the other hand contains two parameters both specific for each gene. These contain our idea of where the slope of a gene will lie: the location $\mu$ is the average, while the scale $\sigma$ our uncertainty.
 
 # %% [markdown]
-# Note that many link function allow you to automatically create a latent variable, although you have to provide the correct definition if some dimensions cannot be inferred from other components:
+# Note that many link functions will create a latent variable automatically if you specify `True`, although you have to provide the correct definition if some dimensions cannot be inferred from other components:
 
 # %%
 expression = la.links.scalar.Linear(
@@ -406,4 +406,17 @@ expression.plot()
 # Sometimes components of the prior distribution may themselves depend on a latent variable. In that case, this distribution will encompass both types of uncertainty. This would be the case for [most examples we gave for prior distributions](#uncertainty-inherent-to-the-system).
 # :::
 
+# %% [markdown]
+# Just like parameters, the two distributions of latent variables may also have transformations. This is for example the case if we would use a LogNormal as prior, which only has a support on positive numbers:
+
 # %%
+baseline_p = la.distributions.LogNormal(
+    loc = la.Parameter(0.),
+    scale = la.Parameter(1., transforms = [la.transforms.Exp()])
+)
+baseline = la.Latent(
+    p = baseline_p,
+    definition = la.Definition([genes]),
+    label = "baseline"
+)
+baseline.plot()

@@ -29,6 +29,12 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  comments:
+    giscus:
+      repo: "probabilistic-cell/latenta"
+      repo-id: "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg="
+      category: "Documentation"
+      category-id: "DIC_kwDOEVlZHM4B-mVU"
 
 # Launcing notebooks
 launch_buttons:

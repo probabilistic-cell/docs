@@ -15,27 +15,7 @@
 # ---
 
 # %% [markdown]
-# # Inference
+# # Unsupervised learning
 
 # %%
 import latenta as la
-import scanpy as sc
-
-# %% [markdown]
-# We'll use the same dataset as [before](./1-variables)...
-
-# %%
-adata = sc.datasets.pbmc3k()
-
-sc.pp.filter_cells(adata, min_counts = 100)
-
-sc.pp.normalize_per_cell(adata)
-sc.pp.log1p(adata)
-sc.pp.filter_genes_dispersion(adata)
-
-sc.pp.pca(adata)
-sc.pp.neighbors(adata)
-
-# %% [markdown]
-# and also the same model:
-

@@ -28,6 +28,9 @@
 # All these models have several aspects in common: we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene's fold change or dynamics during a trajectory), a cell (such as a cells position in a reduced space or its pseudotime) or both (e.g. the future state of a cell).
 
 # %% [markdown]
+# ## But why would I want to model data?
+
+# %% [markdown]
 # Why model data? You as a user probably have either of two goals in mind: prediction or understanding.
 #
 # - For **prediction**, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells we just killed in an experiment, but also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.
@@ -56,6 +59,17 @@
 # - The best experience is the one you built up slowly but surely, starting from what others have done and then try to adapt and experiment
 #
 # Latenta is made with these elements in mind. It's relatively straightforward to reuse other people's models without caring about the details. But you can then delve into parts of a model, change some elements where needed and combine different models. In the end, after some effort, knowledge will come.
+
+# %% [markdown]
+# ## Different layers of latenta
+
+# Latenta has different layers of complexity:
+# 
+# - At the highest level, we provide common functions that create a couple of variables for you. These for example include modelling of transcriptomics, proteomics, chromatin accessibility, trajectories, ...
+# - At the medium level, we provide ways to create individual variables and connect them with eachother.
+# - At the lowest level, we provide ways to create custom sets of variables.
+
+# If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) thinking.
 
 # %% [markdown]
 # Any model is a mathematical representation of reality, and building models does require some mathematics. Although latenta may make this easier, it would be unwise to completely abstract away every mathematical concept. Some probability, statistics and machine learning concepts are simply too central for modelling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.

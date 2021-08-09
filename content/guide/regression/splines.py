@@ -199,3 +199,21 @@ sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
 parameter_values = la.qa.cookbooks.check_parameters(la.qa.cookbooks.gather_parameters(["a", "intercept"], model_gs, observed))
 
 # %%
+dim = la.Dim([1, 2, 3, 4], "h")
+
+# %%
+x_value = pd.Series(
+    [1., 2., 3., 0.],
+    index = dim.index,
+    name = "x"
+)
+x = la.Fixed(x_value)
+
+y = la.links.scalar.Spline(x)
+
+assert y.value_definition[0] == x[0]
+assert y.ndim == 1
+
+# %%
+
+# %%

@@ -25,7 +25,7 @@
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
-                <h3>🎬 The essentials</h3>
+                <h3>👩‍🔬 The essentials</h3>
                 An introduction at modelling with latenta, with a focus for (computation) biologists
                 <a href="tutorials/essentials/0-modelling.html" class="stretched-link"></a>
             </div>

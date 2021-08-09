@@ -19,6 +19,7 @@
 
 # %%
 import latenta as la
+import scanpy as sc
 
 # %% [markdown]
 # Modelling typically consists of several steps:
@@ -28,33 +29,31 @@ import latenta as la
 # 4. Interpret the model
 #
 # In this tutorial, we give a brief overview of the first two steps. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
-
-# We'll use a small single-cell transcriptomics dataset as demonstration:
+#
+# while we will use a simple single-cell transcriptomics dataset as demonstration, in these tutorials we will primarily focus on the core that are relevant to any type of modality, latent space and experimental design.
 
 # %%
-import scanpy as sc
+adata = la.data.load_myod1()
 
-adata = sc.datasets.pbmc3k()
-
-sc.pp.filter_cells(adata, min_counts = 100)
+# %% tags=["hide-input", "remove-output"]
+import numpy as np
 
 sc.pp.normalize_per_cell(adata)
 sc.pp.log1p(adata)
-sc.pp.filter_genes_dispersion(adata)
 
+sc.pp.combat(adata)
 sc.pp.pca(adata)
+
 sc.pp.neighbors(adata)
+sc.tl.umap(adata)
+
+adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 
 # %%
-sc.tl.umap(adata)
-sc.pl.umap(adata)
+sc.pl.umap(adata, color = ["gene_overexpressed", "batch", "log_overexpression"])
 
 # %% [markdown]
-# Just for demonstration, we'll focus on a broad clustering
-
-# %%
-sc.tl.leiden(adata, resolution = 0.05)
-sc.pl.umap(adata, color = ["CD3D", "CD19", "CD14", "leiden"], title = ["CD3D - A T-cell marker", "CD19 - A B-cell marker", "CD14 - A monocyte marker", "leiden"])
+# In this data, we have overexpressed the transcription factor Myod1 in a stem cell line in different batches. As output, we get the transcriptome along with a measure of which gene was overexpressed, and by how much.
 
 # %% [markdown]
 # ## Definition
@@ -125,14 +124,14 @@ counts.value_pd.head()
 # Do note that we can also provide pandas and xarray objects to {class}`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
 
 # %%
-cluster = la.Fixed((adata.obs["leiden"] == 0).astype(float), label = "cluster")
-cluster
+overexpression = la.Fixed(adata.obs["log_overexpression"], label = "overexpression", symbol = "overexpression")
+overexpression
 
 # %% [markdown]
 # Note that we did not provide a definition to this variable, but it was inferred from the series you provided based on the index name (`adata.obs["leiden"].index.name`). The first dimensions of both our `counts` and `leiden` are therefore equal:
 
 # %%
-cluster[0] == counts[0]
+overexpression[0] == counts[0]
 
 # %% [markdown]
 # For discrete fixed variables, we often like to work in a "one-hot" encoding, meaning that we get a binary (True/False) matrix if a sample (cell) is part of a particular group (cluster). We can use `la.discrete.DiscreteFixed` to do this conversion by providing it with a categorical pandas series:
@@ -143,15 +142,16 @@ cluster[0] == counts[0]
 # ```
 
 # %%
-adata.obs["leiden"]
+adata.obs["gene_overexpressed"]
 
 # %%
-leiden = la.discrete.DiscreteFixed(adata.obs["leiden"])
-leiden
+overexpressed = la.discrete.DiscreteFixed(adata.obs["gene_overexpressed"])
+overexpressed
+
 
 # %%
-leiden.run()
-leiden.value_pd.head()
+overexpressed.run()
+overexpressed.value_pd.head()
 
 # %% [markdown]
 # ## Parameters
@@ -196,16 +196,18 @@ baseline
 # We use variables to compute things. In this case we create a variable that depends on other variables, which we call components:
 
 # %%
-expression = la.links.scalar.Linear(cluster, a = lfc, label = "expression")
+expression = la.links.scalar.Linear(overexpression, a = lfc, label = "expression")
 
 # %%
 expression
 
 # %% [markdown]
-# Both dimensions of this variable are **broadcasted**, meaning that their coordinates and size are set by upstream components.
+# Both dimensions of this variable are **broadcasted**, meaning that their coordinates and size are set by upstream components (signified by a •).
+#
+# The actual definition of the variable can be obtained using `.value_definition`:
 
 # %%
-expression["cell"]
+expression.value_definition
 
 # %% [markdown]
 # A critical tool when building complex models is to plot how different variables are related in the graph structure:
@@ -225,7 +227,7 @@ expression.plot()
 expression.a
 
 # %% [markdown]
-# We can sometimes also still add or change components after we have initialized the variable:
+# Often, you can still add or change components after we have initialized the variable:
 
 # %%
 expression.b = baseline
@@ -280,28 +282,31 @@ expression.plot()
 # ```
 
 # %%
-counts = la.distributions.NegativeBinomial2(mu = expression)
+transcriptome_p = la.distributions.NegativeBinomial2(mu = expression)
+
+# %% [markdown]
+# Running a distribution will take a sample from it:
 
 # %%
-counts.run_recursive()
-counts.value_pd.head()
+transcriptome_p.run_recursive()
+transcriptome_p.value_pd.head()
 
 # %% [markdown]
 # Because we model an observation as a distribution, we can calculate how likely this observation is according to this distribution. The goal of any modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
 
 # %%
-counts.likelihood
+transcriptome_p.likelihood
 
 # %% [markdown]
 # ## Observations
 
 # %% [markdown]
-# Observations are fixed variables that follow a distribution. An observation always has some physical connection to reality, but the problem is that we only observe a noisy variant of this reality. This noise is not always purely technical (due to stochastic sampling of mRNAs) but also typically contains biological components (such as transcriptional bursting). Essentially, any variation that cannot be explained by the model is explained away as noise.
+# Observations are fixed variables that follow a distribution. An observation always has some physical connection to reality, but the problem is that we only observe a noisy variant of this reality. This noise is not always purely technical (due to stochastic sampling of mRNAs) but also typically contains biological components (such as transcriptional bursting). Essentially, any variation that cannot be explained by the model is explained away as noise. In our case, this noise is contained in the dispersion component of the Negative Binomial.
 
 # %%
 observation = la.Observation(
     adata.X,
-    counts,
+    transcriptome_p,
     definition = counts_definition
 )
 
@@ -314,7 +319,7 @@ observation.plot()
 observation.run()
 
 # %% [markdown]
-# However, we can now also calculate the (log-)likelihood of the sample
+# Because we model an observation as a distribution, we can calculate how likely this observation is according to this distribution. The goal of modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
 
 # %%
 observation.likelihood
@@ -323,8 +328,8 @@ observation.likelihood
 # ## Latent
 
 # %% [markdown]
-# Latent variables are unknown. but in contrast to a parameters they follow a distribution. Latent variables are central to probabilistic modelling, because they encompass two types of uncertainty:
-
+# Latent variables are unknown but follow distribution, rather than having having one fixed value such as parameters. Latent variables are central to probabilistic modelling, because they encompass two types of uncertainty:
+#
 # ::::{margin}
 # :::{seealso}
 # https://en.wikipedia.org/wiki/Uncertainty_quantification#Aleatoric_and_epistemic_uncertainty
@@ -338,9 +343,9 @@ observation.likelihood
 # In general, we call this _aleatoric uncertainty_. In bayesian modelling, this type of uncertainty is typically encoded as the prior distribution.
 # :::
 # ::::
-# 
+#
 # Let's say we are randomly taking a cell from a tissue. Every time we take such a sample, we don't have an idea about what type of cell it will be, except perhaps that some cell types are more likely because they are more abundant. This uncertainty is inherent to the population, and nothing we do can change that. We model this uncertainty an an appropriate probability distribution, which can have some known or unknown components.
-# 
+#
 # This type of uncertainty is often of interest, and can provide some interesting biological information in more complex models. For example:
 # - How does cell type abundance change across different conditions?
 # - The distribution of all cell's pseudotime. Are there more early than late cells? Does this change between conditions?
@@ -355,7 +360,7 @@ observation.likelihood
 # In general, we call this _epistemic uncertainty_. In bayesian modelling, this type of uncertainty is typically encoded as the posterior.
 # :::
 # ::::
-# Let's say we focus on one particular cell, and we want to know it's cell type. Naturally, before we hav observed anything about this cell, our uncertainty will be the same as that inherent to the system (as described above). However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.
+# Let's say we focus on one particular cell, and we want to know it's cell type. Naturally, before we have observed anything about this cell, our uncertainty will be the same as that inherent to the system (as described above). However, if we would now observe some gene expression, our uncertainty for this particular cell will decrease. The more genes we observe, the more certain we will become.
 #
 # This type of uncertainty is not inherent to the cell. The cell does not change its celltype just because we are uncertain about it. It therefore does not have a direct connection to reality, but is simply an artefact of us not knowing enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
 # - We may be very certain about a cell's cell type, but are very uncertain about the cellular state. This could tell us that we don't have enough sequencing depth to assign a cell's state.
@@ -364,7 +369,7 @@ observation.likelihood
 
 # %% [markdown]
 # ### Constructing a latent variable
-
+#
 # Latent variables combine both types of uncertainty:
 
 # %% [markdown]
@@ -372,7 +377,7 @@ observation.likelihood
 # --- | --- | --- | ----
 # Prior distribution | `.p` | $p$ | The distribution followed by the variable. Note that this distribution can depend on other parameters, latent or fixed variables.
 # Variational distribution | `.q` | $q$ | An approximation of the posterior distribution, i.e. the distribution followed by a variable after observing the data. The parameters of this distribution can be estimated directly (i.e. as one or more Parameter) or through the observed data using amortization
-
+#
 # A prototypical example of a latent variable is the slope (i.e. fold-change) in a linear model:
 
 # %%
@@ -389,7 +394,7 @@ lfc.plot()
 
 # %% [markdown]
 # The prior distribution $p$ in this case is a normal distribution with one free parameter: the scale $\sigma$. This parameter determines how far the slope _on average_ can be different than 0. The only reason we can estimate this as a parameter is because we are pooling information across many genes. This kind of {term}`multi-level modelling` is very powerful, as it includes multiple testing correction directly within the model {citel}`gelman_why_2009`.
-
+#
 # The variational distribution $q$ on the other hand contains two parameters both specific for each gene. These contain our idea of where the slope of a gene will lie: the location $\mu$ is the average, while the scale $\sigma$ our uncertainty.
 
 # %% [markdown]
@@ -397,14 +402,12 @@ lfc.plot()
 
 # %%
 expression = la.links.scalar.Linear(
-    cluster,
-    a = True,                                      # 👈
+    overexpression,
+    a = True,                                     # 👈
     label = "expression",
-    definition = la.Definition([cells, genes])     # ⚠️
+    definition = la.Definition([cells, genes])    # ⚠️
 )
 expression.plot()
-
-# %%
 
 # %% [markdown]
 # :::{note}
@@ -412,7 +415,7 @@ expression.plot()
 # :::
 
 # %% [markdown]
-# Just like parameters, the two distributions of latent variables may also have transformations. This is for example the case if we would use a LogNormal as prior, which only has a support on positive numbers:
+# Just like parameters, the two distributions of latent variables may also have transformations. This is for example the case if we would use a `.LogNormal` as prior, which only has a support on positive numbers:
 
 # %%
 baseline_p = la.distributions.LogNormal(
@@ -425,3 +428,16 @@ baseline = la.Latent(
     label = "baseline"
 )
 baseline.plot()
+
+# %% [markdown]
+# ## Main points
+# - Modelling is creating and connecting variables in a graph structure
+# - Leaf variables are the start of any model. Different types of leaf variables have different functions:
+#    - Fixed variables are provided by you
+#    - Parameters are free and have to be estimated from the data
+#    - Observations are fixed variables that follow a distribution
+# - Computed variables link different variables together in a deterministic way
+# - Distributions are used to uncertainty
+# - Latent variables are the variables we're most interested in, as they encompass both uncertainty inherent to the system and uncertainty due to the lack of data
+#
+# Once we have specified a model, the next question is how we can find optimal values for the free parameters. This question we will answer next.

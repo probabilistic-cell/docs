@@ -78,12 +78,16 @@ print(dist.likelihood)
 
 # %%
 dist = la.distributions.Normal(loc = la.Fixed(10., definition = la.Definition([cells])), scale = la.Fixed(2., definition = la.Definition([genes])))
+dist = la.distributions.Laplace(loc = la.Fixed(10., definition = la.Definition([cells])), scale = la.Fixed(2., definition = la.Definition([genes])))
+dist = la.distributions.Uniform(high = la.Fixed(10., definition = la.Definition([cells])), low = la.Fixed(2., definition = la.Definition([genes])))
 
 # %%
 dist.reset_recursive()
 dist.run_recursive()
 print(dist.value)
 print(dist.likelihood)
+print(dist.icdf(0.9))
+print(dist.spread(3))
 
 # %%
 dist.redefine(la.Definition([cells, genes]))

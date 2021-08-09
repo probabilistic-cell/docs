@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inference</title>
+    <title>Unsupervised learning</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -42,8 +42,47 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -53,8 +92,6 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Interpretation" href="3-interpretation.html" />
-    <link rel="prev" title="Variables" href="1-variables.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -94,45 +131,35 @@
   Tutorials
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../installation.html">
    Installation
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="0-modelling.html">
    Essentials
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="1-variables.html">
      Variables
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Inference
-    </a>
-   </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="3-interpretation.html">
-     Interpretation
+    <a class="reference internal" href="2-regression.html">
+     Regression
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="4-model_selection.html">
      Model selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="5-amortization.html">
-     Amortization
     </a>
    </li>
   </ul>
@@ -155,13 +182,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../guide/variables/leaf_variables.html">
+    <a class="reference internal" href="../../guide/variables/leaves.html">
      Leaf variables
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../guide/variables/custom_variables.html">
-     Custom variables
     </a>
    </li>
   </ul>
@@ -240,6 +262,30 @@
   </a>
  </li>
 </ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
 
     </div>
 </nav> <!-- To handle the deprecated key -->
@@ -280,7 +326,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/tutorials/essentials/2-inference.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/tutorials/essentials/3-unsuperivsed.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -300,7 +346,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Ftutorials/essentials/2-inference.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Ftutorials/essentials/3-unsuperivsed.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -321,7 +367,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./tutorials/essentials/2-inference.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./tutorials/essentials/3-unsuperivsed.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -346,34 +392,15 @@
         
               <div>
                 
-  <div class="section" id="inference">
-<h1>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="unsupervised-learning">
+<h1>Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
-<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>We’ll use the same dataset as <a class="reference internal" href="1-variables.html"><span class="doc std std-doc">before</span></a>…</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">pbmc3k</span><span class="p">()</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_cells</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_counts</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_per_cell</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_genes_dispersion</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>and also the same model:</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -401,8 +428,6 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="1-variables.html" title="previous page">Variables</a>
-    <a class='right-next' id="next-link" href="3-interpretation.html" title="next page">Interpretation</a>
 
         </div>
         

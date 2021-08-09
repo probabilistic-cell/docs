@@ -42,8 +42,47 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -116,23 +155,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="essentials/2-inference.html">
-     Inference
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="essentials/3-interpretation.html">
-     Interpretation
+    <a class="reference internal" href="essentials/2-regression.html">
+     Regression
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="essentials/4-model_selection.html">
      Model selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="essentials/5-amortization.html">
-     Amortization
     </a>
    </li>
   </ul>
@@ -155,13 +184,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../guide/variables/leaf_variables.html">
+    <a class="reference internal" href="../guide/variables/leaves.html">
      Leaf variables
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../guide/variables/custom_variables.html">
-     Custom variables
     </a>
    </li>
   </ul>
@@ -238,6 +262,30 @@
   <a class="reference internal" href="../reference/overview.html">
    Reference
   </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 

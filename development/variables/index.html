@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Custom variables</title>
+    <title>Variables</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -42,8 +42,47 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -53,8 +92,8 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Distributions" href="../distributions/distributions.html" />
-    <link rel="prev" title="Leaf variables" href="leaf_variables.html" />
+    <link rel="next" title="Custom variables" href="custom.html" />
+    <link rel="prev" title="Reference" href="../../reference/overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -116,23 +155,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/2-inference.html">
-     Inference
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/3-interpretation.html">
-     Interpretation
+    <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
+     Regression
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/4-model_selection.html">
      Model selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/5-amortization.html">
-     Amortization
     </a>
    </li>
   </ul>
@@ -143,31 +172,26 @@
   User guide
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/variables/index.html">
    Variables
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="leaf_variables.html">
+    <a class="reference internal" href="../../guide/variables/leaves.html">
      Leaf variables
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Custom variables
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../distributions/distributions.html">
+  <a class="reference internal" href="../../guide/distributions/distributions.html">
    Distributions
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
@@ -177,24 +201,24 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../distributions/mixture.html">
+    <a class="reference internal" href="../../guide/distributions/mixture.html">
      Mixture distributions
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../distributions/discrete.html">
+    <a class="reference internal" href="../../guide/distributions/discrete.html">
      Discrete distributions
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../distributions/count.html">
+    <a class="reference internal" href="../../guide/distributions/count.html">
      Count distributions
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../dynamics/dynamics.html">
+  <a class="reference internal" href="../../guide/dynamics/dynamics.html">
    Dynamics
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
@@ -204,14 +228,14 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../dynamics/sde.html">
+    <a class="reference internal" href="../../guide/dynamics/sde.html">
      Stochastic differential equations
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../model_selection/index.html">
+  <a class="reference internal" href="../../guide/model_selection/index.html">
    Model selection
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
@@ -221,7 +245,7 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../model_selection/toy.html">
+    <a class="reference internal" href="../../guide/model_selection/toy.html">
      Model selection
     </a>
    </li>
@@ -238,6 +262,30 @@
   <a class="reference internal" href="../../reference/overview.html">
    Reference
   </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   Variables
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -280,9 +328,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/guide/variables/custom_variables.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/development/variables/index.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -300,7 +348,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Fguide/variables/custom_variables.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Fdevelopment/variables/index.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -316,23 +364,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./guide/variables/custom_variables.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -346,8 +377,10 @@
         
               <div>
                 
-  <div class="section" id="custom-variables">
-<h1>Custom variables<a class="headerlink" href="#custom-variables" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="variables">
+<h1>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -363,7 +396,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./guide/variables"
+            path: "./development/variables"
         },
         predefinedOutput: true
     }
@@ -375,8 +408,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="leaf_variables.html" title="previous page">Leaf variables</a>
-    <a class='right-next' id="next-link" href="../distributions/distributions.html" title="next page">Distributions</a>
+    <a class='left-prev' id="prev-link" href="../../reference/overview.html" title="previous page">Reference</a>
+    <a class='right-next' id="next-link" href="custom.html" title="next page">Custom variables</a>
 
         </div>
         

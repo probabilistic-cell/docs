@@ -42,8 +42,47 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -114,23 +153,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/2-inference.html">
-     Inference
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/3-interpretation.html">
-     Interpretation
+    <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
+     Regression
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/4-model_selection.html">
      Model selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/5-amortization.html">
-     Amortization
     </a>
    </li>
   </ul>
@@ -153,13 +182,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="leaf_variables.html">
+    <a class="reference internal" href="leaves.html">
      Leaf variables
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="custom_variables.html">
-     Custom variables
     </a>
    </li>
   </ul>
@@ -238,6 +262,30 @@
   </a>
  </li>
 </ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
 
     </div>
 </nav> <!-- To handle the deprecated key -->
@@ -278,7 +326,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/guide/variables/circular_variables.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/guide/variables/circular.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -298,7 +346,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Fguide/variables/circular_variables.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Fguide/variables/circular.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -319,7 +367,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./guide/variables/circular_variables.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./guide/variables/circular.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -493,7 +541,7 @@
 </script><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:ylabel=&#39;Frequency&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_11_2.png" src="../../_images/circular_variables_11_2.png" />
+<img alt="../../_images/circular_11_21.png" src="../../_images/circular_11_21.png" />
 </div>
 </div>
 <p>Correction of the likelihood
@@ -577,7 +625,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_21_1.png" src="../../_images/circular_variables_21_1.png" />
+<img alt="../../_images/circular_21_11.png" src="../../_images/circular_21_11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -603,7 +651,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;gene&#39;, ylabel=&#39;cell&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_23_1.png" src="../../_images/circular_variables_23_1.png" />
+<img alt="../../_images/circular_23_11.png" src="../../_images/circular_23_11.png" />
 </div>
 </div>
 </div>
@@ -743,7 +791,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;gene&#39;, ylabel=&#39;cell&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_37_1.png" src="../../_images/circular_variables_37_1.png" />
+<img alt="../../_images/circular_37_11.png" src="../../_images/circular_37_11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -757,7 +805,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;gene&#39;, ylabel=&#39;cell&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_38_1.png" src="../../_images/circular_variables_38_1.png" />
+<img alt="../../_images/circular_38_11.png" src="../../_images/circular_38_11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -773,7 +821,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_39_1.png" src="../../_images/circular_variables_39_1.png" />
+<img alt="../../_images/circular_39_11.png" src="../../_images/circular_39_11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -799,7 +847,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_41_1.png" src="../../_images/circular_variables_41_1.png" />
+<img alt="../../_images/circular_41_1.png" src="../../_images/circular_41_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -819,7 +867,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 {"model_id": "d2a238301b464a4db3b27aa42971d2b5", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "43a588c8259642feab75bbc29ad956c0", "version_major": 2, "version_minor": 0}
-</script><img alt="../../_images/circular_variables_42_3.png" src="../../_images/circular_variables_42_3.png" />
+</script><img alt="../../_images/circular_42_3.png" src="../../_images/circular_42_3.png" />
 </div>
 </div>
 </div>
@@ -892,7 +940,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
 </pre></div>
 </div>
-<img alt="../../_images/circular_variables_49_1.png" src="../../_images/circular_variables_49_1.png" />
+<img alt="../../_images/circular_49_1.png" src="../../_images/circular_49_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -922,7 +970,7 @@ In this case, because the transformation is not bijective, the inverse likelihoo
 {"model_id": "1e49ff970a104e09a0e9052a761b871a", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "a7d0c2e340d246c797f4cb0ac5283692", "version_major": 2, "version_minor": 0}
-</script><img alt="../../_images/circular_variables_51_3.png" src="../../_images/circular_variables_51_3.png" />
+</script><img alt="../../_images/circular_51_3.png" src="../../_images/circular_51_3.png" />
 </div>
 </div>
 </div>

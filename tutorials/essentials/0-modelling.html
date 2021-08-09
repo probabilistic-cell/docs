@@ -42,8 +42,47 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -116,23 +155,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="2-inference.html">
-     Inference
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="3-interpretation.html">
-     Interpretation
+    <a class="reference internal" href="2-regression.html">
+     Regression
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="4-model_selection.html">
      Model selection
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="5-amortization.html">
-     Amortization
     </a>
    </li>
   </ul>
@@ -155,13 +184,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../guide/variables/leaf_variables.html">
+    <a class="reference internal" href="../../guide/variables/leaves.html">
      Leaf variables
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../guide/variables/custom_variables.html">
-     Custom variables
     </a>
    </li>
   </ul>
@@ -238,6 +262,30 @@
   <a class="reference internal" href="../../reference/overview.html">
    Reference
   </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -338,6 +386,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#but-why-would-i-want-to-model-data">
+   But why would I want to model data?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#different-layers-of-latenta">
+   Different layers of latenta
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -357,6 +423,8 @@
 <li><p>RNA velocity</p></li>
 </ul>
 <p>All these models have several aspects in common: we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene’s fold change or dynamics during a trajectory), a cell (such as a cells position in a reduced space or its pseudotime) or both (e.g. the future state of a cell).</p>
+<div class="section" id="but-why-would-i-want-to-model-data">
+<h2>But why would I want to model data?<a class="headerlink" href="#but-why-would-i-want-to-model-data" title="Permalink to this headline">¶</a></h2>
 <p>Why model data? You as a user probably have either of two goals in mind: prediction or understanding.</p>
 <ul class="simple">
 <li><p>For <strong>prediction</strong>, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells we just killed in an experiment, but also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.</p></li>
@@ -385,7 +453,18 @@
 <li><p>The best experience is the one you built up slowly but surely, starting from what others have done and then try to adapt and experiment</p></li>
 </ul>
 <p>Latenta is made with these elements in mind. It’s relatively straightforward to reuse other people’s models without caring about the details. But you can then delve into parts of a model, change some elements where needed and combine different models. In the end, after some effort, knowledge will come.</p>
+</div>
+<div class="section" id="different-layers-of-latenta">
+<h2>Different layers of latenta<a class="headerlink" href="#different-layers-of-latenta" title="Permalink to this headline">¶</a></h2>
+<p>Latenta has different layers of complexity:</p>
+<ul class="simple">
+<li><p>At the highest level, we provide common functions that create a couple of variables for you. These for example include modelling of transcriptomics, proteomics, chromatin accessibility, trajectories, …</p></li>
+<li><p>At the medium level, we provide ways to create individual variables and connect them with eachother.</p></li>
+<li><p>At the lowest level, we provide ways to create custom sets of variables.</p></li>
+</ul>
+<p>If you’re relatively new to modelling, it’s often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) thinking.</p>
 <p>Any model is a mathematical representation of reality, and building models does require some mathematics. Although latenta may make this easier, it would be unwise to completely abstract away every mathematical concept. Some probability, statistics and machine learning concepts are simply too central for modelling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant “explanation” resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.</p>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>

@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variables</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.27151f2de8a6da6e72b57ec231ceb131.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
+    <script kind="giscuss">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addGiscus = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://giscus.app/client.js";
+    script.async = "async";
+
+    script.setAttribute("data-repo", "probabilistic-cell/latenta");
+    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
+    script.setAttribute("data-theme", "light");
+    script.setAttribute("data-category", "Documentation");
+    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
+    script.setAttribute("data-mapping", "pathname");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.prev-next-bottom");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.parentNode.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addGiscus);
+</script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Variables" href="../../development/variables/index.html" />
+    <link rel="prev" title="Latenta" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      <img src="../../_static/main_logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../index.html">
+   Overview
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../tutorials/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../tutorials/essentials/0-modelling.html">
+   Essentials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/1-variables.html">
+     Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
+     Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/4-model_selection.html">
+     Model selection
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  User guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/variables/leaves.html">
+     Leaf variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/distributions/distributions.html">
+   Distributions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/mixture.html">
+     Mixture distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/discrete.html">
+     Discrete distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/count.html">
+     Count distributions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/dynamics/dynamics.html">
+   Dynamics
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/dynamics/sde.html">
+     Stochastic differential equations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/model_selection/index.html">
+   Model selection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/model_selection/toy.html">
+     Model selection
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../overview.html">
+   Reference
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Latenta
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/reference/latenta/variables.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/probabilistic-cell/docs"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Freference/latenta/variables.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="module-latenta.variables">
+<span id="variables"></span><h1>Variables<a class="headerlink" href="#module-latenta.variables" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="latenta.variables.Definition">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Definition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/definition.html#Definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.labelling.LabelledMixin</span></code></p>
+<p>Defines how a variable should or will look like</p>
+<dl class="py method">
+<dt id="latenta.variables.Definition.broadcast">
+<code class="sig-name descname"><span class="pre">broadcast</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/definition.html#Definition.broadcast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Definition.broadcast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes the size of certain dimensions None, ready to be broadcasted</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="latenta.variables.Definition.replace_dims">
+<code class="sig-name descname"><span class="pre">replace_dims</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/definition.html#Definition.replace_dims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Definition.replace_dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace one or more dimensions</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.variables.Fixed">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Fixed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.variables.definition.Definition</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/fixed.html#Fixed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Fixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.leaf.Leaf</span></code></p>
+<p>A fixed variable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – The value or loader of the variable.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="latenta.variables.Fixed.distribution">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">distribution</span></code><a class="headerlink" href="#latenta.variables.Fixed.distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The distribution followed by the variable</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.variables.Observation">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Observation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/observation.html#Observation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Observation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.random.RandomMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.fixed.Fixed</span></code></p>
+<p>An observed random variable, i.e. the value of this variable is uncertain (=follows a distribution <span class="math notranslate nohighlight">\(p\)</span>) but observed (=we have a sample from this distribution). The parameters of the variables’ distribution <span class="math notranslate nohighlight">\(p\)</span> may depend on other observed, latent, fixed or parameter variables. using <cite>likelihood</cite></p>
+<p>Components:</p>
+<ul class="simple">
+<li><p>«p»: The distribution followed by this observation.</p></li>
+<li><p>«weights»: The weights associated with each observation.</p></li>
+</ul>
+<dl class="py method">
+<dt id="latenta.variables.Observation.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/observation.html#Observation.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Observation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the variable</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="latenta.variables.Observation.likelihood">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">likelihood</span></code><a class="headerlink" href="#latenta.variables.Observation.likelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>The likelihood of the observation according to <span class="math notranslate nohighlight">\(p\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="latenta.variables.Observation.likelihood_sum">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">likelihood_sum</span></code><a class="headerlink" href="#latenta.variables.Observation.likelihood_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>The marginal likelihood according to <span class="math notranslate nohighlight">\(p\)</span></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="latenta.variables.Observation.event_dims">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">event_dims</span></code><a class="headerlink" href="#latenta.variables.Observation.event_dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>The event dimensions of the observation</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.variables.Latent">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Latent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_quantiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/latent.html#Latent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Latent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.random.VariationalMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.random.RandomMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.variable.Variable</span></code></p>
+<p>A latent random variable i.e. the actual value of this variable is uncertain and unobserved. The variable follows a prior distribution <span class="math notranslate nohighlight">\(p\)</span>, which can have parameters that may be fixed and/or depend on other variables. The posterior distribution of a latent is approximated using a variational distribution <span class="math notranslate nohighlight">\(q\)</span>. <span class="math notranslate nohighlight">\(q\)</span> is often but not necessarily a Normal distribution, with some additional transformations so that its support matches that of <span class="math notranslate nohighlight">\(p\)</span>. <span class="math notranslate nohighlight">\(q\)</span> has variational parameters that need to be estimated, which are by default done directly through parameter variables, but which can also be estimated from the data using an amortization function.</p>
+<p>Components:</p>
+<ul class="simple">
+<li><p>«q»:</p></li>
+<li><p>«p»:</p></li>
+</ul>
+<dl class="py method">
+<dt id="latenta.variables.Latent.run_conditional">
+<code class="sig-name descname"><span class="pre">run_conditional</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditional_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/latent.html#Latent.run_conditional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Latent.run_conditional" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conditional latent variable: will take mean of the prior</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.variables.Variational">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Variational</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/latent.html#Variational"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Variational" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.random.VariationalMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.variable.Variable</span></code></p>
+<p>A latent variable with only a variational distribution and no prior. This is often only used when the latent variable has been inferred on another dataset, and we want to keep the variable’s uncertainty but don’t need its prior anymore.</p>
+<p>Components:</p>
+<ul class="simple">
+<li><p>«q»:</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.variables.Computed">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Computed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/computed.html#Computed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Computed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.variable.Variable</span></code></p>
+<p>A computed variable</p>
+</dd></dl>
+
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./reference/latenta"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Latenta</a>
+    <a class='right-next' id="next-link" href="../../development/variables/index.html" title="next page">Variables</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        <!-- 
+          By the latenta team<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

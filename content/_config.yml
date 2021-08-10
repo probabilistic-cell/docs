@@ -53,4 +53,10 @@ sphinx:
   extra_extensions:
     # - html_admonition
    - sphinx_citel
+   - 'sphinx.ext.autodoc'
+   - 'sphinx.ext.intersphinx'
+   - 'sphinx.ext.viewcode'
+   - 'sphinx.ext.autosummary'
+   - 'sphinx.ext.mathjax'
+   - 'sphinx_math_dollar'
 

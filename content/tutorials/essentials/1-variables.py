@@ -21,6 +21,7 @@
 import latenta as la
 import scanpy as sc
 
+
 # %% [markdown]
 # Modelling typically consists of several steps:
 # 1. Creating known and unknown variables

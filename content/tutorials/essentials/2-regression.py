@@ -28,6 +28,7 @@ import numpy as np
 # %%
 adata = la.data.load_myod1()
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
+adata.var["label"] = adata.var["symbol"]
 
 # %% [markdown]
 
@@ -42,8 +43,8 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # We can now use these concepts to build a basic model of a transcriptome:
 
 # %%
-genes = la.Dim(adata.var.index)
-cells = la.Dim(adata.obs.index)
+genes = la.Dim(adata.var)
+cells = la.Dim(adata.obs)
 
 # %%
 overexpression = la.Fixed(adata.obs["log_overexpression"], label = "overexpression", symbol = "overexpression")
@@ -96,8 +97,8 @@ transcriptome.plot()
 #
 # So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish his, we have to limit the flexibility that our model can have. You have already done this in two ways:
 #
-# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities
-# - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes as these are likely caused by lack of data.
+# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities.
+# - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes.
 #
 # All these parameters thus serve two purposes: the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 
@@ -127,15 +128,98 @@ transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
+
+# For interpretation of the model, we can then use 3 main types of posteriors:
+
+# %% [markdown]
 # ### Observed posteriors
 
+# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we run the variational distribution of the slope $q$ the output will be different, which will affect any downstream function even if they are themselves deterministic. To interpret the results, we can thus sample multiple times from the model:
+
 # %%
+transcriptome_observed = la.posterior.Observed(transcriptome)
+transcriptome_observed.sample(5)
+
+# %% [markdown]
+# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome. We can access each variable either by providing the variable itself or by providing a "breadcrumb" starting from the output variable:
+
+# %%
+transcriptome_observed.samples[expression.a]
+
+# %%
+transcriptome_observed.samples["transcriptome.p.mu.a"]
+
+# %% [markdown]
+# :::{note}
+# Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as xr.DataArray objects. Important functions to know are:
+# - `.sel(dimension = [...])` to select a subset of the data
+# - `.to_pandas()` to convert a 2D or 1D array to a pandas DataFrame or Series
+# - `.dims` to get the dimensions of the data
+# - `.values` to get the values of a numpy array
+# - `.mean(dim = ...)` to get the mean of a dimension
+# - `xr.DataArray(..., dims = ['...'])` to construct a new DataArray
+# :::
+
+# %%
+
+transcriptome_observed.samples[expression.a].mean("sample")
 
 # %% [markdown]
 # ### Causal posteriors
 
+# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a `ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell) impacts a **vector** (gene expression for each cell):
+
+# %%
+overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+    overexpression,
+    transcriptome
+)
+overexpression_causal.sample(10)
+
+# %% [markdown]
+# This posterior also contains samples, but now for some pseudocells with each a distinct value for the `overexpression` variable.
+
+# %%
+overexpression_causal.samples[overexpression].mean("sample").head()
+
+# %% [markdown]
+# Depending on the type of causal posterior, you can plot the outcome. The `ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
+
+# %%
+overexpression_causal.plot_features();
+
+# %% [markdown]
+# This causal posterior can also provide a score dataframe that will rank each _feature_ (gene):
+
+# %%
+overexpression_causal.scores
+
 # %% [markdown]
 # ### Perturbed posteriors
+
+# %% [markdown]
+# To understand whether a variable has an important impact on the downstream variable, we use perturbed posteriors. These posteriors work in a very similar way as the observed posterior, but rather than using the actual value of the variable, it uses a perturbed version. The type of perturbation varies depending on which question we want to address, and can include random shuffling, random sampling from the prior, or conditionalizing on a fixed value.
+
+# While you can independently construct a perturbed posterior, you will typically create it indirectly through a causal posterior. For example, we can do random sampling using:
+
+# %%
+overexpression_causal.sample_random()
+
+# %% [markdown]
+# To check the impact of a variable on our observation, we can calculate the likelihood ratio: how much more likely is the observed expression before and after we perturbed our upstream variable?
+
+# %%
+overexpression_causal.likelihood_ratio
+
+# %% [markdown]
+# These likelihood ratios were also added to our scores table:
+
+# %%
+overexpression_causal.scores
+
+# :::{note}
+# These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a more accurate measure to quantify whether a variable significantly affects an outcome
+# :::
 
 # %% [markdown]
 # ## Using _lacell_ to make model creation easier

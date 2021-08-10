@@ -76,6 +76,8 @@
 </div>
 <br>
 
+<div class="full-width">
+
 # Overview
 Latenta models the cell as a combination of different _cellular processes_ (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, ...). Each of these processes influence _observations_ (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, ...). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable _mechanistic_ models. In this way, it allows you to answer questions such as:
 
@@ -103,3 +105,4 @@ Key concepts are:
 - **Hierarchical interactions**: Biological processes are tightly integrated and interconnected. For example, a differentiation process almost always affects the activity of the cell cycle. Latenta can therefore not only connect the latent space to observations, but also create connections between latent variables themselves.
 - **Minimal analytical mindset**: Any modelling requires some mathematical and statistical knowledge, which can look daunting coming from a biological background. However, we took great care to make sure latenta's models are easy to reuse, introspect, and adapt, which should make this transition easier.
 
+</div>

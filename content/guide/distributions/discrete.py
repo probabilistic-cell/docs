@@ -50,8 +50,8 @@ probs_value = probs_value / probs_value.values.sum(0, keepdims = True)
 dist = la.distributions.OneHotCategorical(0.1, definition = la.Definition([cells, celltypes]))
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 dist.value
 
 # %% [markdown]
@@ -65,8 +65,8 @@ probs_value = probs_value / probs_value.values.sum(0, keepdims = True)
 dist = la.distributions.OneHotCategorical(0.1, definition = la.Definition([cells, celltypes]), component_dim=cells)
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 dist.value
 
 # %% [markdown]
@@ -80,8 +80,8 @@ probs_value = probs_value / probs_value.sum(0, keepdims = True)
 dist = la.distributions.OneHotCategorical(0.1, definition = la.Definition([cells, genes, celltypes]), component_dim=cells)
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 

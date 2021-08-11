@@ -50,8 +50,8 @@ dist = la.distributions.NegativeBinomial1(
 )
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 print(dist.log_prob(torch.tensor([0., 1., 2.])))
@@ -66,8 +66,8 @@ dist = la.distributions.NegativeBinomial1(
 dist.plot()
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 print(dist.log_prob(torch.tensor([10., 100., 200.])))
@@ -82,8 +82,8 @@ dist = la.distributions.NegativeBinomial2(
 dist.plot()
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 print(dist.log_prob(torch.tensor([10., 100., 200.])))

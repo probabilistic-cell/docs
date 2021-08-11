@@ -48,8 +48,8 @@ genes = la.Dim(pd.Series(range(4), name = "gene").astype(str))
 dist = la.distributions.Normal(loc = 1.)
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value, dist.likelihood)
 
 # %%
@@ -62,8 +62,8 @@ dist.prior_mean
 dist = la.distributions.Normal(definition = la.Definition([cells]))
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 
@@ -71,8 +71,8 @@ print(dist.likelihood)
 dist = la.distributions.Normal(loc = la.Fixed(10., definition = la.Definition([cells])))
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 
@@ -82,8 +82,8 @@ dist = la.distributions.Laplace(loc = la.Fixed(10., definition = la.Definition([
 dist = la.distributions.Uniform(high = la.Fixed(10., definition = la.Definition([cells])), low = la.Fixed(2., definition = la.Definition([genes])))
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 print(dist.icdf(0.9))
@@ -102,14 +102,14 @@ dist_2 = la.distributions.Normal(loc = la.Fixed(np.linspace(-1, 1., len(cells)),
 dist_3 = la.distributions.Normal(loc = la.Fixed(np.linspace(-1, 1., len(genes)), definition = la.Definition([genes])), definition = dist_1.clean)
 
 # %%
-dist_1.reset_recursive()
-dist_1.run_recursive()
+dist_1.reset()
+dist_1.run()
 
-dist_2.reset_recursive()
-dist_2.run_recursive()
+dist_2.reset()
+dist_2.run()
 
-dist_3.reset_recursive()
-dist_3.run_recursive()
+dist_3.reset()
+dist_3.run()
 
 # %%
 dist_2.likelihood
@@ -140,11 +140,11 @@ dist_1 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([
 dist_2 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([cells])))
 
 # %%
-dist_1.reset_recursive()
-dist_1.run_recursive()
+dist_1.reset()
+dist_1.run()
 
-dist_2.reset_recursive()
-dist_2.run_recursive()
+dist_2.reset()
+dist_2.run()
 
 # %%
 dist_1.likelihood
@@ -160,11 +160,11 @@ dist_3 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([
 dist_4 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([cells])), scale = la.Fixed(2., definition = la.Definition([genes])), dependent_dims = {genes})
 
 # %%
-dist_3.reset_recursive()
-dist_3.run_recursive()
+dist_3.reset()
+dist_3.run()
 
-dist_4.reset_recursive()
-dist_4.run_recursive()
+dist_4.reset()
+dist_4.run()
 
 # %%
 dist_3.likelihood
@@ -191,8 +191,8 @@ dist = la.distributions.Dirichlet(concentration = la.Fixed(1., definition = la.D
 dist.event_dims
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 
@@ -211,8 +211,8 @@ dist = la.distributions.Dirichlet(concentration = la.Fixed(10., definition = la.
 dist.component_dim
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.value.sum(1))
 print(dist.likelihood)
@@ -224,8 +224,8 @@ print(dist.likelihood)
 dist = la.distributions.Dirichlet(concentration = la.Fixed(10., definition = la.Definition([cells, genes])), component_dim = cells)
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.value.sum(0))
 print(dist.likelihood)
@@ -237,8 +237,8 @@ print(dist.likelihood)
 dist = la.distributions.Dirichlet(concentration = la.Fixed(10., definition = la.Definition([cells, genes])), component_dim = cells, dependent_dims = {genes})
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.value.sum(0))
 print(dist.likelihood)
@@ -254,13 +254,13 @@ dist_1 = la.distributions.Normal(scale = 1., transforms = [la.transforms.Affine(
 dist_2 = la.distributions.Normal(scale = 2.)
 
 # %%
-dist_1.reset_recursive()
+dist_1.reset()
 torch.manual_seed(0)
-dist_1.run_recursive()
+dist_1.run()
 
-dist_2.reset_recursive()
+dist_2.reset()
 torch.manual_seed(0)
-dist_2.run_recursive()
+dist_2.run()
 
 # %%
 dist_1.likelihood
@@ -286,11 +286,11 @@ dist_2 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([
 dist_1.transforms
 
 # %%
-dist_1.reset_recursive()
-dist_1.run_recursive()
+dist_1.reset()
+dist_1.run()
 
-dist_2.reset_recursive()
-dist_2.run_recursive()
+dist_2.reset()
+dist_2.run()
 
 # %%
 dist_1.likelihood
@@ -309,11 +309,11 @@ dist_2 = la.distributions.Normal(loc = la.Fixed(0., definition = la.Definition([
 dist_1.transforms
 
 # %%
-dist_1.reset_recursive()
-dist_1.run_recursive()
+dist_1.reset()
+dist_1.run()
 
-dist_2.reset_recursive()
-dist_2.run_recursive()
+dist_2.reset()
+dist_2.run()
 
 # %%
 dist_1.likelihood
@@ -339,8 +339,8 @@ dist_1 = la.distributions.Normal(
 dist_1
 
 # %%
-dist_1.reset_recursive()
-dist_1.run_recursive()
+dist_1.reset()
+dist_1.run()
 
 # %%
 dist_1.value

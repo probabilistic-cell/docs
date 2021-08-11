@@ -32,7 +32,7 @@ genes = la.Dim(pd.Series(range(4), name = "gene").astype(str))
 dist = la.distributions.RandomWalk(10, la.distributions.Normal())
 
 # %%
-dist.run_recursive()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 
@@ -43,7 +43,7 @@ knots = la.Dim(range(10), "knot")
 dist = la.distributions.RandomWalk(10, la.distributions.Normal(), definition = la.Definition([genes, knots]))
 
 # %%
-dist.run_recursive()
+dist.run()
 print(dist.value)
 print(dist.likelihood)
 
@@ -54,8 +54,8 @@ knots = la.Dim(range(10), "knot")
 dist = la.distributions.RandomWalk(10, la.distributions.Normal(), definition = la.Definition([knots, genes]))
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.step.likelihood)
 print(dist.likelihood)
@@ -67,8 +67,8 @@ dist = la.distributions.RandomWalk(10, la.distributions.Normal(definition = la.D
 dist.plot()
 
 # %%
-dist.reset_recursive()
-dist.run_recursive()
+dist.reset()
+dist.run()
 print(dist.value)
 print(dist.step.likelihood)
 print(dist.likelihood)
@@ -80,7 +80,7 @@ genes = la.Dim(pd.Series(range(100), name = "gene").astype(str))
 
 # %%
 dist = la.distributions.RandomWalk(100, la.distributions.Normal(definition = la.Definition([genes])))
-dist.run_recursive()
+dist.run()
 value = dist.value.cpu().numpy()
 for i in range(value.shape[0]):
     sns.lineplot(x = np.arange(value.shape[1]), y = value[i], alpha = 0.3)
@@ -133,15 +133,15 @@ posterior.sample(1)
 loc_value = posterior.samples[dist.loc].sel(sample = 0).to_pandas()
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 gene_ids = genes.coords[:10]
 fig, axes = la.plotting.axes_wrap(len(gene_ids))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
-x_value = model_gs.find_recursive("x").prior_pd()
+cell_order = model_gs.find("x").prior_pd().sort_values().index
+x_value = model_gs.find("x").prior_pd()
 
 for gene_id, ax in zip(gene_ids, axes):
     ax.scatter(
@@ -160,7 +160,7 @@ for gene_id, ax in zip(gene_ids, axes):
 # %%
 s = la.Parameter(1., definition = scale, transforms = la.distributions.Exponential().biject_to())
 
-z = la.links.scalar.Spline(x, knot = model_gs.find_recursive("knot"), b = intercept, output = y.value_definition)
+z = la.links.scalar.Spline(x, knot = model_gs.find("knot"), b = intercept, output = y.value_definition)
 
 dist = la.distributions.Normal(loc = z, scale = s)
 
@@ -184,12 +184,12 @@ trace.plot();
 
 # %%
 observed = la.posterior.Posterior(observation)
-observed.sample(10, subsample_n = 3)
+observed.sample(10, subsample_n = 1)
 
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)

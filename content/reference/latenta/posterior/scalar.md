@@ -1,13 +1,14 @@
-# .variables
+# .scalar
 
 ```{eval-rst}
 
-.. currentmodule:: latent.variables
+.. currentmodule:: latent.posterior.scalar
 ```
 
 ```{eval-rst}
-.. automodule:: latenta.variables
+.. automodule:: latenta.posterior.scalar
     :members:
     :show-inheritance:
     :member-order: bysource
 ```
+

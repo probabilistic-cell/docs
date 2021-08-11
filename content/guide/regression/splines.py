@@ -93,7 +93,7 @@ n_cells = 50
 cell_ids = [str(i) for i in range(n_cells)]
 cells = la.Dim(pd.Series(cell_ids, name = "cell"))
 
-x = la.Fixed(pd.Series(np.random.uniform(0, 3, n_cells), index = cells.index), label = "x")
+x = la.Fixed(pd.Series(np.random.uniform(0, 20, n_cells), index = cells.index), label = "x")
 
 
 # %%
@@ -160,7 +160,7 @@ for gene_id, ax in zip(gene_ids, axes):
 # %%
 s = la.Parameter(1., definition = scale, transforms = la.distributions.Exponential().biject_to())
 
-z = la.links.scalar.Spline(x, knot = model_gs.find("knot"), b = intercept, output = y.value_definition)
+z = la.links.scalar.Spline(x, b = intercept, knot = model_gs.find("knot"), output = y.value_definition)
 
 dist = la.distributions.Normal(loc = z, scale = s)
 
@@ -194,6 +194,13 @@ sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
 
+
+# %%
+x_causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+x_causal.sample(10)
+
+# %%
+x_causal.plot_features()
 
 # %%
 parameter_values = la.qa.cookbooks.check_parameters(la.qa.cookbooks.gather_parameters(["a", "intercept"], model_gs, observed))

@@ -1,12 +1,11 @@
-# .variables
+# .vector
 
 ```{eval-rst}
 
-.. currentmodule:: latent.variables
 ```
 
 ```{eval-rst}
-.. automodule:: latenta.variables
+.. automodule:: latenta.links.vector
     :members:
     :show-inheritance:
     :member-order: bysource

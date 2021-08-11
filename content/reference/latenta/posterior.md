@@ -1,12 +1,12 @@
-# .variables
+# .posterior
 
 ```{eval-rst}
 
-.. currentmodule:: latent.variables
+.. currentmodule:: latent.posterior
 ```
 
 ```{eval-rst}
-.. automodule:: latenta.variables
+.. automodule:: latenta.posterior
     :members:
     :show-inheritance:
     :member-order: bysource

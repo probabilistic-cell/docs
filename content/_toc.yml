@@ -9,7 +9,7 @@ parts:
     sections:
     - file: tutorials/essentials/1-variables
     - file: tutorials/essentials/2-regression
-    - file: tutorials/essentials/3-unsupervised
+    - file: tutorials/essentials/3-unsuperivsed
     - file: tutorials/essentials/4-model_selection
   # - file: tutorials/overview
     # title: Overview
@@ -19,7 +19,6 @@ parts:
   - file: guide/variables/index
     sections:
     - file: guide/variables/leaves
-    - file: guide/variables/latent
   - file: guide/distributions/distributions
     sections:
     - file: guide/distributions/mixture
@@ -49,7 +48,12 @@ parts:
     - file: reference/latenta/links
       sections:
       - file: reference/latenta/links/scalar
+      - file: reference/latenta/links/vector
     - file: reference/latenta/variables
+    - file: reference/latenta/posterior
+      sections:
+      - file: reference/latenta/posterior/scalar
+
 - caption: "Developer guide"
   chapters:
   - file: development/variables/index

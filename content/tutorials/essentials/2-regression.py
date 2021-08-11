@@ -19,6 +19,7 @@
 
 # %%
 import latenta as la
+from latenta import distributions
 import scanpy as sc
 import numpy as np
 
@@ -29,13 +30,13 @@ import numpy as np
 adata = la.data.load_myod1()
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 adata.var["label"] = adata.var["symbol"]
+adata.raw = adata
 
 # %% [markdown]
 
 # ## Easy things first: Linear regression
 
 # %% [markdown]
-# ### Creating models
 # In the last tutorial, we learned the main types of variables, and how to connect these to construct a model:
 # - You either specify them at initialization: `la.Observation(p = ...)`
 # - Or connect them afterwards: `observation.p = ...`
@@ -129,6 +130,8 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
 
+# ## Interpreting a regression model
+
 # For interpretation of the model, we can then use 3 main types of posteriors:
 
 # %% [markdown]
@@ -206,7 +209,7 @@ overexpression_causal.scores
 overexpression_causal.sample_random()
 
 # %% [markdown]
-# To check the impact of a variable on our observation, we can calculate the likelihood ratio: how much more likely is the observed expression before and after we perturbed our upstream variable?
+# To check the impact of a variable on our observation, we calculate a (log-)likelihood ratio: how much more likely is the observed expression before and after we perturbed our upstream variable?
 
 # %%
 overexpression_causal.likelihood_ratio
@@ -215,14 +218,35 @@ overexpression_causal.likelihood_ratio
 # These likelihood ratios were also added to our scores table:
 
 # %%
-overexpression_causal.scores
+overexpression_causal.scores.head()
 
+# %% [markdown]
 # :::{note}
-# These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a more accurate measure to quantify whether a variable significantly affects an outcome
+# These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a more accurate measure to quantify whether a variable significantly affects an outcome, and whether this is significant compare to other simpler or more complex models.
 # :::
 
 # %% [markdown]
 # ## Using _lacell_ to make model creation easier
+
+# Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the `lacell` package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
+
+# %%
+import lacell as lac
+transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome.plot()
+
+# %% [markdown]
+# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same:
+
+# - We model the counts as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
+# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
+# - The $\rho$ itself is a linear combination of the average expression of each gene in the cell $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
+# - When modelling cellular processes, we typically adapt the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
+
+# %% [markdown]
+# :::{seealso}
+# [Why don't we just provide normalized data to latenta?](why-not-just-provide-normalized-data)
+# :::
 
 # %%
 

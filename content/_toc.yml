@@ -37,6 +37,7 @@ parts:
   # - file: guide/circular/circular
     # sections:
     # - file: guide/circular/toy
+  - file: guide/transcriptomics/index
 # - caption: "Explanation"
   # chapters:
   # - file: explanation/amortization

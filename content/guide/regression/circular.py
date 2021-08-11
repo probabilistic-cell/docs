@@ -77,8 +77,8 @@ posterior.samples[dist1].to_pandas().plot(kind = "hist", bins = 20, alpha = 0.5)
 # In this case, because the transformation is not bijective, the inverse likelihoods are not corrected.
 
 # %%
-dist1.reset_recursive()
-dist1.run_recursive()
+dist1.reset()
+dist1.run()
 dist1.x.value = coordinates.prior()
 uncorrected_likelihood = dist1.x.likelihood.sum(-1)
 corrected_likelihood = dist1.likelihood

@@ -44,17 +44,28 @@ launch_buttons:
 sphinx:
   config:
     mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    intersphinx_mapping:
+      python:
+        - "https://docs.python.org/3/"
+        - null
+      pandas:
+        - "https://pandas.pydata.org/pandas-docs/stable"
+        - null
+      torch:
+        - "https://pytorch.org/docs/stable/"
+        - null
+      xarray:
+        - "https://xarray.pydata.org/en/stable/"
+        - null
   nb_custom_formats:
     .py:
       - jupytext.reads
       - fmt: py
-  docstitle: hi
 
   extra_extensions:
     # - html_admonition
    - sphinx_citel
    - 'sphinx.ext.autodoc'
-   - 'sphinx.ext.intersphinx'
    - 'sphinx.ext.viewcode'
    - 'sphinx.ext.autosummary'
    - 'sphinx.ext.mathjax'

@@ -58,7 +58,7 @@ posterior.sample(1)
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 
 # %% [markdown]
@@ -94,7 +94,7 @@ observed.sample(10, subsample_n = 3)
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
@@ -139,7 +139,7 @@ observed.sample(10, subsample_n = 3)
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
@@ -173,8 +173,8 @@ trace.plot();
 
 
 # %%
-observation.reset_recursive()
-observation.run_recursive()
+observation.reset()
+observation.run()
 observation.p.loc.x.likelihood.sum()
 
 # %%
@@ -184,7 +184,7 @@ observed.sample(10, subsample_n = 4)
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
@@ -231,7 +231,7 @@ parameter_values = la.qa.cookbooks.check_parameters(la.qa.cookbooks.gather_param
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)

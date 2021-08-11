@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -63,7 +63,7 @@ slope_subset = la.Fixed(pd.Series(random_coefficient(10), index = genes.index[:1
 
 # %%
 y_linear = la.links.scalar.Linear(x = x, a = slope)
-y = la.modular.Additive(linear = y_linear, definition = y_linear.value_definition, subsettable = ("gene", ))
+y = la.modular.Additive(linear = y_linear, definition = y_linear.value_definition, subsettable = {genes})
 
 # %% [markdown]
 # We can add extra terms:
@@ -113,14 +113,14 @@ posterior.sample(1)
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x").prior_pd().sort_values().index
+cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 
 # %% [markdown]
 # ## Types of modular variables
 
 # %%
-y = la.modular.Multiplicative(linear = y_linear, linear_subset = y_linear_subset, definition = y_linear.value_definition, subsettable = ("gene", ))
+y = la.modular.Multiplicative(linear = y_linear, linear_subset = y_linear_subset, definition = y_linear.value_definition, subsettable = {genes})
 
 # %%
 y.prior_pd()

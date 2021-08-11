@@ -113,7 +113,7 @@ posterior.sample(1)
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x1").prior_pd().sort_values().index
+cell_order = model_gs.find("x1").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 
 # %% [markdown]
@@ -157,7 +157,7 @@ observed.sample(10, subsample_n = 3)
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x1").prior_pd().sort_values().index
+cell_order = model_gs.find("x1").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
@@ -168,8 +168,8 @@ parameter_ids = ["intercept", "slope_x1", "slope_x2", "slope_x12"]
 parameter_values = []
 for parameter_id in parameter_ids:
     parameter_values.append(pd.DataFrame({
-        "actual":model_gs.find_recursive(parameter_id).prior_pd(),
-        "inferred":observed.samples[model.find_recursive(parameter_id)].mean("sample").to_pandas(),
+        "actual":model_gs.find(parameter_id).prior_pd(),
+        "inferred":observed.samples[model.find(parameter_id)].mean("sample").to_pandas(),
         "parameter_id":parameter_id
     }))
 parameter_values = pd.concat(parameter_values)
@@ -225,7 +225,7 @@ observed.sample(10)
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x1").prior_pd().sort_values().index
+cell_order = model_gs.find("x1").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
@@ -310,7 +310,7 @@ causal_x1_x2.plot_features_contour();
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x1").prior_pd().sort_values().index
+cell_order = model_gs.find("x1").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax = ax1)

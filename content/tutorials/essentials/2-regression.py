@@ -19,14 +19,14 @@
 
 # %%
 import latenta as la
-from latenta import distributions
-import scanpy as sc
 import numpy as np
 
 # %% [markdown]
 # We'll use the same dataset as [before](./1-variables)...
 
 # %%
+import scanpy as sc
+
 adata = la.data.load_myod1()
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 adata.var["label"] = adata.var["symbol"]
@@ -125,7 +125,7 @@ trace.plot();
 # You can check that our values have changed:
 
 # %%
-transcriptome.p.mu.a.q.loc.run()
+transcriptome.p.mu.a.q.loc.run_local()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -155,12 +155,12 @@ transcriptome_observed.samples["transcriptome.p.mu.a"]
 # %% [markdown]
 # :::{note}
 # Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as xr.DataArray objects. Important functions to know are:
-# - `.sel(dimension = [...])` to select a subset of the data
-# - `.to_pandas()` to convert a 2D or 1D array to a pandas DataFrame or Series
-# - `.dims` to get the dimensions of the data
-# - `.values` to get the values of a numpy array
-# - `.mean(dim = ...)` to get the mean of a dimension
-# - `xr.DataArray(..., dims = ['...'])` to construct a new DataArray
+# - {py:meth}`~xarray.DataArray.sel` to select a subset of the data
+# - {py:meth}`~xarray.DataArray.to_pandas` to convert a 2D or 1D array to a pandas DataFrame or Series
+# - {py:attr}`~xarray.DataArray.dims` to get the dimensions of the data
+# - {py:attr}`~xarray.DataArray.values` to get the values as a numpy array
+# - {py:meth}`~xarray.DataArray.mean` to get the mean across a dimension
+# - {py:class}`xarray.DataArray` to construct a new DataArray
 # :::
 
 # %%
@@ -170,7 +170,7 @@ transcriptome_observed.samples[expression.a].mean("sample")
 # %% [markdown]
 # ### Causal posteriors
 
-# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a `ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell) impacts a **vector** (gene expression for each cell):
+# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell) impacts a **vector** (gene expression for each cell):
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -186,7 +186,7 @@ overexpression_causal.sample(10)
 overexpression_causal.samples[overexpression].mean("sample").head()
 
 # %% [markdown]
-# Depending on the type of causal posterior, you can plot the outcome. The `ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
+# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
 overexpression_causal.plot_features();

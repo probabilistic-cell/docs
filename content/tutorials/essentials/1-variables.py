@@ -146,7 +146,7 @@ overexpression[0] == counts[0]
 adata.obs["gene_overexpressed"]
 
 # %%
-overexpressed = la.discrete.DiscreteFixed(adata.obs["gene_overexpressed"])
+overexpressed = la.variables.DiscreteFixed(adata.obs["gene_overexpressed"])
 overexpressed
 
 
@@ -289,7 +289,7 @@ transcriptome_p = la.distributions.NegativeBinomial2(mu = expression)
 # Running a distribution will take a sample from it:
 
 # %%
-transcriptome_p.run_recursive()
+transcriptome_p.run()
 transcriptome_p.value_pd.head()
 
 # %% [markdown]

@@ -29,9 +29,9 @@ n_cells = 1000
 cells = la.Dim([str(i) for i in range(n_cells)], "cell")
 
 x1 = la.Fixed(pd.Series(np.random.uniform(0, 1, cells.size), index = cells.index), label = "x1", symbol = "x1")
-x1.distribution = la.distributions.Uniform()
+x1.distribution = la.distributions.Uniform(definition = x1)
 x2 = la.Fixed(pd.Series(np.random.uniform(0, 1, cells.size), index = cells.index), label = "x2", symbol = "x2")
-x2.distribution = la.distributions.Uniform()
+x2.distribution = la.distributions.Uniform(definition = x2)
 
 
 # %%
@@ -107,8 +107,8 @@ gene_infos.update({gene_id:{"type":gene_type} for gene_id in genes.index})
 a1 = la.Fixed(pd.Series(random_a(n_genes), index = genes.index), label = "a")
 a2 = la.Fixed(pd.Series(random_a(n_genes), index = genes.index), label = "a")
 gene_outputs[gene_type] = la.modular.Additive(
-    x1_effect = la.links.scalar.Linear(x1, a1),
-    x2_effect = la.links.scalar.Linear(x2, a2),
+    x1 = la.links.scalar.Linear(x1, a1),
+    x2 = la.links.scalar.Linear(x2, a2),
     definition = la.Definition([cells, genes])
 )
 
@@ -177,7 +177,7 @@ gene_info.index.name = "gene"
 
 # %%
 genes = la.Dim(gene_info.index)
-output = la.modular.Additive(0., la.Definition([cells, genes]), label = "output", subsettable = ("gene",))
+output = la.modular.Additive(0., la.Definition([cells, genes]), label = "output", subsettable = {genes})
 
 
 # %%
@@ -206,7 +206,7 @@ posterior.sample(1)
 # %%
 observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find_recursive("x1").prior_pd().sort_values().index
+cell_order = model_gs.find("x1").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax = ax0)
 
 
@@ -243,16 +243,16 @@ models = {}
 # ### Constant
 
 # %%
-output.reset_recursive()
+output.reset()
 
 # %%
-mu = la.modular.Additive(intercept = la.Parameter(0., la.Definition([genes])), definition = output.value_definition, subsettable = ("gene",))
+mu = la.modular.Additive(intercept = la.Parameter(0., la.Definition([genes])), definition = output.value_definition, subsettable = {genes})
 s = la.Parameter(1., definition = la.Definition([genes]), transforms = la.distributions.Exponential().biject_to())
 
 
 # %%
-mu.x1_effect = la.links.scalar.Constant(x1, output = mu.value_definition)
-mu.x2_effect = la.links.scalar.Constant(x2, output = mu.value_definition)
+mu.x1 = la.links.scalar.Constant(x1, output = mu.value_definition)
+mu.x2 = la.links.scalar.Constant(x2, output = mu.value_definition)
 
 
 # %%
@@ -269,7 +269,7 @@ model_constant.plot()
 
 # %%
 model_constant2 = model_constant.clone()
-assert (model_constant.observation.p.loc.x1_effect.x.loader.value is model_constant2.observation.p.loc.x1_effect.x.loader.value)
+assert (model_constant.observation.p.loc.x1.x.loader.value is model_constant2.observation.p.loc.x1.x.loader.value)
 assert not (model_constant.observation.p.scale is model_constant2.observation.p.scale)
 
 # %% [markdown]
@@ -279,8 +279,8 @@ assert not (model_constant.observation.p.scale is model_constant2.observation.p.
 model = la.Model(model_constant.observation.clone())
 
 mu = model.observation.p.loc
-mu.x1_effect = la.links.scalar.Spline(x1, output = mu)
-mu.x2_effect = la.links.scalar.Spline(x2, output = mu)
+mu.x1 = la.links.scalar.Spline(x1, output = mu)
+mu.x2 = la.links.scalar.Spline(x2, output = mu)
 
 models["spline(x1) + spline(x2)"] = model
 
@@ -293,9 +293,9 @@ model.plot()
 model = la.Model(model_constant.observation.clone())
 
 mu = model.observation.p.loc
-del mu.x1_effect
-del mu.x2_effect
-mu.x12_effect = la.links.scalars.Thinplate({"x1":x1, "x2":x2}, output = mu)
+del mu.x1
+del mu.x2
+mu.x12 = la.links.scalars.Thinplate({"x1":x1, "x2":x2}, output = mu)
 
 models["thinplate([x1, x2])"] = model
 model.plot()
@@ -305,12 +305,12 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1_effect = la.links.scalar.Switch(x1, switch = True, a = True, output = mu.value_definition)
-mu.x2_effect = la.links.scalar.Switch(x2, switch = True, a = True, output = mu.value_definition)
+mu.x1 = la.links.scalar.Switch(x1, switch = True, a = True, output = mu.value_definition)
+mu.x2 = la.links.scalar.Switch(x2, switch = True, a = True, output = mu.value_definition)
 
 models["switch(x1) + switch(x2)"] = model
 model.plot()
@@ -320,13 +320,13 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-del mu.x1_effect
-del mu.x2_effect
-mu.x12_effect = la.links.scalars.Linear([
+del mu.x1
+del mu.x2
+mu.x12 = la.links.scalars.Linear([
     la.links.scalar.Switch(x1, switch = True, output = mu), 
     la.links.scalar.Switch(x2, switch = True, output = mu)
 ], a = la.Definition([genes]))
@@ -339,15 +339,15 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1_effect = la.links.scalar.Switch(x1, switch = True, a = True, output = mu)
-mu.x2_effect = la.links.scalar.Switch(x2, switch = True, a = True, output = mu)
-mu.x12_effect = la.links.scalars.Linear([
-    la.links.scalar.Switch(x1, switch = mu.x1_effect.switch), 
-    la.links.scalar.Switch(x2, switch = mu.x2_effect.switch)
+mu.x1 = la.links.scalar.Switch(x1, switch = True, a = True, output = mu)
+mu.x2 = la.links.scalar.Switch(x2, switch = True, a = True, output = mu)
+mu.x12 = la.links.scalars.Linear([
+    la.links.scalar.Switch(x1, switch = mu.x1.switch), 
+    la.links.scalar.Switch(x2, switch = mu.x2.switch)
 ], a = True, output = mu)
 
 models["switch(x1, s1) + switch(x2, s2) + switch([x1, x2], [s1, s2])"] = model
@@ -358,12 +358,12 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1_effect = la.links.scalar.Linear(x1, a = True, output = mu)
-mu.x2_effect = la.links.scalar.Linear(x2, a = True, output = mu)
+mu.x1 = la.links.scalar.Linear(x1, a = True, output = mu)
+mu.x2 = la.links.scalar.Linear(x2, a = True, output = mu)
 
 models["linear(x1) + linear(x2)"] = model
 model.plot()
@@ -373,13 +373,13 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1_effect = la.links.scalar.Linear(x1, a = True, output = mu)
-mu.x2_effect = la.links.scalar.Linear(x2, a = True, output = mu)
-mu.x12_effect = la.links.scalars.Linear([x1, x2], a = True, output = mu)
+mu.x1 = la.links.scalar.Linear(x1, a = True, output = mu)
+mu.x2 = la.links.scalar.Linear(x2, a = True, output = mu)
+mu.x12 = la.links.scalars.Linear([x1, x2], a = True, output = mu)
 
 models["linear(x1) + linear(x2) + linear([x1, x2])"] = model
 model.plot()
@@ -389,13 +389,13 @@ model.plot()
 
 # %%
 model = la.Model(model_constant.observation.clone())
-x1 = model.find_recursive("x1")
-x2 = model.find_recursive("x2")
+x1 = model.find("x1")
+x2 = model.find("x2")
 
 mu = model.observation.p.loc
-del mu.x1_effect
-del mu.x2_effect
-mu.x12_effect = la.links.scalars.Linear([
+del mu.x1
+del mu.x2
+mu.x12 = la.links.scalars.Linear([
     la.links.scalar.Switch(x1, switch = True, label = "x1 activity", symbol = "x1_activity", output = mu), 
     x2
 ], a = la.Definition([genes]), output = mu)
@@ -414,14 +414,14 @@ model.plot()
 model = la.Model(model_constant.observation.clone())
 
 mu = model.observation.p.loc
-# del mu.x1_effect
-# del mu.x2_effect
+# del mu.x1
+# del mu.x2
 
 components = la.Dim(20, "component")
 embedding = la.Latent(la.distributions.Normal(0., 1.), definition = la.Definition([cells, components]), label = "embedding", symbol = "embedding")
 a = la.Latent(la.distributions.Normal(), definition = la.Definition([genes, components]))
 
-mu.embedding_effect = la.links.vector.Matmul(embedding, a)
+mu.embedding = la.links.vector.Matmul(embedding, a)
 
 models["embedding"] = model
 model.plot()
@@ -435,8 +435,8 @@ for model_ix, (model_id, model) in enumerate(models.items()):
 #     if model_id != "constant":
 #         continue
 
-    x1 = model.observation.find_recursive("x1")
-    x2 = model.observation.find_recursive("x2")
+    x1 = model.observation.find("x1")
+    x2 = model.observation.find("x2")
     
 #     if "trace" in model: del model["trace"]
     if "trace" not in model:
@@ -505,6 +505,7 @@ model["x1_x2_causal"].plot_features_contour(feature_ids = gene_info.query("type 
 # %%
 fig = model["x1_x2_causal"].plot_likelihood_ratio();
 fig.axes[0].legend(bbox_to_anchor=(0.5, 1.1), ncol = 2, title = "coregulatory")
+
 
 # %%
 ax = sns.scatterplot(x = "lr_x1", y = "lr_x2", data = model["x1_x2_causal"].scores.join(gene_info), hue = "type")

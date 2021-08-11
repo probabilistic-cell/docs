@@ -156,6 +156,11 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/3-unsuperivsed.html">
+     Unsupervised learning
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="tutorials/essentials/4-model_selection.html">
      Model selection
     </a>
@@ -274,10 +279,49 @@ commentsRunWhenDOMLoaded(addGiscus);
    </i>
   </label>
   <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="reference/latenta/variables.html">
-     Variables
+     .variables
     </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -292,8 +336,8 @@ commentsRunWhenDOMLoaded(addGiscus);
   <a class="reference internal" href="development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -390,6 +434,7 @@ commentsRunWhenDOMLoaded(addGiscus);
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#V"><strong>V</strong></a>
@@ -397,6 +442,10 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.BaselineCenter">BaselineCenter (class in latenta.links.vector)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/latenta/variables.html#latenta.variables.Definition.broadcast">broadcast() (latenta.variables.Definition method)</a>
 </li>
@@ -408,10 +457,16 @@ commentsRunWhenDOMLoaded(addGiscus);
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Cartesian">Cartesian (class in latenta.links.scalar)</a>
 </li>
-      <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.CircularShift">CircularShift (class in latenta.links.scalar)</a>
+      <li><a href="reference/latenta/posterior.html#latenta.posterior.Causal">Causal (class in latenta.posterior)</a>
+</li>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.Center">Center (class in latenta.links.vector)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.Circular">Circular (class in latenta.links.vector)</a>
+</li>
+      <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.CircularShift">CircularShift (class in latenta.links.scalar)</a>
+</li>
       <li><a href="reference/latenta/variables.html#latenta.variables.Computed">Computed (class in latenta.variables)</a>
 </li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Constant">Constant (class in latenta.links.scalar)</a>
@@ -440,11 +495,17 @@ commentsRunWhenDOMLoaded(addGiscus);
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Exp">Exp (class in latenta.links.scalar)</a>
 </li>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.ExtremeCenter">ExtremeCenter (class in latenta.links.vector)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/variables.html#latenta.variables.Latent.filter">filter() (latenta.variables.Latent method)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/latenta/variables.html#latenta.variables.Fixed">Fixed (class in latenta.variables)</a>
 </li>
@@ -464,14 +525,35 @@ commentsRunWhenDOMLoaded(addGiscus);
 </li>
       </ul></li>
       <li>
+    latenta.links.vector
+
+      <ul>
+        <li><a href="reference/latenta/links/vector.html#module-latenta.links.vector">module</a>
+</li>
+      </ul></li>
+      <li>
+    latenta.posterior
+
+      <ul>
+        <li><a href="reference/latenta/posterior.html#module-latenta.posterior">module</a>
+</li>
+      </ul></li>
+      <li>
+    latenta.posterior.scalar
+
+      <ul>
+        <li><a href="reference/latenta/posterior/scalar.html#module-latenta.posterior.scalar">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     latenta.variables
 
       <ul>
         <li><a href="reference/latenta/variables.html#module-latenta.variables">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/latenta/variables.html#latenta.variables.Observation.likelihood">likelihood() (latenta.variables.Observation property)</a>
 </li>
       <li><a href="reference/latenta/variables.html#latenta.variables.Observation.likelihood_sum">likelihood_sum() (latenta.variables.Observation property)</a>
@@ -482,6 +564,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 </li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Log1p">Log1p (class in latenta.links.scalar)</a>
 </li>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.LogCenter">LogCenter (class in latenta.links.vector)</a>
+</li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Logistic">Logistic (class in latenta.links.scalar)</a>
 </li>
   </ul></td>
@@ -490,11 +574,19 @@ commentsRunWhenDOMLoaded(addGiscus);
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.Matmul">Matmul (class in latenta.links.vector)</a>
+</li>
       <li>
     module
 
       <ul>
         <li><a href="reference/latenta/links/scalar.html#module-latenta.links.scalar">latenta.links.scalar</a>
+</li>
+        <li><a href="reference/latenta/links/vector.html#module-latenta.links.vector">latenta.links.vector</a>
+</li>
+        <li><a href="reference/latenta/posterior.html#module-latenta.posterior">latenta.posterior</a>
+</li>
+        <li><a href="reference/latenta/posterior/scalar.html#module-latenta.posterior.scalar">latenta.posterior.scalar</a>
 </li>
         <li><a href="reference/latenta/variables.html#module-latenta.variables">latenta.variables</a>
 </li>
@@ -510,6 +602,14 @@ commentsRunWhenDOMLoaded(addGiscus);
   </ul></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.QuantileCenter">QuantileCenter (class in latenta.links.vector)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -517,9 +617,9 @@ commentsRunWhenDOMLoaded(addGiscus);
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/latenta/variables.html#latenta.variables.Observation.run">run() (latenta.variables.Observation method)</a>
-</li>
       <li><a href="reference/latenta/variables.html#latenta.variables.Latent.run_conditional">run_conditional() (latenta.variables.Latent method)</a>
+</li>
+      <li><a href="reference/latenta/variables.html#latenta.variables.Observation.run_local">run_local() (latenta.variables.Observation method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -527,12 +627,16 @@ commentsRunWhenDOMLoaded(addGiscus);
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/posterior/scalar.html#latenta.posterior.scalar.ScalarScalarCausal">ScalarScalarCausal (class in latenta.posterior.scalar)</a>
+</li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Sigmoid">Sigmoid (class in latenta.links.scalar)</a>
 </li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Sine">Sine (class in latenta.links.scalar)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/latenta/links/vector.html#latenta.links.vector.Softmax">Softmax (class in latenta.links.vector)</a>
+</li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Softplus">Softplus (class in latenta.links.scalar)</a>
 </li>
       <li><a href="reference/latenta/links/scalar.html#latenta.links.scalar.Switch">Switch (class in latenta.links.scalar)</a>

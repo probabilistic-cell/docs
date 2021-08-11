@@ -158,6 +158,11 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/3-unsuperivsed.html">
+     Unsupervised learning
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/4-model_selection.html">
      Model selection
     </a>
@@ -249,6 +254,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../guide/transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -263,7 +273,7 @@ commentsRunWhenDOMLoaded(addGiscus);
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../reference/latenta/index.html">
-   Latenta
+   latenta
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -271,10 +281,49 @@ commentsRunWhenDOMLoaded(addGiscus);
    </i>
   </label>
   <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../reference/latenta/variables.html">
-     Variables
+     .variables
     </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -289,8 +338,8 @@ commentsRunWhenDOMLoaded(addGiscus);
   <a class="reference internal" href="../../../development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -447,10 +496,7 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">variances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span><span class="o">/</span><span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erfinv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">quantile</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="p">)</span>
-    <span class="c1"># print(variances)</span>
-    <span class="c1"># print(torch.stack(variances, -1).mean(-1))</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">variances</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># print(variances)</span>
     <span class="k">return</span> <span class="n">scale</span>
 
 
@@ -573,7 +619,7 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">out</span> <span class="o">=</span> <span class="n">p</span>
         <span class="k">return</span> <span class="n">out</span>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run_local</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :meta private: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -624,9 +670,9 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">value_definition</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">to_variational</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-        <span class="n">q</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
         <span class="n">q</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">to_fixed</span><span class="p">()</span>
         <span class="n">q</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">scale</span><span class="o">.</span><span class="n">to_fixed</span><span class="p">()</span>
 
@@ -637,7 +683,16 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">fixedlatent</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span>
         <span class="n">fixedlatent</span><span class="o">.</span><span class="n">intervals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intervals</span>
 
-        <span class="k">return</span> <span class="n">fixedlatent</span></div>
+        <span class="k">return</span> <span class="n">fixedlatent</span>
+
+<div class="viewcode-block" id="Latent.filter"><a class="viewcode-back" href="../../../reference/latenta/variables.html#latenta.variables.Latent.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_local</span><span class="p">()</span> <span class="c1"># remove the value definition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
+
+
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
 
 <div class="viewcode-block" id="Variational"><a class="viewcode-back" href="../../../reference/latenta/variables.html#latenta.variables.Variational">[docs]</a><span class="k">class</span> <span class="nc">Variational</span><span class="p">(</span><span class="n">VariationalMixin</span><span class="p">,</span> <span class="n">Variable</span><span class="p">):</span>

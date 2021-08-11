@@ -1,4 +1,4 @@
-# Scalar links
+# .scalar
 
 ```{eval-rst}
 

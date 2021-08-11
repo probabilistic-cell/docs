@@ -93,7 +93,7 @@ commentsRunWhenDOMLoaded(addGiscus);
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Mixture distributions" href="mixture.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="../variables/latent.html" />
+    <link rel="prev" title="Leaf variables" href="../variables/leaves.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -157,6 +157,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
      Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/3-unsuperivsed.html">
+     Unsupervised learning
     </a>
    </li>
    <li class="toctree-l2">
@@ -251,6 +256,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -265,7 +275,7 @@ commentsRunWhenDOMLoaded(addGiscus);
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../reference/latenta/index.html">
-   Latenta
+   latenta
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -273,10 +283,49 @@ commentsRunWhenDOMLoaded(addGiscus);
    </i>
   </label>
   <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../reference/latenta/variables.html">
-     Variables
+     .variables
     </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -291,8 +340,8 @@ commentsRunWhenDOMLoaded(addGiscus);
   <a class="reference internal" href="../../development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -507,14 +556,14 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor(-0.0951) tensor(-1.5186)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor(0.8133) tensor(-0.9364)
 </pre></div>
 </div>
 </div>
@@ -542,16 +591,16 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([ 0.6055, -1.2171,  0.6376])
-tensor([-1.1022, -1.6596, -1.1222])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([-0.2262, -2.4287,  0.2035])
+tensor([-0.9445, -3.8682, -0.9396])
 </pre></div>
 </div>
 </div>
@@ -565,16 +614,16 @@ tensor([-1.1022, -1.6596, -1.1222])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([ 9.2040,  8.6273, 10.3920])
-tensor([-1.2358, -1.8610, -0.9958])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([10.8572,  9.9752,  8.1683])
+tensor([-1.2863, -0.9192, -2.5965])
 </pre></div>
 </div>
 </div>
@@ -590,8 +639,8 @@ tensor([-1.2358, -1.8610, -0.9958])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">icdf</span><span class="p">(</span><span class="mf">0.9</span><span class="p">))</span>
@@ -600,10 +649,10 @@ tensor([-1.2358, -1.8610, -0.9958])
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[3.0840, 8.6515, 8.0779],
-        [7.5365, 8.0170, 7.8934],
-        [2.8852, 8.9259, 7.7494],
-        [9.8495, 7.8107, 7.3049]])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[2.1192, 9.7082, 3.8705],
+        [4.4555, 9.6861, 8.6457],
+        [8.5513, 2.4180, 3.3985],
+        [5.6047, 8.3366, 9.4604]])
 tensor([[-2.0794, -2.0794, -2.0794],
         [-2.0794, -2.0794, -2.0794],
         [-2.0794, -2.0794, -2.0794],
@@ -654,14 +703,14 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_2</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_2</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_3</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_3</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_3</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_3</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -673,9 +722,9 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-1.1784],
-        [-1.4607],
-        [-0.9507]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-1.0183],
+        [-1.3193],
+        [-1.3182]])
 </pre></div>
 </div>
 </div>
@@ -699,9 +748,9 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-23.5420,  -0.9273,  -0.9245, -13.2566],
-        [ -1.4570,  -1.0197,  -1.0057,  -1.0372],
-        [ -1.7680,  -0.9200,  -2.2784,  -1.3578]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[ -0.9279,  -2.3591,  -1.9538,  -1.3205],
+        [ -0.9242,  -1.8378,  -5.0566, -24.1642],
+        [ -5.0975,  -3.0267,  -2.5786,  -1.3964]])
 </pre></div>
 </div>
 </div>
@@ -713,7 +762,7 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-0.9294, -1.2696, -1.1112, -0.9453]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-1.8514, -1.5177, -0.9196, -1.0867]])
 </pre></div>
 </div>
 </div>
@@ -737,9 +786,9 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-23.5420,  -1.2358,  -1.6731,  -5.3217],
-        [ -2.9944,  -1.2248,  -1.2001,  -1.0509],
-        [ -1.1618,  -1.8714,  -1.4014,  -1.3578]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[ -0.9279,  -1.4499,  -0.9245,  -1.5281],
+        [ -1.5264,  -2.3452,  -4.1533, -31.4826],
+        [ -1.3158,  -1.1780,  -1.5862,  -1.3964]])
 </pre></div>
 </div>
 </div>
@@ -758,11 +807,11 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_2</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_2</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -774,7 +823,7 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([-5.9135])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([-2.9126])
 </pre></div>
 </div>
 </div>
@@ -786,7 +835,7 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([-1.2661, -0.9882, -1.6208])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([-1.1054, -2.4430, -3.9915])
 </pre></div>
 </div>
 </div>
@@ -802,11 +851,11 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_3</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_3</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_3</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_3</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_4</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_4</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_4</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_4</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -818,7 +867,7 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-9.7929, -6.3105, -8.8677, -8.2928]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-4.9986, -6.4439, -7.0914, -6.5678]])
 </pre></div>
 </div>
 </div>
@@ -830,9 +879,9 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-8.6664],
-        [-9.7665],
-        [-7.6880]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[-13.2840],
+        [ -7.8421],
+        [ -7.9666]])
 </pre></div>
 </div>
 </div>
@@ -876,15 +925,15 @@ tensor([[[ 2.,  2.,  2.],
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0.0054, 0.8951, 0.0994])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([0.1366, 0.4325, 0.4309])
 tensor([0.6931])
 </pre></div>
 </div>
@@ -918,8 +967,8 @@ tensor([0.6931])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
@@ -927,13 +976,13 @@ tensor([0.6931])
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.1579, 0.3093, 0.1765, 0.3563],
-        [0.2409, 0.2678, 0.2383, 0.2530],
-        [0.1996, 0.3419, 0.1839, 0.2746]])
-tensor([1., 1., 1.])
-tensor([[3.3539],
-        [5.4791],
-        [4.3905]])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.2863, 0.1546, 0.3227, 0.2364],
+        [0.2327, 0.2339, 0.2595, 0.2738],
+        [0.2830, 0.3072, 0.1355, 0.2743]])
+tensor([1.0000, 1.0000, 1.0000])
+tensor([[4.2077],
+        [5.4312],
+        [3.8092]])
 </pre></div>
 </div>
 </div>
@@ -948,8 +997,8 @@ tensor([[3.3539],
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
@@ -957,11 +1006,11 @@ tensor([[3.3539],
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.3770, 0.2780, 0.2135, 0.2040],
-        [0.2860, 0.2814, 0.2573, 0.4322],
-        [0.3370, 0.4407, 0.5292, 0.3638]])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.3014, 0.3461, 0.4795, 0.3005],
+        [0.4089, 0.2564, 0.3029, 0.3374],
+        [0.2897, 0.3975, 0.2176, 0.3621]])
 tensor([1., 1., 1., 1.])
-tensor([[3.0167, 2.5409, 1.0094, 1.8946]])
+tensor([[2.8587, 2.7499, 1.7613, 3.1100]])
 </pre></div>
 </div>
 </div>
@@ -976,8 +1025,8 @@ tensor([[3.0167, 2.5409, 1.0094, 1.8946]])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">likelihood</span><span class="p">)</span>
@@ -985,11 +1034,11 @@ tensor([[3.0167, 2.5409, 1.0094, 1.8946]])
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.3687, 0.3365, 0.4117, 0.2880],
-        [0.3334, 0.2813, 0.3045, 0.2365],
-        [0.2979, 0.3822, 0.2838, 0.4755]])
-tensor([1.0000, 1.0000, 1.0000, 1.0000])
-tensor([[10.8737]])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0.2890, 0.4015, 0.2827, 0.2648],
+        [0.4106, 0.3558, 0.4033, 0.3856],
+        [0.3004, 0.2426, 0.3139, 0.3496]])
+tensor([1., 1., 1., 1.])
+tensor([[11.1790]])
 </pre></div>
 </div>
 </div>
@@ -1008,13 +1057,13 @@ tensor([[10.8737]])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_2</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">dist_2</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1086,11 +1135,11 @@ tensor([[10.8737]])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_2</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_2</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1142,11 +1191,11 @@ tensor([[10.8737]])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
-<span class="n">dist_2</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_2</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_2</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1206,8 +1255,8 @@ tensor([[10.8737]])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset_recursive</span><span class="p">()</span>
-<span class="n">dist_1</span><span class="o">.</span><span class="n">run_recursive</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_1</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">dist_1</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1335,7 +1384,7 @@ q: loc, scale ↦ Normal [gene (4)]
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="../variables/latent.html" title="previous page">&lt;no title&gt;</a>
+    <a class='left-prev' id="prev-link" href="../variables/leaves.html" title="previous page">Leaf variables</a>
     <a class='right-next' id="next-link" href="mixture.html" title="next page">Mixture distributions</a>
 
         </div>

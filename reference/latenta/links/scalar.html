@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scalar links</title>
+    <title>.scalar</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -94,6 +94,8 @@ commentsRunWhenDOMLoaded(addGiscus);
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title=".vector" href="vector.html" />
+    <link rel="prev" title=".links" href="../links.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -157,6 +159,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/2-regression.html">
      Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/3-unsuperivsed.html">
+     Unsupervised learning
     </a>
    </li>
    <li class="toctree-l2">
@@ -251,32 +258,76 @@ commentsRunWhenDOMLoaded(addGiscus);
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../guide/transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
   Reference
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../overview.html">
    Reference
   </a>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../index.html">
-   Latenta
+   latenta
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
+   <li class="toctree-l2 current active has-children">
+    <a class="reference internal" href="../links.html">
+     .links
+    </a>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul class="current">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../variables.html">
-     Variables
+     .variables
     </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -291,8 +342,8 @@ commentsRunWhenDOMLoaded(addGiscus);
   <a class="reference internal" href="../../../development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -395,7 +446,7 @@ commentsRunWhenDOMLoaded(addGiscus);
               <div>
                 
   <div class="section" id="module-latenta.links.scalar">
-<span id="scalar-links"></span><h1>Scalar links<a class="headerlink" href="#module-latenta.links.scalar" title="Permalink to this headline">¶</a></h1>
+<span id="scalar"></span><h1>.scalar<a class="headerlink" href="#module-latenta.links.scalar" title="Permalink to this headline">¶</a></h1>
 <p>Functions that map a scalar variable (with * dimensions) to another scalar variable (with * + # dimensions, where # can be empty)
 Each component allows an <strong>x</strong> variable which solely consists of batch dimensions, often only one (as per torch convention)
 Each component will often add a <strong>b</strong> variable, which has * + # dimensions. Some extra dimensions can be added to this variable as well, e.g.: spline functions will add a knot dimension.</p>
@@ -576,6 +627,8 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
         
         <div class='prev-next-bottom'>
             
+    <a class='left-prev' id="prev-link" href="../links.html" title="previous page">.links</a>
+    <a class='right-next' id="next-link" href="vector.html" title="next page">.vector</a>
 
         </div>
         

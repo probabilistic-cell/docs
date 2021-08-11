@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Variables</title>
+    <title>.variables</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet" />
   <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -94,8 +94,8 @@ commentsRunWhenDOMLoaded(addGiscus);
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Variables" href="../../development/variables/index.html" />
-    <link rel="prev" title="Latenta" href="index.html" />
+    <link rel="next" title=".posterior" href="posterior.html" />
+    <link rel="prev" title=".vector" href="links/vector.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -159,6 +159,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
      Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/3-unsuperivsed.html">
+     Unsupervised learning
     </a>
    </li>
    <li class="toctree-l2">
@@ -253,6 +258,11 @@ commentsRunWhenDOMLoaded(addGiscus);
    </li>
   </ul>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../guide/transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
 </ul>
 <p class="caption">
  <span class="caption-text">
@@ -267,7 +277,7 @@ commentsRunWhenDOMLoaded(addGiscus);
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
-   Latenta
+   latenta
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -275,10 +285,49 @@ commentsRunWhenDOMLoaded(addGiscus);
    </i>
   </label>
   <ul class="current">
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Variables
+     .variables
     </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -293,8 +342,8 @@ commentsRunWhenDOMLoaded(addGiscus);
   <a class="reference internal" href="../../development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -397,10 +446,10 @@ commentsRunWhenDOMLoaded(addGiscus);
               <div>
                 
   <div class="section" id="module-latenta.variables">
-<span id="variables"></span><h1>Variables<a class="headerlink" href="#module-latenta.variables" title="Permalink to this headline">¶</a></h1>
+<span id="variables"></span><h1>.variables<a class="headerlink" href="#module-latenta.variables" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="latenta.variables.Definition">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Definition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/definition.html#Definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Definition" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Definition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/definition.html#Definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.labelling.LabelledMixin</span></code></p>
 <p>Defines how a variable should or will look like</p>
 <dl class="py method">
@@ -419,7 +468,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 
 <dl class="py class">
 <dt id="latenta.variables.Fixed">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Fixed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.variables.definition.Definition</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/fixed.html#Fixed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Fixed" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.variables.</span></code><code class="sig-name descname"><span class="pre">Fixed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.variables.definition.Definition</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invert_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/fixed.html#Fixed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Fixed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.variables.leaf.Leaf</span></code></p>
 <p>A fixed variable</p>
 <dl class="field-list simple">
@@ -446,8 +495,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 <li><p>«weights»: The weights associated with each observation.</p></li>
 </ul>
 <dl class="py method">
-<dt id="latenta.variables.Observation.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/observation.html#Observation.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Observation.run" title="Permalink to this definition">¶</a></dt>
+<dt id="latenta.variables.Observation.run_local">
+<code class="sig-name descname"><span class="pre">run_local</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/observation.html#Observation.run_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Observation.run_local" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the variable</p>
 </dd></dl>
 
@@ -485,6 +534,12 @@ commentsRunWhenDOMLoaded(addGiscus);
 <dt id="latenta.variables.Latent.run_conditional">
 <code class="sig-name descname"><span class="pre">run_conditional</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditional_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/latent.html#Latent.run_conditional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Latent.run_conditional" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditional latent variable: will take mean of the prior</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="latenta.variables.Latent.filter">
+<code class="sig-name descname"><span class="pre">filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/variables/latent.html#Latent.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.variables.Latent.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter one or more dimensions.</p>
 </dd></dl>
 
 </dd></dl>
@@ -534,8 +589,8 @@ commentsRunWhenDOMLoaded(addGiscus);
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Latenta</a>
-    <a class='right-next' id="next-link" href="../../development/variables/index.html" title="next page">Variables</a>
+    <a class='left-prev' id="prev-link" href="links/vector.html" title="previous page">.vector</a>
+    <a class='right-next' id="next-link" href="posterior.html" title="next page">.posterior</a>
 
         </div>
         

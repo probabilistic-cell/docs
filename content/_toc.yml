@@ -48,11 +48,15 @@ parts:
     - file: reference/latenta/links
       sections:
       - file: reference/latenta/links/scalar
+        title: .scalar
       - file: reference/latenta/links/vector
+        title: .vector
     - file: reference/latenta/variables
     - file: reference/latenta/posterior
+      title: .posterior
       sections:
       - file: reference/latenta/posterior/scalar
+        title: .scalar
 
 - caption: "Developer guide"
   chapters:

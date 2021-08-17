@@ -42,7 +42,6 @@ parts:
   # - file: explanation/amortization
 - caption: "Reference"
   chapters:
-  - file: reference/overview
   - file: reference/latenta/index
     sections:
     - file: reference/latenta/links

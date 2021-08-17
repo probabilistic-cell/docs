@@ -33,7 +33,7 @@ adata.var["label"] = adata.var["symbol"]
 adata.raw = adata
 
 # %% [markdown]
-
+#
 # ## Easy things first: Linear regression
 
 # %% [markdown]
@@ -48,16 +48,18 @@ genes = la.Dim(adata.var)
 cells = la.Dim(adata.obs)
 
 # %%
-overexpression = la.Fixed(adata.obs["log_overexpression"], label = "overexpression", symbol = "overexpression")
+overexpression = la.Fixed(
+    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
+)
 
 # %%
 expression = la.links.scalar.Linear(
     overexpression,
-    a = True,
-    b = True,
-    label = "expression",
-    definition = la.Definition([cells, genes]),
-    transforms = [la.transforms.Exp()]
+    a=True,
+    b=True,
+    label="expression",
+    definition=la.Definition([cells, genes]),
+    transforms=[la.transforms.Exp()],
 )
 
 # %% [markdown]
@@ -73,20 +75,23 @@ expression = la.links.scalar.Linear(
 # %%
 dispersion = la.Latent(
     la.distributions.LogNormal(
-        la.Parameter(0.),
-        la.Parameter(1., transforms = [la.transforms.Exp()])
+        la.Parameter(0.0), la.Parameter(1.0, transforms=[la.transforms.Exp()])
     ),
-    definition = la.Definition([genes])
+    definition=la.Definition([genes]),
 )
 
 # %%
 transcriptome_p = la.distributions.NegativeBinomial2(
-    mu = expression,
-    dispersion = dispersion
+    mu=expression, dispersion=dispersion
 )
 
 # %%
-transcriptome = la.Observation(adata.X, transcriptome_p, definition = la.Definition([cells, genes]), label = "transcriptome")
+transcriptome = la.Observation(
+    adata.X,
+    transcriptome_p,
+    definition=la.Definition([cells, genes]),
+    label="transcriptome",
+)
 
 # %%
 transcriptome.plot()
@@ -108,9 +113,7 @@ transcriptome.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    transcriptome,
-    [la.infer.loss.ELBO()],
-    la.infer.optim.Adam(lr = 0.05)
+    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
 )
 trainer = la.infer.trainer.Trainer(inference)
 
@@ -119,7 +122,7 @@ trainer = la.infer.trainer.Trainer(inference)
 
 # %%
 trace = trainer.train(10000)
-trace.plot();
+trace.plot()
 
 # %% [markdown]
 # You can check that our values have changed:
@@ -129,32 +132,29 @@ transcriptome.p.mu.a.q.loc.run_local()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
-
+#
 # ## Interpreting a regression model
-
+#
 # For interpretation of the model, we can then use 3 main types of posteriors:
 
 # %% [markdown]
 # ### Observed posteriors
-
+#
 # Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we run the variational distribution of the slope $q$ the output will be different, which will affect any downstream function even if they are themselves deterministic. To interpret the results, we can thus sample multiple times from the model:
 
 # %%
-transcriptome_observed = la.posterior.Observed(transcriptome)
+transcriptome_observed = la.posterior.Observed(transcriptome, retain_samples = {expression.a})
 transcriptome_observed.sample(5)
 
 # %% [markdown]
-# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome. We can access each variable either by providing the variable itself or by providing a "breadcrumb" starting from the output variable:
+# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome. We can access each variable either by providing the variable itself:
 
 # %%
 transcriptome_observed.samples[expression.a]
 
-# %%
-transcriptome_observed.samples["transcriptome.p.mu.a"]
-
 # %% [markdown]
 # :::{note}
-# Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as xr.DataArray objects. Important functions to know are:
+# Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as {py:class}`xarray.DataArray` objects. Important functions to know are:
 # - {py:meth}`~xarray.DataArray.sel` to select a subset of the data
 # - {py:meth}`~xarray.DataArray.to_pandas` to convert a 2D or 1D array to a pandas DataFrame or Series
 # - {py:attr}`~xarray.DataArray.dims` to get the dimensions of the data
@@ -164,18 +164,16 @@ transcriptome_observed.samples["transcriptome.p.mu.a"]
 # :::
 
 # %%
-
 transcriptome_observed.samples[expression.a].mean("sample")
 
 # %% [markdown]
 # ### Causal posteriors
-
+#
 # To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell) impacts a **vector** (gene expression for each cell):
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-    overexpression,
-    transcriptome
+    overexpression, transcriptome
 )
 overexpression_causal.sample(10)
 
@@ -189,10 +187,19 @@ overexpression_causal.samples[overexpression].mean("sample").head()
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %% [markdown]
-# This causal posterior can also provide a score dataframe that will rank each _feature_ (gene):
+# The plot above shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the soft and hard priors of the model, where the actual average value of the gene expression will lie.
+#
+# ::::{margin}
+# :::{seealso}
+# https://en.wikipedia.org/wiki/Credible_interval
+# :::
+# ::::
+
+# %% [markdown]
+# A causal posterior can also provide a score dataframe that will rank each _feature_ (gene). In this case, this also includes columns for the maximal fold change (`fc`), absolute change (`ab`) and peak input value (`peak`).
 
 # %%
 overexpression_causal.scores
@@ -202,8 +209,8 @@ overexpression_causal.scores
 
 # %% [markdown]
 # To understand whether a variable has an important impact on the downstream variable, we use perturbed posteriors. These posteriors work in a very similar way as the observed posterior, but rather than using the actual value of the variable, it uses a perturbed version. The type of perturbation varies depending on which question we want to address, and can include random shuffling, random sampling from the prior, or conditionalizing on a fixed value.
-
-# While you can independently construct a perturbed posterior, you will typically create it indirectly through a causal posterior. For example, we can do random sampling using:
+#
+# While you can independently construct a perturbed posterior, you will typically create it indirectly through a causal posterior. For example, we can do random sampling from the prior using:
 
 # %%
 overexpression_causal.sample_random()
@@ -215,7 +222,7 @@ overexpression_causal.sample_random()
 overexpression_causal.likelihood_ratio
 
 # %% [markdown]
-# These likelihood ratios were also added to our scores table:
+# These likelihood ratios were automatically added to our scores table:
 
 # %%
 overexpression_causal.scores.head()
@@ -227,17 +234,18 @@ overexpression_causal.scores.head()
 
 # %% [markdown]
 # ## Using _lacell_ to make model creation easier
-
+#
 # Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the `lacell` package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
 
 # %%
 import lacell as lac
+
 transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
 # Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same:
-
+#
 # - We model the counts as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
 # - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
 # - The $\rho$ itself is a linear combination of the average expression of each gene in the cell $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
@@ -248,16 +256,54 @@ transcriptome.plot()
 # [Why don't we just provide normalized data to latenta?](why-not-just-provide-normalized-data)
 # :::
 
+# %% [markdown]
+# Once models reach a certain complexity, it becomes easier to get a variable using the {meth}`~latenta.variables.Composed.find` function, which will recursively look for an object with the given label or symbol:
+
 # %%
+foldchange = transcriptome.find("foldchange")
+
+# %% [markdown]
+# The fold change in this case is a {class}`~latenta.modular.Additive` variable, to which you can add as many variables as you want which will all be summed:
+
+# %%
+foldchange.overexpression = la.links.scalar.Linear(
+    overexpression,
+    a=True,
+    b=True,
+    label="expression",
+    definition=foldchange.value_definition,
+    transforms=[la.transforms.Exp()],
+)
+
+# %%
+foldchange.plot()
 
 # %% [markdown]
 # ## More complex regression problems
 
 
 # %% [markdown]
-# ### Multiple inputs
+# ### Non-linear
+#
+# To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
+
+# %% tags=["remove-input", "remove-output"]
+from myst_nb import glue
+logistic = la.links.scalar.Logistic._repr_formula_latex_()
+glue("logistic", logistic, display=False)
+
+spline = la.links.scalar.Spline._repr_formula_latex_()
+glue("spline", logistic, display=False)
+
+sigmoid = la.links.scalar.Sigmoid._repr_formula_latex_()
+glue("sigmoid", logistic, display=False)
 
 # %% [markdown]
-# ### Non-linear
+# Name | Component | Formula | Description
+# --- | --- | --- | ----
+# Spline | {class}`~latenta.links.scalar.Spline` | {glue:math}`logistic` | A flexible non-linear function, defined by the value at a fixed set of knots
+# Sigmoid | {class}`~latenta.links.scalar.Sigmoid` | {glue:math}`sigmoid` | Sigmoid kinetics model
+# Switch | {class}`~latenta.links.scalar.Switch` | {glue:math}`switch` | A sudden jump
 
-
+# %% [markdown]
+# ### Multiple inputs

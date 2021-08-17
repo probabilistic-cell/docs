@@ -96,7 +96,7 @@ trace = trainer.train(10000)
 
 
 # %%
-posterior = la.posterior.Posterior(observation)
+posterior = la.posterior.Posterior(observation, retain_samples = {probs})
 posterior.sample(10)
 
 
@@ -110,10 +110,10 @@ sns.heatmap(modelled_value.iloc[np.argsort(x.prior().numpy())])
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
-causal.observed.sample(1)
-causal.sample(5)
-causal.plot_features(observation.p.probs);
+causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed = posterior, retain_samples = {probs.concentration})
+# causal.observed.sample(1)
+causal.sample(100)
+causal.plot_features(probs.concentration);
 
 # %% [markdown]
 # ## Classification based on observed x (2)
@@ -147,7 +147,7 @@ trace = trainer.train(10000)
 
 
 # %%
-posterior = la.posterior.Posterior(observation)
+posterior = la.posterior.Posterior(observation, retain_samples = {probs})
 posterior.sample(10)
 
 # %%

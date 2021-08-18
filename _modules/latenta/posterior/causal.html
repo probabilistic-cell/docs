@@ -156,13 +156,18 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/3-unsuperivsed.html">
-     Unsupervised learning
+    <a class="reference internal" href="../../../tutorials/essentials/3-manifolds.html">
+     Manifolds
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/4-model_selection.html">
      Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/5-serialization.html">
+     Amortization
     </a>
    </li>
   </ul>
@@ -264,11 +269,6 @@ commentsRunWhenDOMLoaded(addGiscus);
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../reference/overview.html">
-   Reference
-  </a>
- </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../reference/latenta/index.html">
    latenta
@@ -425,27 +425,43 @@ commentsRunWhenDOMLoaded(addGiscus);
   <h1>Source code for latenta.posterior.causal</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">latenta.dag</span> <span class="kn">import</span> <span class="n">InferenceDAG</span>
-<span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="n">Dim</span><span class="p">,</span>  <span class="n">is_observation</span>
+<span class="kn">from</span> <span class="nn">latenta.posterior.empirical</span> <span class="kn">import</span> <span class="n">Empirical</span>
+<span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="n">Dim</span><span class="p">,</span> <span class="n">is_observation</span>
 
 <span class="kn">from</span> <span class="nn">.posterior</span> <span class="kn">import</span> <span class="n">Posterior</span>
 <span class="kn">from</span> <span class="nn">.observed</span> <span class="kn">import</span> <span class="n">Observed</span>
 <span class="kn">from</span> <span class="nn">.perturbed</span> <span class="kn">import</span> <span class="n">Bootstrapped</span><span class="p">,</span> <span class="n">Random</span><span class="p">,</span> <span class="n">Conditionalized</span>
 
+
 <span class="k">def</span> <span class="nf">isobserved_posterior</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;.Observed&quot;</span> <span class="ow">in</span> <span class="nb">repr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span>
 
+
 <span class="k">class</span> <span class="nc">Conditional</span><span class="p">(</span><span class="n">Posterior</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interpretable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">interpretable</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">interpretable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">output</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">batch_dim</span><span class="o">=</span><span class="n">output</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">batch_dim</span><span class="o">=</span><span class="n">output</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interpretable</span> <span class="o">=</span> <span class="n">interpretable</span>
 
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latents</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_batch</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distributions</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="o">=</span> <span class="n">InferenceDAG</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">_visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">latents</span><span class="o">.</span><span class="n">copy</span><span class="p">()))</span> <span class="c1"># don&#39;t go further than latents</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">latents</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">n_batch</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">distributions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="o">=</span> <span class="n">InferenceDAG</span><span class="p">()</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">_visited</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">latents</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="p">)</span>  <span class="c1"># don&#39;t go further than latents</span>
 
         <span class="k">if</span> <span class="n">distributions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">distributions</span> <span class="o">=</span> <span class="p">{}</span>
@@ -460,7 +476,9 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># make sure all latents are in the dag</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">latent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="k">for</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">latents</span><span class="p">]),</span> <span class="p">[</span><span class="n">latent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="k">for</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">latents</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">latent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="k">for</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">latents</span><span class="p">),</span> <span class="p">[</span>
+            <span class="n">latent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span> <span class="k">for</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">latents</span>
+        <span class="p">]</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span>
 
         <span class="c1"># first get the samples for each variable individually</span>
@@ -471,78 +489,128 @@ commentsRunWhenDOMLoaded(addGiscus);
 
         <span class="n">latent_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">latent</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">n_batch</span><span class="p">,</span> <span class="n">latents</span><span class="p">):</span>
-            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span> <span class="o">==</span> <span class="n">latent</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;&quot;</span> <span class="c1"># Batch dim not in first dimension not yet supported</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span> <span class="o">==</span> <span class="n">latent</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">),</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># Batch dim not in first dimension not yet supported</span>
 
             <span class="k">if</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">distributions</span><span class="p">:</span>
-                <span class="n">values_individual</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="n">distributions</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span><span class="o">.</span><span class="n">spread</span><span class="p">(</span><span class="n">n_batch</span><span class="p">)</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># take first at batch_dim</span>
+                <span class="n">distribution</span> <span class="o">=</span> <span class="n">values_individual</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">values_individual</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="n">latent</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">spread</span><span class="p">(</span><span class="n">n_batch</span><span class="p">)</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># take first at batch dim</span>
+                <span class="n">distribution</span> <span class="o">=</span> <span class="n">latent</span><span class="o">.</span><span class="n">distribution</span>
+            <span class="n">values_individual</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">distribution</span><span class="o">.</span><span class="n">spread</span><span class="p">(</span><span class="n">n_batch</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">latent</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
+                <span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>  <span class="c1"># take first at batch dim</span>
 
             <span class="n">latent_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">values_individual</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="c1"># now calculate the product</span>
         <span class="n">prod</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cartesian_prod</span><span class="p">(</span><span class="o">*</span><span class="n">latent_values</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">prod</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># cartesian product doesn&#39;t return a matrix if there&#39;s only one tensor</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">prod</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="p">):</span>  <span class="c1"># cartesian product doesn&#39;t return a matrix if there&#39;s only one tensor</span>
             <span class="n">prod</span> <span class="o">=</span> <span class="n">prod</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="n">prod</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">new_dim</span> <span class="o">=</span> <span class="n">new_dim</span> <span class="o">=</span> <span class="n">Dim</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">)</span>
+        <span class="n">new_dim</span> <span class="o">=</span> <span class="n">new_dim</span> <span class="o">=</span> <span class="n">Dim</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">)</span>
 
         <span class="c1"># create conditional dimensions</span>
-        <span class="n">conditional_dimensions</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">:</span><span class="n">new_dim</span>
-        <span class="p">}</span>
+        <span class="n">conditional_dimensions</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">:</span> <span class="n">new_dim</span><span class="p">}</span>
 
         <span class="c1"># create the values for each latent variable</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">latent</span><span class="p">,</span> <span class="n">value_individual</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values_individual</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">definition</span> <span class="o">=</span> <span class="n">latent</span><span class="o">.</span><span class="n">value_definition</span>
             <span class="n">definition</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_dim</span>
-            <span class="n">values</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span><span class="n">value_individual</span><span class="p">[</span><span class="n">prod</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]])</span>
+            <span class="n">values</span><span class="p">[</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span>
+                <span class="n">value_individual</span><span class="p">[</span><span class="n">prod</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">value_individual</span><span class="o">.</span><span class="n">device</span><span class="p">)]</span>
+            <span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="n">retain_samples</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">,</span> <span class="n">conditional_dimensions</span> <span class="o">=</span> <span class="n">conditional_dimensions</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="n">condition</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">conditional_dimensions</span><span class="o">=</span><span class="n">conditional_dimensions</span><span class="p">,</span>
+            <span class="n">condition</span><span class="o">=</span><span class="n">condition</span><span class="p">,</span>
+            <span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">conditional_dimensions</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dag</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">conditional_dimensions</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">sample</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dag</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">dag</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                    <span class="n">variable</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
+                    <span class="n">variable</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">variable</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span><span class="n">conditional_dimensions</span> <span class="o">=</span> <span class="n">conditional_dimensions</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="n">condition</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span> <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">condition</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_sample_variable</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="n">retain_samples</span><span class="p">,</span> <span class="n">probabilities</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">variable</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span>
+                        <span class="n">conditional_dimensions</span><span class="o">=</span><span class="n">conditional_dimensions</span><span class="p">,</span>
+                        <span class="n">condition</span><span class="o">=</span><span class="n">condition</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">condition</span>
+                        <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_sample_variable</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">probabilities</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">variable</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
         <span class="k">return</span> <span class="n">sample</span>
 
-    <span class="k">def</span> <span class="nf">_get_default_interpretable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretable</span>
-        <span class="k">if</span> <span class="n">is_observation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">promises</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">def</span> <span class="nf">_get_default_interpretable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interpretable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">interpretable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">interpretable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpretable</span>
+
+        <span class="k">if</span> <span class="n">interpretable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">interpretable</span>
+
+        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="k">if</span> <span class="n">is_observation</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">promises</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">promises</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">promises</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]</span>
 
 
 <div class="viewcode-block" id="Causal"><a class="viewcode-back" href="../../../reference/latenta/posterior.html#latenta.posterior.Causal">[docs]</a><span class="k">class</span> <span class="nc">Causal</span><span class="p">(</span><span class="n">Conditional</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A causal posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latent</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">observed</span><span class="p">:</span> <span class="n">Observed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">interpretable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">interpretable</span><span class="o">=</span><span class="n">interpretable</span><span class="p">)</span>
+    <span class="n">empirical</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">latent</span><span class="p">,</span>
+        <span class="n">output</span><span class="p">,</span>
+        <span class="n">observed</span><span class="p">:</span> <span class="n">Observed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">interpretable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">retain_samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="k">if</span> <span class="n">observed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">latent</span> <span class="ow">in</span> <span class="n">observed</span><span class="o">.</span><span class="n">samples</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">observed</span> <span class="o">=</span> <span class="n">Posterior</span><span class="p">(</span><span class="n">latent</span><span class="p">)</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">latent</span> <span class="o">=</span> <span class="n">latent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">observed</span> <span class="o">=</span> <span class="n">observed</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">retain_samples</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#[self.latent, self.output, *self.output.components.values()]</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">retain_samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">retain_samples</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">retain_samples</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">latent</span><span class="p">,</span>
+                <span class="n">output</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_interpretable</span><span class="p">(</span>
+                    <span class="n">interpretable</span><span class="o">=</span><span class="n">interpretable</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">output</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">output</span><span class="p">,</span> <span class="n">interpretable</span><span class="o">=</span><span class="n">interpretable</span><span class="p">,</span> <span class="n">retain_samples</span><span class="o">=</span><span class="n">retain_samples</span>
+        <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">mean_latent_observed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -558,29 +626,100 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="k">def</span> <span class="nf">std_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_batch</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distribution</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">n_batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">samples</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">distributions</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">distribution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">distributions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">]</span> <span class="o">=</span> <span class="n">distribution</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">latents</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">],</span> <span class="n">retain_samples</span> <span class="o">=</span> <span class="n">retain_samples</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">=</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_batch</span> <span class="o">=</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">distributions</span> <span class="o">=</span> <span class="n">distributions</span><span class="p">,</span> <span class="n">condition</span> <span class="o">=</span> <span class="n">condition</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">latents</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">],</span>
+            <span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span>
+            <span class="n">n_batch</span><span class="o">=</span><span class="n">n_batch</span><span class="p">,</span>
+            <span class="n">distributions</span><span class="o">=</span><span class="n">distributions</span><span class="p">,</span>
+            <span class="n">condition</span><span class="o">=</span><span class="n">condition</span><span class="p">,</span>
+            <span class="n">samples</span><span class="o">=</span><span class="n">samples</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">sample_bootstrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">subsample_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span> <span class="o">=</span> <span class="n">Bootstrapped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">subsample_size</span> <span class="o">=</span> <span class="n">subsample_size</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">sample_empirical</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># uniformily get batches using binning</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_latent_observed</span>
+
+        <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">n_bins</span><span class="p">)</span>
+        <span class="n">ixs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+
+        <span class="n">batch_dim_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">bin_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_bins</span><span class="p">):</span>
+            <span class="n">ix</span> <span class="o">=</span> <span class="n">ixs</span> <span class="o">==</span> <span class="n">bin_id</span>
+            <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                    <span class="n">batch_dim_index</span><span class="p">[</span><span class="n">ix</span><span class="p">],</span> <span class="nb">min</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="n">ix</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+
+        <span class="c1"># create and sample empirical using coords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">empirical</span> <span class="o">=</span> <span class="n">Empirical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">retain_samples</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">retain_samples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">empirical</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample_bootstrap</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">subsample_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">subsample_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span> <span class="o">=</span> <span class="n">Bootstrapped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">n_samples</span><span class="p">,</span>
+            <span class="n">subsample_n</span><span class="o">=</span><span class="n">subsample_n</span><span class="p">,</span>
+            <span class="n">subsample_size</span><span class="o">=</span><span class="n">subsample_size</span><span class="p">,</span>
+            <span class="n">to_sum</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">},</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bootstrapped</span><span class="o">.</span><span class="n">likelihood_ratio</span>
 
-    <span class="k">def</span> <span class="nf">sample_random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">subsample_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">subsample_n</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="o">=</span> <span class="n">Random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">subsample_size</span> <span class="o">=</span> <span class="n">subsample_size</span><span class="p">,</span> <span class="n">subsample_n</span> <span class="o">=</span> <span class="n">subsample_n</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">sample_random</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">subsample_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">subsample_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="o">=</span> <span class="n">Random</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">n_samples</span><span class="p">,</span>
+            <span class="n">subsample_size</span><span class="o">=</span><span class="n">subsample_size</span><span class="p">,</span>
+            <span class="n">subsample_n</span><span class="o">=</span><span class="n">subsample_n</span><span class="p">,</span>
+            <span class="n">to_sum</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">},</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">likelihood_ratio</span>
 
-    <span class="k">def</span> <span class="nf">sample_conditional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">subsample_size</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">batch_subset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conditional</span> <span class="o">=</span> <span class="n">Conditionalized</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conditional</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">subsample_size</span> <span class="o">=</span> <span class="n">subsample_size</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">sample_conditional</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">subsample_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">batch_subset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conditional</span> <span class="o">=</span> <span class="n">Conditionalized</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conditional</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+            <span class="n">n_samples</span><span class="p">,</span> <span class="n">subsample_size</span><span class="o">=</span><span class="n">subsample_size</span><span class="p">,</span> <span class="n">to_sum</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditional</span><span class="o">.</span><span class="n">likelihood_ratio</span>
         <span class="k">if</span> <span class="n">batch_subset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="n">likelihood_ratio</span><span class="o">.</span><span class="n">sel</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">:</span><span class="n">batch_subset</span><span class="p">})</span>
+            <span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="n">likelihood_ratio</span><span class="o">.</span><span class="n">sel</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">:</span> <span class="n">batch_subset</span><span class="p">})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span> <span class="o">=</span> <span class="n">likelihood_ratio</span></div>
+
 
 <span class="k">class</span> <span class="nc">PairedCausal</span><span class="p">(</span><span class="n">Conditional</span><span class="p">):</span>
     <span class="k">pass</span>
@@ -595,16 +734,13 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="k">def</span> <span class="nf">get_scores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">interpretable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_interpretable</span><span class="p">()</span>
 
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><span class="n">interpretable</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="s2">&quot;sample&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><span class="n">interpretable</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="s2">&quot;sample&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 
-        <span class="n">scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-            <span class="s2">&quot;fc&quot;</span><span class="p">:</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-            <span class="s2">&quot;ac&quot;</span><span class="p">:</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-        <span class="p">})</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;fc&quot;</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="s2">&quot;ac&quot;</span><span class="p">:</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()})</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_dim</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
-            <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">ascending</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">likelihood_ratio</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">feature_dim</span> <span class="o">=</span> <span class="n">interpretable</span><span class="o">.</span><span class="n">value_definition</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 

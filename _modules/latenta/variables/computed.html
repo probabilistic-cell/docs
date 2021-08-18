@@ -81,8 +81,6 @@ commentsRunWhenDOMLoaded(addGiscus);
 </script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -158,13 +156,18 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/3-unsuperivsed.html">
-     Unsupervised learning
+    <a class="reference internal" href="../../../tutorials/essentials/3-manifolds.html">
+     Manifolds
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/4-model_selection.html">
      Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/5-serialization.html">
+     Amortization
     </a>
    </li>
   </ul>
@@ -266,11 +269,6 @@ commentsRunWhenDOMLoaded(addGiscus);
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../reference/overview.html">
-   Reference
-  </a>
- </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../reference/latenta/index.html">
    latenta
@@ -425,18 +423,21 @@ commentsRunWhenDOMLoaded(addGiscus);
               <div>
                 
   <h1>Source code for latenta.variables.computed</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.variable</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">infer_value_definition</span>
+<span></span><span class="kn">from</span> <span class="nn">.variable</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">infer_value_definition</span><span class="p">,</span> <span class="n">class_or_instancemethod</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
 
 <div class="viewcode-block" id="Computed"><a class="viewcode-back" href="../../../reference/latenta/variables.html#latenta.variables.Computed">[docs]</a><span class="k">class</span> <span class="nc">Computed</span><span class="p">(</span><span class="n">Variable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A computed variable</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_define_manual_required</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># for computed variables, we can use the components to determine the definition</span>
+    <span class="n">_define_manual_required</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">False</span>
+    <span class="p">)</span>  <span class="c1"># for computed variables, we can use the components to determine the definition</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">definition</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">definition</span> <span class="o">=</span> <span class="n">definition</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">repr_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">repr_unicode</span><span class="p">()</span>
@@ -456,14 +457,19 @@ commentsRunWhenDOMLoaded(addGiscus);
             <span class="n">out</span> <span class="o">+=</span> <span class="s2">&quot; = $&quot;</span> <span class="o">+</span> <span class="n">formula</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\require</span><span class="si">{action}</span><span class="s2">$&quot;</span>
         <span class="k">return</span> <span class="n">out</span>
 
+    <span class="nd">@class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="nd">@class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_short_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr_formula_latex_</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_repr_formula_unicode_short_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">latenta.introspect</span> <span class="kn">import</span> <span class="n">latex_to_unicode</span> <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="kn">from</span> <span class="nn">latenta.introspect</span> <span class="kn">import</span> <span class="p">(</span>
+            <span class="n">latex_to_unicode</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
         <span class="k">return</span> <span class="n">latex_to_unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repr_latex_short_</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">_get_value_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -471,16 +477,10 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="k">return</span> <span class="n">infer_value_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">node_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theme</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">node_attr</span><span class="p">(</span><span class="n">theme</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">theme</span><span class="p">[</span><span class="s2">&quot;node&quot;</span><span class="p">][</span><span class="s2">&quot;computed&quot;</span><span class="p">]</span>
-        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">node_attr</span><span class="p">(</span><span class="n">theme</span><span class="p">),</span> <span class="o">**</span><span class="n">theme</span><span class="p">[</span><span class="s2">&quot;node&quot;</span><span class="p">][</span><span class="s2">&quot;computed&quot;</span><span class="p">]}</span>
 
     <span class="k">def</span> <span class="nf">node_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;computed&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="s2">&quot;Computed&quot;</span>
-        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;computed&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Computed&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">_repr_latex_short_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>

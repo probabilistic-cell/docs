@@ -443,8 +443,7 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="k">return</span> <span class="n">isinstance2</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Variational</span><span class="p">)</span>
 
 
-
-<span class="k">def</span> <span class="nf">get_initial_quantiles_sampling</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_initial_quantiles_sampling</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="n">is_dim_broadcasted</span>
     <span class="kn">import</span> <span class="nn">math</span>
 
@@ -461,27 +460,43 @@ commentsRunWhenDOMLoaded(addGiscus);
 
     <span class="c1"># put all samples + shared_ix in first dimension (to get quantiles)</span>
     <span class="n">samples_reshaped</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">n_samples</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_shared_ix</span><span class="p">]]),</span> <span class="o">*</span><span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_nonshared_ix</span><span class="p">]]</span>
+        <span class="p">[</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">n_samples</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_shared_ix</span><span class="p">]]),</span>
+            <span class="o">*</span><span class="p">[</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_nonshared_ix</span><span class="p">],</span>
+        <span class="p">]</span>
     <span class="p">)</span>
 
     <span class="c1"># get initial quantiles (and reshape to get back to the original shape)</span>
     <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">initial_quantile_mapping</span><span class="p">:</span>
-        <span class="n">initial_quantiles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
-            <span class="n">samples_reshaped</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_shared_ix</span> <span class="k">else</span> <span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))])</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-        <span class="p">])</span>
-    
+        <span class="n">initial_quantiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
+                <span class="n">samples_reshaped</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">q2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">initial_shared_ix</span> <span class="k">else</span> <span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">shape</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
     <span class="k">return</span> <span class="n">initial_quantiles</span>
+
 
 <span class="k">def</span> <span class="nf">get_initial_quantiles_icdf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="p">):</span>
     <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span> <span class="ow">in</span> <span class="n">initial_quantile_mapping</span><span class="p">:</span>
-        <span class="n">initial_quantiles</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">icdf</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q2</span><span class="p">))</span><span class="c1">#.expand(p.value_definition.shape)</span>
-        <span class="p">])</span>
+        <span class="n">initial_quantiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q1</span><span class="p">),</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">icdf</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">q2</span><span class="p">)),</span>  <span class="c1"># .expand(p.value_definition.shape)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">initial_quantiles</span>
+
 
 <span class="k">def</span> <span class="nf">invert_quantiles_normal</span><span class="p">(</span><span class="n">initial_quantiles</span><span class="p">,</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -493,9 +508,7 @@ commentsRunWhenDOMLoaded(addGiscus);
             <span class="n">quantile</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">quantile</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">prior_invert_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">variances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span><span class="o">/</span><span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">erfinv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">quantile</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="p">)</span>
+        <span class="n">variances</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">y</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">erfinv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">quantile</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">variances</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">scale</span>
 
@@ -509,7 +522,7 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="n">p</span> <span class="o">=</span> <span class="n">RandomPromise</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initial_quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="k">assert</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="c1"># assert p can calculate likelihood (i.e. a distribution or something that can invert towards a distribution)</span>
@@ -544,11 +557,16 @@ commentsRunWhenDOMLoaded(addGiscus);
                         <span class="s2">&quot;Cannot initialize from a distribution without a mean or median, provide initial manually&quot;</span>
                     <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">loc_value</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">broadcast</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+                <span class="n">loc_value</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                    <span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">broadcast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+                <span class="p">)</span>
 
             <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)),</span> <span class="s2">&quot;Initial value contains NaNs&quot;</span>
 
-            <span class="k">assert</span> <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span>
+                <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="c1"># get transforms to go from the prior&#39;s support to real</span>
             <span class="n">transforms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">biject_to</span><span class="p">()</span>
@@ -584,13 +602,19 @@ commentsRunWhenDOMLoaded(addGiscus);
             <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">initial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_icdf</span><span class="p">:</span>
-                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_icdf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span> <span class="o">=</span> <span class="n">initial_quantile_mapping</span><span class="p">)</span>
+                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_icdf</span><span class="p">(</span>
+                            <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
+                        <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_sampling</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span> <span class="o">=</span> <span class="n">initial_quantile_mapping</span><span class="p">)</span>
-                        
+                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_sampling</span><span class="p">(</span>
+                            <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
+                        <span class="p">)</span>
+
             <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_quantiles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                <span class="n">scale_value</span> <span class="o">=</span> <span class="n">invert_quantiles_normal</span><span class="p">(</span><span class="n">initial_quantiles</span><span class="p">,</span> <span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="n">loc_value</span><span class="p">)</span>
+                <span class="n">scale_value</span> <span class="o">=</span> <span class="n">invert_quantiles_normal</span><span class="p">(</span>
+                    <span class="n">initial_quantiles</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc_value</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">scale_value</span> <span class="o">=</span> <span class="mf">0.1</span>
 
@@ -621,7 +645,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 
     <span class="k">def</span> <span class="nf">run_local</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :meta private: </span>
+<span class="sd">        :meta private:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">value</span>
 
@@ -629,13 +653,15 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Conditional latent variable: will take mean of the prior</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value_set</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">conditional_dimensions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">dim_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="k">for</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="n">conditional_dimensions</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">value_set</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;# TODO 😶&quot;</span><span class="p">)</span>
 
                 <span class="c1"># take the prior, broadcast to the latent&#39;s dimensions and expand to match the shape</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcasters</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcasters</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">)</span>
                 <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">size</span>
                     <span class="k">if</span> <span class="n">dim_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conditional_dimensions</span>
@@ -650,12 +676,12 @@ commentsRunWhenDOMLoaded(addGiscus);
                         <span class="k">if</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span>
-            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-            <span class="n">conditional_dimensions</span><span class="o">=</span><span class="n">conditional_dimensions</span><span class="p">,</span>
-            <span class="n">condition</span><span class="o">=</span><span class="n">condition</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value_set</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">conditional_dimensions</span><span class="o">=</span><span class="n">conditional_dimensions</span><span class="p">,</span>
+                <span class="n">condition</span><span class="o">=</span><span class="n">condition</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -688,9 +714,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class="viewcode-block" id="Latent.filter"><a class="viewcode-back" href="../../../reference/latenta/variables.html#latenta.variables.Latent.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_local</span><span class="p">()</span> <span class="c1"># remove the value definition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_local</span><span class="p">()</span>  <span class="c1"># remove the value definition</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
-
 
         <span class="k">return</span> <span class="bp">self</span></div></div>
 

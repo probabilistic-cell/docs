@@ -81,8 +81,6 @@ commentsRunWhenDOMLoaded(addGiscus);
 </script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -266,11 +264,6 @@ commentsRunWhenDOMLoaded(addGiscus);
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../../../reference/overview.html">
-   Reference
-  </a>
- </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../../reference/latenta/index.html">
    latenta
@@ -428,26 +421,25 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">distributions</span><span class="p">,</span> <span class="n">domains</span>
+<span class="kn">from</span> <span class="nn">latenta.variables.promise</span> <span class="kn">import</span> <span class="n">is_promise</span>
+<span class="kn">from</span> <span class="nn">latenta.variables.variable</span> <span class="kn">import</span> <span class="n">class_or_instancemethod</span>
 
 <span class="kn">from</span> <span class="nn">.scalar</span> <span class="kn">import</span> <span class="n">CoefficientPromise</span>
 <span class="kn">from</span> <span class="nn">.linear</span> <span class="kn">import</span> <span class="n">Linear</span>
 <span class="kn">from</span> <span class="nn">..link</span> <span class="kn">import</span> <span class="n">InvertibleLinkMixin</span>
+
 
 <div class="viewcode-block" id="Logistic"><a class="viewcode-back" href="../../../../reference/latenta/links/scalar.html#latenta.links.scalar.Logistic">[docs]</a><span class="k">class</span> <span class="nc">Logistic</span><span class="p">(</span><span class="n">InvertibleLinkMixin</span><span class="p">,</span> <span class="n">Linear</span><span class="p">):</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
         <span class="s2">&quot;final&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
         <span class="s2">&quot;The final value of the logistic function. Denotes the output at high values of «x», far away from &lt;&lt;switch&gt;&gt;.&quot;</span><span class="p">,</span>
-        <span class="n">default_distribution</span> <span class="o">=</span> <span class="s2">&quot;output_difference&quot;</span><span class="p">,</span>
+        <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;output_difference&quot;</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">switch</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
-        <span class="s2">&quot;shift&quot;</span><span class="p">,</span>
-        <span class="sa">r</span><span class="s2">&quot;\zeta&quot;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
+        <span class="s2">&quot;shift&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\zeta&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
 
     <span class="n">skew</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
@@ -456,28 +448,48 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">default_distribution</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">distributions</span><span class="o">.</span><span class="n">LogNormal</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">support</span><span class="o">=</span><span class="n">domains</span><span class="o">.</span><span class="n">positive</span>
+        <span class="n">support</span><span class="o">=</span><span class="n">domains</span><span class="o">.</span><span class="n">positive</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">skew</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">switch</span><span class="p">)</span> <span class="o">*</span> <span class="n">skew</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">expit</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">switch</span><span class="p">)</span> <span class="o">*</span> <span class="n">skew</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">out</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;NaNs in output of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
+    <span class="nd">@class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;[x]&quot;</span>
+        <span class="n">skew</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;-[skew] \;\cdot\; &quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_promise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skew</span><span class="p">)</span>
+            <span class="k">else</span> <span class="s2">&quot;-&quot;</span>
+        <span class="p">)</span>
+        <span class="n">switch</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;- [switch] &quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_promise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch</span><span class="p">)</span>
+            <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a]&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_promise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;1&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;- [b]&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_promise</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span>
-            <span class="sa">r</span><span class="s2">&quot;\left. [a] \right/ \left(1+e^{-[skew] \;\cdot\; [x] - [switch]}\right) &quot;</span>
+            <span class="sa">r</span><span class="s2">&quot;\frac{[a]}{1 + e^{[skew][x][switch]}}[b]&quot;</span><span class="p">,</span>
+            <span class="n">skew</span><span class="o">=</span><span class="n">skew</span><span class="p">,</span>
+            <span class="n">switch</span><span class="o">=</span><span class="n">switch</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_repr_formula_latex_short_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a] \cdot Logistic([x], [switch], [skew])&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_log_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span> <span class="o">+</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softplus</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">log_prob</span></div>
 
 
@@ -487,7 +499,7 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="sa">r</span><span class="s2">&quot;\gamma&quot;</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">default_distribution</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">distributions</span><span class="o">.</span><span class="n">LogNormal</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span><span class="p">),</span>
-        <span class="n">default</span><span class="o">=</span><span class="mf">25.</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">25.0</span><span class="p">,</span>
         <span class="n">support</span><span class="o">=</span><span class="n">domains</span><span class="o">.</span><span class="n">positive</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -499,6 +511,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span class="sd">            \end{cases}&quot;&quot;&quot;</span>
         <span class="p">)</span>
 
+    <span class="nd">@class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_short_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a] \cdot Switch([x], [switch])&quot;</span><span class="p">)</span></div>
 
@@ -519,7 +532,7 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">support</span><span class="o">=</span><span class="n">domains</span><span class="o">.</span><span class="n">positive</span><span class="p">,</span>
         <span class="n">default_distribution</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">distributions</span><span class="o">.</span><span class="n">LogNormal</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span>
-        <span class="n">default</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">halfmaximal</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cooperativity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
@@ -534,6 +547,7 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span>
 
+    <span class="nd">@class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span>
             <span class="sa">r</span><span class="s2">&quot;\left. [a] \frac{({[x]}^{[cooperativity]}}{{[halfmaximal]}^{[cooperativity]} + {[x]}^{[cooperativity]}&quot;</span>

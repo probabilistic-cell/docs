@@ -158,13 +158,18 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/3-unsuperivsed.html">
-     Unsupervised learning
+    <a class="reference internal" href="../../tutorials/essentials/3-manifolds.html">
+     Manifolds
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/4-model_selection.html">
      Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/5-serialization.html">
+     Amortization
     </a>
    </li>
   </ul>
@@ -266,11 +271,6 @@ commentsRunWhenDOMLoaded(addGiscus);
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../overview.html">
-   Reference
-  </a>
- </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
    latenta
@@ -445,7 +445,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span id="posterior"></span><h1>.posterior<a class="headerlink" href="#module-latenta.posterior" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="latenta.posterior.Causal">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.posterior.</span></code><code class="sig-name descname"><span class="pre">Causal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.posterior.observed.Observed</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/posterior/causal.html#Causal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.posterior.Causal" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.posterior.</span></code><code class="sig-name descname"><span class="pre">Causal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.posterior.observed.Observed</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/latenta/posterior/causal.html#Causal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.posterior.Causal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.posterior.causal.Conditional</span></code></p>
 <p>A causal posterior</p>
 </dd></dl>

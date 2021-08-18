@@ -81,8 +81,6 @@ commentsRunWhenDOMLoaded(addGiscus);
 </script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -160,13 +158,18 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/3-unsuperivsed.html">
-     Unsupervised learning
+    <a class="reference internal" href="../../../tutorials/essentials/3-manifolds.html">
+     Manifolds
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/4-model_selection.html">
      Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/5-serialization.html">
+     Amortization
     </a>
    </li>
   </ul>
@@ -268,11 +271,6 @@ commentsRunWhenDOMLoaded(addGiscus);
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../overview.html">
-   Reference
-  </a>
- </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../index.html">
    latenta
@@ -447,9 +445,16 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span id="scalar"></span><h1>.scalar<a class="headerlink" href="#module-latenta.posterior.scalar" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="latenta.posterior.scalar.ScalarScalarCausal">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.posterior.scalar.</span></code><code class="sig-name descname"><span class="pre">ScalarScalarCausal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.posterior.observed.Observed</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/posterior/scalar/causal.html#ScalarScalarCausal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.posterior.scalar.ScalarScalarCausal" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.posterior.scalar.</span></code><code class="sig-name descname"><span class="pre">ScalarScalarCausal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.posterior.observed.Observed</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/posterior/scalar/causal.html#ScalarScalarCausal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.posterior.scalar.ScalarScalarCausal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.posterior.causal.Causal</span></code></p>
-<p>Causal posterior comparing a scalar input to a scalar output</p>
+<p>Comparing a scalar input to a scalar output</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="latenta.posterior.scalar.ScalarVectorCausal">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.posterior.scalar.</span></code><code class="sig-name descname"><span class="pre">ScalarVectorCausal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">latenta.posterior.observed.Observed</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpretable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retain_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/posterior/scalar/causal.html#ScalarVectorCausal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.posterior.scalar.ScalarVectorCausal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.posterior.causal.XVectorCausal</span></code></p>
+<p>Comparing a scalar input to a vector output</p>
 </dd></dl>
 
 </div>

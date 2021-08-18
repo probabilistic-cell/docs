@@ -435,6 +435,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span class="kn">from</span> <span class="nn">backports.cached_property</span> <span class="kn">import</span> <span class="n">cached_property</span>
 
 <span class="kn">from</span> <span class="nn">latenta.utils</span> <span class="kn">import</span> <span class="n">isinstance2</span>
+
+
 <span class="k">def</span> <span class="nf">is_fixed</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">isinstance2</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Fixed</span><span class="p">)</span>
 
@@ -447,22 +449,19 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">node_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theme</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">node_attr</span><span class="p">(</span><span class="n">theme</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">theme</span><span class="p">[</span><span class="s2">&quot;node&quot;</span><span class="p">][</span><span class="s2">&quot;fixed&quot;</span><span class="p">]</span>
-        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">node_attr</span><span class="p">(</span><span class="n">theme</span><span class="p">),</span> <span class="o">**</span><span class="n">theme</span><span class="p">[</span><span class="s2">&quot;node&quot;</span><span class="p">][</span><span class="s2">&quot;fixed&quot;</span><span class="p">]}</span>
 
     <span class="k">def</span> <span class="nf">node_legend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="s2">&quot;Fixed&quot;</span>
-        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fixed&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Fixed&quot;</span><span class="p">}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribution</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">empirical_distribution</span>
+            <span class="n">distribution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribution</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">distribution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">empirical_distribution</span>
+        <span class="n">distribution</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">distribution</span>
 
     <span class="nd">@distribution</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -473,9 +472,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="nd">@cached_property</span>
     <span class="k">def</span> <span class="nf">empirical_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">..distributions</span> <span class="kn">import</span> <span class="n">Uniform</span>
+
         <span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prior_xr</span><span class="p">()</span>
         <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Uniform</span><span class="o">.</span><span class="n">from_samples</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Uniform</span><span class="o">.</span><span class="n">from_samples</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

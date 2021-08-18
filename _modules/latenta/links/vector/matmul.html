@@ -436,13 +436,24 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span class="kn">from</span> <span class="nn">.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
 
 <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">domains</span>
-<span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">is_variable</span><span class="p">,</span> <span class="n">is_definition</span><span class="p">,</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">Fixed</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">,</span> <span class="n">Latent</span><span class="p">,</span> <span class="n">Computed</span><span class="p">,</span> <span class="n">VariablePromise</span>
+<span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Variable</span><span class="p">,</span>
+    <span class="n">is_variable</span><span class="p">,</span>
+    <span class="n">is_definition</span><span class="p">,</span>
+    <span class="n">Definition</span><span class="p">,</span>
+    <span class="n">Fixed</span><span class="p">,</span>
+    <span class="n">Distribution</span><span class="p">,</span>
+    <span class="n">Latent</span><span class="p">,</span>
+    <span class="n">Computed</span><span class="p">,</span>
+    <span class="n">VariablePromise</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">distributions</span>
 <span class="kn">from</span> <span class="nn">latenta.variables.promise</span> <span class="kn">import</span> <span class="n">ParentSwitchedRight</span>
 
+
 <div class="viewcode-block" id="Matmul"><a class="viewcode-back" href="../../../../reference/latenta/links/vector.html#latenta.links.vector.Matmul">[docs]</a><span class="k">class</span> <span class="nc">Matmul</span><span class="p">(</span><span class="n">Vector</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">VariablePromise</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">dims</span> <span class="o">=</span> <span class="n">ParentSwitchedRight</span><span class="p">())</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">VariablePromise</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">dims</span> <span class="o">=</span> <span class="n">ParentSwitchedRight</span><span class="p">())</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">VariablePromise</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ParentSwitchedRight</span><span class="p">())</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">VariablePromise</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ParentSwitchedRight</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">_determine_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="c1"># deterime output dimensions</span>
@@ -453,24 +464,26 @@ commentsRunWhenDOMLoaded(addGiscus);
 
         <span class="k">return</span> <span class="n">output</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span>
-        <span class="k">assert</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="c1"># TODO: Allow automatic creation of latent a based on output&#39;s distribution?</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">)</span>  <span class="c1"># TODO: Allow automatic creation of latent a based on output&#39;s distribution?</span>
         <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">2</span>
 
         <span class="c1"># the output has the same dimensions as x, except for the last dimension (which will be added by a)</span>
         <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">dims</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">dims</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    
+
         <span class="c1"># get output from a if necessary</span>
         <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Either output or a has to be given&quot;</span>
             <span class="k">assert</span> <span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">output</span> <span class="o">=</span> <span class="n">Definition</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span> <span class="o">+</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">definition</span> <span class="o">=</span> <span class="n">output</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">definition</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">out</span><span class="p">)),</span> <span class="sa">f</span><span class="s2">&quot;NaNs in output of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -478,6 +491,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 
     <span class="k">def</span> <span class="nf">_repr_formula_latex_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a] \cdot [x]&quot;</span><span class="p">)</span>
+
     <span class="n">_repr_formula_latex_short_</span> <span class="o">=</span> <span class="n">_repr_formula_latex_</span></div>
 </pre></div>
 

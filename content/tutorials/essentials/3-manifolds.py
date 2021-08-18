@@ -23,8 +23,11 @@ import latenta as la
 # %% [markdown]
 # So far, we have focused on models that basically look like this:
 
-# %% [markdown]
-# <img src="_static/regression.svg">|
+# %%
+from IPython import display
+
+# %%
+display.SVG(filename = "_static/regression.svg")
 
 # %% [markdown]
 # But what if our cellular variables are also unknown:

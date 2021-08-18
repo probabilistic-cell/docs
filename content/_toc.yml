@@ -9,8 +9,9 @@ parts:
     sections:
     - file: tutorials/essentials/1-variables
     - file: tutorials/essentials/2-regression
-    - file: tutorials/essentials/3-unsuperivsed
+    - file: tutorials/essentials/3-manifolds
     - file: tutorials/essentials/4-model_selection
+    - file: tutorials/essentials/5-serialization
   # - file: tutorials/overview
     # title: Overview
 - caption: "User guide"

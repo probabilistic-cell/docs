@@ -81,6 +81,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 </script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -167,7 +169,7 @@ commentsRunWhenDOMLoaded(addGiscus);
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../tutorials/essentials/5-serialization.html">
-     Amortization
+     Serialization
     </a>
    </li>
   </ul>
@@ -499,8 +501,8 @@ commentsRunWhenDOMLoaded(addGiscus);
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">base_experiment</span><span class="p">,</span> <span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
         
     <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_</span><span class="p">):</span>
+        <span class="n">data_</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     
 <span class="k">class</span> <span class="nc">Model1</span><span class="p">(</span><span class="n">laf</span><span class="o">.</span><span class="n">Flow</span><span class="p">):</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">Flowobj</span><span class="p">(</span><span class="n">Dataset</span><span class="p">)</span>
@@ -511,10 +513,9 @@ commentsRunWhenDOMLoaded(addGiscus);
     <span class="n">model</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">Laobj</span><span class="p">()</span>
         
     <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span><span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="p">},</span> <span class="n">outputs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span><span class="n">model</span><span class="p">})</span>
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-        <span class="n">model_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model_</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_</span><span class="p">,</span> <span class="n">model_</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">data_</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">model_</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -533,7 +534,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/tmp/tmpr3jii4vm/output/&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/tmp/tmptzizi1do/output/&#39;
 </pre></div>
 </div>
 </div>
@@ -545,8 +546,10 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;/data/func/same&#39;: True, &#39;/data/func/rerun&#39;: False, &#39;/forced/rerun&#39;: False}
-✔️ | /dataset/create                                                                                     
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | /dataset/create                                                                                     
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | /dataset/create                                                                                     
 </pre></div>
 </div>
 </div>
@@ -560,12 +563,15 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>ls /tmp/tmphf7myapr/output/dataset/
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>data.pkl  data.pkl.info  model1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | /dataset/model1/create                                                                              
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | /dataset/model1/create                                                                              
 </pre></div>
 </div>
 </div>
@@ -573,19 +579,6 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;/model/data/rerun&#39;: False, &#39;/model/data/used&#39;: True, &#39;/model/data/modified&#39;: True, &#39;/model/func/same&#39;: True, &#39;/model/func/rerun&#39;: False, &#39;/forced/rerun&#39;: False}
-✔️ | /dataset/model1/create                                                                              
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

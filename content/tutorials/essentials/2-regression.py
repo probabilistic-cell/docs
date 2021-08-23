@@ -302,22 +302,22 @@ foldchange.plot()
 # To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
 
 # %% tags=["remove-input", "remove-output"]
-from myst_nb import glue
-logistic = la.links.scalar.Logistic._repr_formula_latex_()
-glue("logistic", logistic, display=False)
 
-spline = la.links.scalar.Spline._repr_formula_latex_()
-glue("spline", logistic, display=False)
+import pandas as pd
+import IPython.display
+links = [la.links.scalar.Logistic, la.links.scalar.Spline, la.links.scalar.Sigmoid]
 
-sigmoid = la.links.scalar.Sigmoid._repr_formula_latex_()
-glue("sigmoid", logistic, display=False)
-
-# %% [markdown]
-# Name | Component | Formula | Description
-# --- | --- | --- | ----
-# Spline | {class}`~latenta.links.scalar.Spline` | {glue:math}`logistic` | A flexible non-linear function, defined by the value at a fixed set of knots
-# Sigmoid | {class}`~latenta.links.scalar.Sigmoid` | {glue:math}`sigmoid` | Sigmoid kinetics model
-# Switch | {class}`~latenta.links.scalar.Switch` | {glue:math}`switch` | A sudden jump
+link_table = []
+for link in links:
+    link_table.append(
+        {
+            "name": link.__name__,
+            "reference": link.__module__ + "/" + link.__name__,
+            "description": link.__doc__.split("\n")[0]
+        }
+    )
+link_table = pd.DataFrame(link_table)
+IPython.display.Markdown(link_table.to_markdown())
 
 # %% [markdown]
 # ### Multiple inputs

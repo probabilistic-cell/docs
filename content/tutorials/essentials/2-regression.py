@@ -104,7 +104,7 @@ transcriptome.plot()
 # All these parameters thus serve two purposes: the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 
 # %% [markdown]
-# But how do we infer these parameters in practice? We have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into better values. These tasks are fullfilled by a loss function (`ELBO`), an optimizer (`Adam`), and an overarching training class (`SVI`):
+# To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into better values. These tasks are fullfilled by a loss function (`ELBO`), an optimizer (`Adam`), and an overarching training class (`SVI`):
 
 # %%
 inference = la.infer.svi.SVI(
@@ -137,7 +137,7 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # %% [markdown]
 # ### Observed posteriors
 
-# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we run the variational distribution of the slope $q$ the output will be different, which will affect any downstream function even if they are themselves deterministic. To interpret the results, we can thus sample multiple times from the model:
+# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` posterior:
 
 # %%
 transcriptome_observed = la.posterior.Observed(transcriptome)
@@ -154,7 +154,7 @@ transcriptome_observed.samples["transcriptome.p.mu.a"]
 
 # %% [markdown]
 # :::{note}
-# Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as xr.DataArray objects. Important functions to know are:
+# Latenta makes extensive use of the [xarray](https://xarray.pydata.org/en/stable/) library for annotated data in more than 2 dimensions. All samples are always stored as {py:meth}`~xarray.DataArray` objects. Important functions to know are:
 # - {py:meth}`~xarray.DataArray.sel` to select a subset of the data
 # - {py:meth}`~xarray.DataArray.to_pandas` to convert a 2D or 1D array to a pandas DataFrame or Series
 # - {py:attr}`~xarray.DataArray.dims` to get the dimensions of the data
@@ -183,13 +183,20 @@ overexpression_causal.sample(10)
 # This posterior also contains samples, but now for some pseudocells with each a distinct value for the `overexpression` variable.
 
 # %%
-overexpression_causal.samples[overexpression].mean("sample").head()
+overexpression_causal.samples[overexpression].mean("sample")
 
 # %% [markdown]
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
 overexpression_causal.plot_features();
+
+# %% tags=["hide-input", "remove-output"]
+from myst_nb import glue
+glue("conditional", f"P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)")
+
+# %% [markdown]
+# Mathematically, this plot represents the conditional posterior: {glue:}`conditional`.
 
 # %% [markdown]
 # This causal posterior can also provide a score dataframe that will rank each _feature_ (gene):
@@ -211,8 +218,15 @@ overexpression_causal.sample_random()
 # %% [markdown]
 # To check the impact of a variable on our observation, we calculate a (log-)likelihood ratio: how much more likely is the observed expression before and after we perturbed our upstream variable?
 
+# %% tags=["hide-input", "remove-output"]
+from myst_nb import glue
+glue("conditional", rf"\frac{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{optimal}})}}{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{random}})}}")
+
 # %%
 overexpression_causal.likelihood_ratio
+
+# %% [markdown]
+# Mathematically, this plot represents the ratio between  posterior: {glue:}`conditional`.
 
 # %% [markdown]
 # These likelihood ratios were also added to our scores table:

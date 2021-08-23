@@ -17,9 +17,6 @@
 # %% [markdown]
 # # Variables
 
-# %% [markdown]
-# Pernille was here
-
 # %%
 import latenta as la
 import scanpy as sc

@@ -233,7 +233,7 @@ glue("conditional", rf"\frac{{P({transcriptome.symbol}|{overexpression.symbol} =
 overexpression_causal.likelihood_ratio
 
 # %% [markdown]
-# Mathematically, this plot represents the ratio between  posterior: {glue:}`conditional`.
+# Mathematically, this plot represents the ratio between posteriors: {glue:}`conditional`.
 
 # %% [markdown]
 # These likelihood ratios were also automatically added to our scores table:

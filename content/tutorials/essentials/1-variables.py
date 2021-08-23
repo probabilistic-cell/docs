@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.11.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -16,6 +16,9 @@
 
 # %% [markdown]
 # # Variables
+
+# %% [markdown]
+# Pernille was here
 
 # %%
 import latenta as la
@@ -51,7 +54,7 @@ sc.tl.umap(adata)
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 
 # %%
-sc.pl.umap(adata, color = ["gene_overexpressed", "batch", "log_overexpression"])
+sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 
 # %% [markdown]
 # In this data, we have overexpressed the transcription factor Myod1 in a stem cell line in different batches. As output, we get the transcriptome along with a measure of which gene was overexpressed, and by how much.
@@ -60,12 +63,12 @@ sc.pl.umap(adata, color = ["gene_overexpressed", "batch", "log_overexpression"])
 # ## Definition
 
 # %% [markdown]
-# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore,a dimension can also be annotation with a label, symbol and/or description.
+# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore, a dimension can also be annotation with a label, symbol and/or description.
 #
 # A "genes" dimension could be defined as follows:
 
 # %%
-genes = la.Dim(adata.var.index, id = "gene")
+genes = la.Dim(adata.var.index, id="gene")
 genes
 
 # %% [markdown]
@@ -81,17 +84,14 @@ genes
 
 # %%
 adata.obs.index.name = "cell"
-cells = la.Dim(adata.obs.index, id = "cell")
+cells = la.Dim(adata.obs.index, id="cell")
 cells
 
 # %% [markdown]
 # A count matrix is a prototypical example of a variable. We can define how it should look like, without any data, using {class}`la.Definition()`:
 
 # %%
-counts_definition = la.Definition(
-    [cells, genes],
-    "counts"
-)
+counts_definition = la.Definition([cells, genes], "counts")
 counts_definition
 
 # %% [markdown]
@@ -101,7 +101,7 @@ counts_definition
 # Fixed variables contain a tensor that never changes:
 
 # %%
-counts = la.Fixed(adata.X, definition = counts_definition)
+counts = la.Fixed(adata.X, definition=counts_definition)
 
 # %% [markdown]
 # You can _run_ a variable by calling it's run function:
@@ -125,7 +125,9 @@ counts.value_pd.head()
 # Do note that we can also provide pandas and xarray objects to {class}`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
 
 # %%
-overexpression = la.Fixed(adata.obs["log_overexpression"], label = "overexpression", symbol = "overexpression")
+overexpression = la.Fixed(
+    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
+)
 overexpression
 
 # %% [markdown]
@@ -161,7 +163,7 @@ overexpressed.value_pd.head()
 # Parameters are variables that are unknown and have to be inferred (optimized) based on our data. Parameters do require a starting default value.
 
 # %%
-lfc = la.Parameter(0., definition = la.Definition([genes]), label = "lfc", symbol = "lfc")
+lfc = la.Parameter(0.0, definition=la.Definition([genes]), label="lfc", symbol="lfc")
 lfc
 
 # %% [markdown]
@@ -182,11 +184,11 @@ lfc
 
 # %%
 baseline = la.Parameter(
-    1.,
-    definition = la.Definition([genes]),
-    label = "baseline",
-    symbol = "baseline",
-    transforms = [la.transforms.Exp()]
+    1.0,
+    definition=la.Definition([genes]),
+    label="baseline",
+    symbol="baseline",
+    transforms=[la.transforms.Exp()],
 )
 baseline
 
@@ -197,7 +199,7 @@ baseline
 # We use variables to compute things. In this case we create a variable that depends on other variables, which we call components:
 
 # %%
-expression = la.links.scalar.Linear(overexpression, a = lfc, label = "expression")
+expression = la.links.scalar.Linear(overexpression, a=lfc, label="expression")
 
 # %%
 expression
@@ -283,7 +285,7 @@ expression.plot()
 # ```
 
 # %%
-transcriptome_p = la.distributions.NegativeBinomial2(mu = expression)
+transcriptome_p = la.distributions.NegativeBinomial2(mu=expression)
 
 # %% [markdown]
 # Running a distribution will take a sample from it:
@@ -305,11 +307,7 @@ transcriptome_p.likelihood
 # Observations are fixed variables that follow a distribution. An observation always has some physical connection to reality, but the problem is that we only observe a noisy variant of this reality. This noise is not always purely technical (due to stochastic sampling of mRNAs) but also typically contains biological components (such as transcriptional bursting). Essentially, any variation that cannot be explained by the model is explained away as noise. In our case, this noise is contained in the dispersion component of the Negative Binomial.
 
 # %%
-observation = la.Observation(
-    adata.X,
-    transcriptome_p,
-    definition = counts_definition
-)
+observation = la.Observation(adata.X, transcriptome_p, definition=counts_definition)
 
 observation.plot()
 
@@ -383,14 +381,9 @@ observation.likelihood
 
 # %%
 lfc_p = la.distributions.Normal(
-    loc = 0.,
-    scale = la.Parameter(1., transforms = [la.transforms.Exp()])
+    loc=0.0, scale=la.Parameter(1.0, transforms=[la.transforms.Exp()])
 )
-lfc = la.Latent(
-    p = lfc_p,
-    definition = la.Definition([genes]),
-    label = "lfc"
-)
+lfc = la.Latent(p=lfc_p, definition=la.Definition([genes]), label="lfc")
 lfc.plot()
 
 # %% [markdown]
@@ -404,9 +397,9 @@ lfc.plot()
 # %%
 expression = la.links.scalar.Linear(
     overexpression,
-    a = True,                                     # 👈
-    label = "expression",
-    definition = la.Definition([cells, genes])    # ⚠️
+    a=True,  # 👈
+    label="expression",
+    definition=la.Definition([cells, genes]),  # ⚠️
 )
 expression.plot()
 
@@ -420,25 +413,22 @@ expression.plot()
 
 # %%
 baseline_p = la.distributions.LogNormal(
-    loc = la.Parameter(0.),
-    scale = la.Parameter(1., transforms = [la.transforms.Exp()])
+    loc=la.Parameter(0.0), scale=la.Parameter(1.0, transforms=[la.transforms.Exp()])
 )
-baseline = la.Latent(
-    p = baseline_p,
-    definition = la.Definition([genes]),
-    label = "baseline"
-)
+baseline = la.Latent(p=baseline_p, definition=la.Definition([genes]), label="baseline")
 baseline.plot()
 
 # %% [markdown]
 # ## Main points
 # - Modelling is creating and connecting variables in a graph structure
 # - Leaf variables are the start of any model. Different types of leaf variables have different functions:
-#    - Fixed variables are provided by you
+#    - Fixed variables are provided by you or set to a reasonable default value
 #    - Parameters are free and have to be estimated from the data
 #    - Observations are fixed variables that follow a distribution
 # - Computed variables link different variables together in a deterministic way
-# - Distributions are used to uncertainty
+# - Distributions model uncertainty
 # - Latent variables are the variables we're most interested in, as they encompass both uncertainty inherent to the system and uncertainty due to the lack of data
 #
-# Once we have specified a model, the next question is how we can find optimal values for the free parameters. This question we will answer next.
+# Once we have specified a model, the next question is how we can find optimal values for the free parameters.
+
+# %%

@@ -15,7 +15,7 @@
 # ---
 
 # %% [markdown]
-# # Unsupervised learning
+# # Serialization
 
 # %%
 import latenta as la

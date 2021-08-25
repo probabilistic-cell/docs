@@ -143,7 +143,9 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` posterior:
 
 # %%
-transcriptome_observed = la.posterior.Observed(transcriptome, retain_samples = {expression.a})
+transcriptome_observed = la.posterior.Observed(
+    transcriptome, retain_samples={expression.a}
+)
 transcriptome_observed.sample(5)
 
 # %% [markdown]
@@ -191,6 +193,7 @@ overexpression_causal.plot_features()
 
 # %% tags=["hide-input", "remove-output"]
 from myst_nb import glue
+
 glue("conditional", f"P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)")
 
 # %% [markdown]
@@ -227,7 +230,11 @@ overexpression_causal.sample_random()
 
 # %% tags=["hide-input", "remove-output"]
 from myst_nb import glue
-glue("conditional", rf"\frac{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{optimal}})}}{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{random}})}}")
+
+glue(
+    "conditional",
+    rf"\frac{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{optimal}})}}{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{random}})}}",
+)
 
 # %%
 overexpression_causal.likelihood_ratio
@@ -305,6 +312,7 @@ foldchange.plot()
 
 import pandas as pd
 import IPython.display
+
 links = [la.links.scalar.Logistic, la.links.scalar.Spline, la.links.scalar.Sigmoid]
 
 link_table = []
@@ -312,8 +320,8 @@ for link in links:
     link_table.append(
         {
             "name": link.__name__,
-            "reference": link.__module__ + "/" + link.__name__,
-            "description": link.__doc__.split("\n")[0]
+            "reference": "{class}`" + link.__module__ + "." + link.__name__ + "`",
+            "description": link.__doc__.split("\n")[0],
         }
     )
 link_table = pd.DataFrame(link_table)

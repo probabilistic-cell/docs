@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.11.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -66,7 +66,7 @@ expression = la.links.scalar.Linear(
 # Although the latent slope and baseline were created automatically for us by specifying `a = True, b = True`, it's important to remember that we could have easily created these variables ourselves:
 #
 # ```python
-# slope = la.Latent(
+# lfc = la.Latent(
 #     p = la.distributions.Normal(scale = la.Parameter(1., transforms = [la.transforms.Exp()])),
 #     definition = la.Definition([genes])
 # )
@@ -97,16 +97,22 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the many parameters that form the leaves of our model. But, why are there so many even for the simples of a simple case of linear regression?
+# Note the  number of parameters that form the leaves of our model. But, why are there so many even for a simple case of linear regression?
 #
-# Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. There are however many models that will provide a very good fit of the data equally. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well.
+# Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. 
 #
-# So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish his, we have to limit the flexibility that our model can have. You have already done this in two ways:
+# It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations. 
+#
+# So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
 # - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities.
 # - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes.
 #
-# All these parameters thus serve two purposes: the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
+# All these parameters thus serve two purposes: 
+# * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 
+# * The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. 
+#
+# It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 
 # %% [markdown]
 # But how do we infer these parameters in practice? We have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into better values. These tasks are fullfilled by a loss function (`ELBO`), an optimizer (`Adam`), and an overarching training class (`SVI`):

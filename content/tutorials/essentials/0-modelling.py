@@ -17,7 +17,7 @@
 # # The essentials of modelling with latenta
 
 # %% [markdown]
-# With a background in single-cell biology, chances are high you already created many types of models:
+# With a background in single-cell biology, chances are high you already created/worked with many types of models:
 # - Clustering
 # - Dimensionality reduction
 # - Differential expression
@@ -25,16 +25,16 @@
 # - RNA velocity
 
 # %% [markdown]
-# All these models have several aspects in common: we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene's fold change or dynamics during a trajectory), a cell (such as a cells position in a reduced space or its pseudotime) or both (e.g. the future state of a cell).
+# All these models have several aspects in common: when using them we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene's fold change or dynamics along a trajectory), a cell (such as a cell's position in a reduced space or its pseudotime), or both (e.g. the future state of a cell).
 
 # %% [markdown]
 # ## But why would I want to model data?
 
 # %% [markdown]
-# Why model data? You as a user probably have either of two goals in mind: prediction or understanding.
+# Why model data? As a user, you probably have either of these two goals in mind: prediction or understanding.
 #
-# - For **prediction**, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells we just killed in an experiment, but also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.
-# - For **understanding**, we care both about both interpretability and generalizability. For this reason, a model that is useful for understanding is often also good at making predictions.
+# - For **prediction**, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells from our dataset, but we also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.
+# - For **understanding**, we care about both interpretability and generalizability. For this reason, a model that is useful for understanding is often also good at making predictions.
 #
 # Interpretable models however often:
 #   - Require a bit more data, because there are more free parameters
@@ -44,7 +44,7 @@
 
 # %% [markdown]
 # ```{note}
-# Latenta is very related, and borrows elements, from tools such as stan, tensorflow and torch. However, we focused on making the entry barrier much lower, by focussing on:
+# Latenta is very related to, and borrows elements from, tools such as stan, tensorflow and torch, which are different package for statistical modeling/machine learning. However, we focused on making the entry barrier to apply this tools to biological data much lower, by focussing on:
 # - Modularity, so that you can easily reuse parts made by others without having to understand them (although it can help!)
 # - Dummy-proofing, so that it is obvious what is wrong with a model early on
 # - Interpretability, so that we can easily see what our model is doing

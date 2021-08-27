@@ -17,28 +17,23 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
-cell_order = model_gs.find("x").prior_pd().sort_values().index
-sns.heatmap(observation_value.loc[cell_order], ax = ax0)
-modelled_value = observed.samples[observation.p].sel(sample = 0).to_pandas()
-sns.heatmap(modelled_value.loc[cell_order], ax = ax1)
+model_gs = la.Model(dist, label = "ground truth", symbol = "gs")
+model_gs.plot()
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mKeyError[0m                                  Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2698258/2466115458.py[0m in [0;36m<module>[0;34m[0m
-[1;32m      2[0m [0mcell_order[0m [0;34m=[0m [0mmodel_gs[0m[0;34m.[0m[0mfind[0m[0;34m([0m[0;34m"x"[0m[0;34m)[0m[0;34m.[0m[0mprior_pd[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0msort_values[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0mindex[0m[0;34m[0m[0;34m[0m[0m
-[1;32m      3[0m [0msns[0m[0;34m.[0m[0mheatmap[0m[0;34m([0m[0mobservation_value[0m[0;34m.[0m[0mloc[0m[0;34m[[0m[0mcell_order[0m[0;34m][0m[0;34m,[0m [0max[0m [0;34m=[0m [0max0[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;32m----> 4[0;31m [0mmodelled_value[0m [0;34m=[0m [0mobserved[0m[0;34m.[0m[0msamples[0m[0;34m[[0m[0mobservation[0m[0;34m.[0m[0mp[0m[0;34m][0m[0;34m.[0m[0msel[0m[0;34m([0m[0msample[0m [0;34m=[0m [0;36m0[0m[0;34m)[0m[0;34m.[0m[0mto_pandas[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m      5[0m [0msns[0m[0;34m.[0m[0mheatmap[0m[0;34m([0m[0mmodelled_value[0m[0;34m.[0m[0mloc[0m[0;34m[[0m[0mcell_order[0m[0;34m][0m[0;34m,[0m [0max[0m [0;34m=[0m [0max1[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;31mAssertionError[0m                            Traceback (most recent call last)
+[0;32m/tmp/ipykernel_412221/961674877.py[0m in [0;36m<module>[0;34m[0m
+[0;32m----> 1[0;31m [0mmodel_gs[0m [0;34m=[0m [0mla[0m[0;34m.[0m[0mModel[0m[0;34m([0m[0mdist[0m[0;34m,[0m [0mlabel[0m [0;34m=[0m [0;34m"ground truth"[0m[0;34m,[0m [0msymbol[0m [0;34m=[0m [0;34m"gs"[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0mmodel_gs[0m[0;34m.[0m[0mplot[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
-[0;32m~/projects/probabilistic-cell/latenta/src/latenta/posterior/samples.py[0m in [0;36m__getitem__[0;34m(self, key)[0m
-[1;32m     57[0m [0;34m[0m[0m
-[1;32m     58[0m     [0;32mdef[0m [0m__getitem__[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mkey[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m---> 59[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0m_data[0m[0;34m[[0m[0mself[0m[0;34m.[0m[0m_map_key[0m[0;34m([0m[0mkey[0m[0;34m)[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     60[0m [0;34m[0m[0m
-[1;32m     61[0m     [0;32mdef[0m [0mkeys[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m~/projects/probabilistic-cell/latenta/src/latenta/variables/model.py[0m in [0;36m__init__[0;34m(self, label, symbol, description, *args, **kwargs)[0m
+[1;32m     19[0m         [0mself[0m[0;34m.[0m[0mcomponent_ids[0m [0;34m=[0m [0mset[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     20[0m         [0;32mfor[0m [0mcomponent[0m [0;32min[0m [0margs[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 21[0;31m             [0;32massert[0m [0mcomponent[0m[0;34m.[0m[0mlabelling[0m[0;34m.[0m[0mraw_label[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     22[0m [0;34m[0m[0m
+[1;32m     23[0m             assert (
 
-[0;31mKeyError[0m: 'H34rc9uV8AiEsdSY96iMTF'
-KeyError: 'H34rc9uV8AiEsdSY96iMTF'
+[0;31mAssertionError[0m: 
+AssertionError: 
 

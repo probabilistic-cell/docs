@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.27151f2de8a6da6e72b57ec231ceb131.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -42,6 +42,7 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <script kind="giscuss">
 
     var commentsRunWhenDOMLoaded = cb => {
@@ -117,7 +118,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -436,7 +437,7 @@ commentsRunWhenDOMLoaded(addGiscus);
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
             </div>
-            <nav id="bd-toc-nav">
+            <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#the-amortization-function">
@@ -467,12 +468,29 @@ commentsRunWhenDOMLoaded(addGiscus);
   <div class="section" id="amortization">
 <h1>Amortization<a class="headerlink" href="#amortization" title="Permalink to this headline">¶</a></h1>
 <p>Amortization means estimating a variable from observed variables 
-    <span style="border-bottom: 1px dotted;cursor: pointer;" data-html="true" data-container="body" data-toggle="popover" data-placement="auto" data-trigger="hover" data-content="
+    <a 
+        style="border-bottom: 1px dotted;cursor: pointer;"
+        data-bs-html="true" 
+        data-bs-container="body" 
+        data-bs-toggle="popover" 
+        data-bs-placement="auto" 
+        data-bs-trigger="focus" 
+        data-bs-content="
     <a href='https://escholarship.org/uc/item/34j1h7k5'  target='_blank' class='stretched-link'></a>
     Gershman, S. &amp; Goodman, N., 2014. Amortized Inference in Probabilistic Reasoning. <i>Proceedings of the Annual Meeting of the Cognitive Science Society</i>, 36(36). Available at: https://escholarship.org/uc/item/34j1h7k5 [Accessed January 24, 2021].
-    " data-original-title="" title="">
+    " 
+        data-bs-original-title="" 
+        tabindex="0" 
+        title=""
+     >
     (Gershman &amp; Goodman 2014)
-    </span>
+    </a>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
     . This mapping is often done by a flexible (albeit black-box) function, e.g. a neural network. Amortization can have the following advantages:</p>
 <ul class="simple">
 <li><p>Faster training because of a lower number of parameters.</p></li>
@@ -524,14 +542,18 @@ commentsRunWhenDOMLoaded(addGiscus);
               </div>
               
         
-        <div class='prev-next-bottom'>
             
 
-        </div>
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
         
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         <!-- 

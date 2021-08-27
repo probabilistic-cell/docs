@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -383,6 +383,7 @@ lfc_p = la.distributions.Normal(
 lfc = la.Latent(p=lfc_p, definition=la.Definition([genes]), label="lfc")
 lfc.plot()
 
+
 # %% [markdown]
 # The prior distribution $p$ in this case is a normal distribution with one free parameter: the scale $\sigma$. This parameter determines how far the slope _on average_ can be different than 0. The only reason we can estimate this as a parameter is because we are pooling information across many genes. This kind of {term}`multi-level modelling` is very powerful, as it includes multiple testing correction directly within the model {citel}`gelman_why_2009`.
 #
@@ -427,5 +428,13 @@ baseline.plot()
 # - Latent variables are the variables we're most interested in, as they encompass both uncertainty inherent to the system and uncertainty due to the lack of data
 #
 # Once we have specified a model, the next question is how we can find optimal values for the free parameters.
+
+# %%
+
+# %%
+
+# %%
+
+# %%
 
 # %%

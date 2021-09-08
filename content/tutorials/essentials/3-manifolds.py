@@ -23,23 +23,18 @@ import latenta as la
 # %% [markdown]
 # So far, we have focused on models that basically look like this:
 
-# %%
-from IPython import display
-
-# %%
-display.SVG(filename = "_static/regression.svg")
+# %% [markdown]
+# ![](_static/previous.svg)
 
 # %% [markdown]
-# But what if our cellular variables are also unknown:
+# But what if our cellular variables are also unknown, i.e. latent?
 
-# %% language="html"
-# <canvas id="canvas", width = 100, height = 200>
+# %% [markdown]
+# ![](_static/now.svg)
+
+# %% [markdown]
+# While many manifold models are relatively easy to implement, the main difficulty lies in the interpretability. Especially when different **cellular processes** are happening at the same time in a cell, a latent variable will try to explain all of them.
 #
-# </canvas>
+# What is therefore often required is the inclusion of prior knowledge that can help with disentangling different cellular processes
 
-# %% language="javascript"
-# const rc = rough.canvas(document.getElementById('canvas'));
-# rc.rectangle(10, 10, 200, 200); // x, y, width, height
-
-# %% [markdown]
-# So far, we have 
+# %%

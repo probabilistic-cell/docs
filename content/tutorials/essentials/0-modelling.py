@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ---
 # jupyter:
 #   jupytext:
@@ -26,9 +27,9 @@
 
 # %% [markdown]
 # All these models have several aspects in common: we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene's fold change or dynamics during a trajectory), a cell (such as a cells position in a reduced space or its pseudotime) or both (e.g. the future state of a cell).
-
+#
 # While these models are powerful, they are all mostly one-dimensional in nature: a single clustering, trajectory or embedding that tries to explain a single modality (often transcriptome). We easily hit roadblocks if we try to explain different aspects of the cell, both in terms of cellular processes (differentiation, cell cycle, patient subtypes, ...) and modalities. Such questions can be:
-
+#
 # * How does the remaining variation look like once I model («regress out») a time series, batch effect and cell cycle?
 # * Does my genetic perturbation affect target gene expression in a linear, sigmoid, exponential or more complex manner?
 # * How is the cell cycle distributed with zonation?
@@ -38,7 +39,7 @@
 # * How many cells are cycling in a spatial spot, and in which phases are these cells?
 # * Is my genetic perturbation inducing two or three cellular states?
 # * ...
-
+#
 # To answer these, we need a more modular toolbox, which can model various cellular processes and states.
 
 # %% [markdown]
@@ -76,13 +77,13 @@
 
 # %% [markdown]
 # ## Different layers of latenta
-
+#
 # Latenta has different layers of complexity:
 #
 # - At the highest level, we provide common functions that create a couple of variables for you. These for example include modelling of transcriptomics, proteomics, chromatin accessibility, trajectories, ...
 # - At the medium level, we provide ways to create individual variables and connect them with eachother.
 # - At the lowest level, we provide ways to create custom sets of variables.
-
+#
 # If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) thinking.
 
 # %% [markdown]

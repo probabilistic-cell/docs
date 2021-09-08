@@ -18,9 +18,10 @@
 
 # %%
 from IPython import get_ipython
+
 if get_ipython():
-    get_ipython().run_line_magic('load_ext', 'autoreload')
-    get_ipython().run_line_magic('autoreload', '2')
+    get_ipython().run_line_magic("load_ext", "autoreload")
+    get_ipython().run_line_magic("autoreload", "2")
 
 import numpy as np
 import pandas as pd
@@ -34,6 +35,7 @@ import seaborn as sns
 import collections
 
 import latenta as la
+
 la.logger.setLevel("INFO")
 
 # %% [markdown]
@@ -42,37 +44,53 @@ la.logger.setLevel("INFO")
 # %%
 n_cells = 50
 cell_ids = [str(i) for i in range(n_cells)]
-cells = la.Dim(pd.Series(cell_ids, name = "cell"))
+cells = la.Dim(pd.Series(cell_ids, name="cell"))
 
-x = la.Fixed(pd.Series(np.random.uniform(0, 3, n_cells), index = cells.index), label = "x")
+x = la.Fixed(pd.Series(np.random.uniform(0, 3, n_cells), index=cells.index), label="x")
 
 
 # %%
 n_genes = 100
-genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), id = "gene")
+genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), id="gene")
+
 
 def random_coefficient(n_genes):
-    return np.random.choice([-1, 1], n_genes) * np.random.normal(3., 1., n_genes) * (np.random.random(n_genes) > 0.5)
+    return (
+        np.random.choice([-1, 1], n_genes)
+        * np.random.normal(3.0, 1.0, n_genes)
+        * (np.random.random(n_genes) > 0.5)
+    )
 
-slope = la.Fixed(pd.Series(random_coefficient(n_genes), index = genes.index), label = "slope")
-intercept = la.Fixed(pd.Series(random_coefficient(n_genes), index = genes.index), label = "intercept")
-final = la.Fixed(pd.Series(random_coefficient(n_genes), index = genes.index), label = "final")
 
-slope_subset = la.Fixed(pd.Series(random_coefficient(10), index = genes.index[:10]), label = "slope_subset")
+slope = la.Fixed(
+    pd.Series(random_coefficient(n_genes), index=genes.index), label="slope"
+)
+intercept = la.Fixed(
+    pd.Series(random_coefficient(n_genes), index=genes.index), label="intercept"
+)
+final = la.Fixed(
+    pd.Series(random_coefficient(n_genes), index=genes.index), label="final"
+)
+
+slope_subset = la.Fixed(
+    pd.Series(random_coefficient(10), index=genes.index[:10]), label="slope_subset"
+)
 
 
 # %%
-y_linear = la.links.scalar.Linear(x = x, a = slope)
-y = la.modular.Additive(linear = y_linear, definition = y_linear.value_definition, subsettable = {genes})
+y_linear = la.links.scalar.Linear(x=x, a=slope)
+y = la.modular.Additive(
+    linear=y_linear, definition=y_linear.value_definition, subsettable={genes}
+)
 
 # %% [markdown]
 # We can add extra terms:
 
 # %%
-y_sigmoid = la.links.scalar.Sigmoid(x = x, a = final)
+y_sigmoid = la.links.scalar.Sigmoid(x=x, a=final)
 y.sigmoid = y_sigmoid
 
-y_exponential = la.links.scalar.Exp(x = x, a = final)
+y_exponential = la.links.scalar.Exp(x=x, a=final)
 y.exponential = y_exponential
 
 # %% [markdown]
@@ -87,7 +105,7 @@ y.simply_slope = slope
 # In fact, a terms dimension can be a subset, as long as this dimension was registered as "subsettable" when defining the modular variable:
 
 # %%
-y_linear_subset = la.links.scalar.Linear(x = x, a = slope_subset)
+y_linear_subset = la.links.scalar.Linear(x=x, a=slope_subset)
 y.linear_subset = y_linear_subset
 y_linear.prior_xr().shape, y_linear_subset.prior_xr().shape
 
@@ -98,11 +116,13 @@ y_linear.prior_xr().shape, y_linear_subset.prior_xr().shape
 del y.exponential
 
 # %%
-scale = la.Fixed(pd.Series(np.random.uniform(1., 1.2, n_genes), index = genes.index), label = "scale")
-dist = la.distributions.Normal(loc = y, scale = scale)
+scale = la.Fixed(
+    pd.Series(np.random.uniform(1.0, 1.2, n_genes), index=genes.index), label="scale"
+)
+dist = la.distributions.Normal(loc=y, scale=scale)
 
 # %%
-model_gs = la.Model(dist, label = "ground truth", symbol = "gs")
+model_gs = la.Root(dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -111,16 +131,21 @@ posterior.sample(1)
 
 
 # %%
-observation_value = posterior.samples[dist].sel(sample = 0).to_pandas()
-fig, (ax0, ax1) = plt.subplots(1, 2, figsize = (10, 5))
+observation_value = posterior.samples[dist].sel(sample=0).to_pandas()
+fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 5))
 cell_order = model_gs.find("x").prior_pd().sort_values().index
-sns.heatmap(observation_value.loc[cell_order], ax = ax0)
+sns.heatmap(observation_value.loc[cell_order], ax=ax0)
 
 # %% [markdown]
 # ## Types of modular variables
 
 # %%
-y = la.modular.Multiplicative(linear = y_linear, linear_subset = y_linear_subset, definition = y_linear.value_definition, subsettable = {genes})
+y = la.modular.Multiplicative(
+    linear=y_linear,
+    linear_subset=y_linear_subset,
+    definition=y_linear.value_definition,
+    subsettable={genes},
+)
 
 # %%
 y.prior_pd()

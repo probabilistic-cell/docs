@@ -18,6 +18,8 @@
 # # Variables
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
 import latenta as la
 import scanpy as sc
 
@@ -123,7 +125,7 @@ counts.value_pd.head()
 
 # %%
 overexpression = la.Fixed(
-    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
+    adata.obs["log_overexpression"], label="overexpression"
 )
 overexpression
 
@@ -160,7 +162,7 @@ overexpressed.value_pd.head()
 # Parameters are variables that are unknown and have to be inferred (optimized) based on our data. Parameters do require a starting default value.
 
 # %%
-lfc = la.Parameter(0.0, definition=la.Definition([genes]), label="lfc", symbol="lfc")
+lfc = la.Parameter(0.0, definition=la.Definition([genes]), label="lfc")
 lfc
 
 # %% [markdown]
@@ -184,7 +186,6 @@ baseline = la.Parameter(
     1.0,
     definition=la.Definition([genes]),
     label="baseline",
-    symbol="baseline",
     transforms=[la.transforms.Exp()],
 )
 baseline
@@ -428,8 +429,6 @@ baseline.plot()
 # - Latent variables are the variables we're most interested in, as they encompass both uncertainty inherent to the system and uncertainty due to the lack of data
 #
 # Once we have specified a model, the next question is how we can find optimal values for the free parameters.
-
-# %%
 
 # %%
 

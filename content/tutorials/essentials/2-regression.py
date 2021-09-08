@@ -18,6 +18,8 @@
 # # Regression
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
 import latenta as la
 import numpy as np
 
@@ -31,6 +33,7 @@ adata = la.data.load_myod1()
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 adata.var["label"] = adata.var["symbol"]
 adata.raw = adata
+
 
 # %% [markdown]
 #
@@ -48,9 +51,7 @@ genes = la.Dim(adata.var)
 cells = la.Dim(adata.obs)
 
 # %%
-overexpression = la.Fixed(
-    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
-)
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
 
 # %%
 expression = la.links.scalar.Linear(
@@ -139,7 +140,7 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
 # ### Observed posteriors
-
+#
 # Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` posterior:
 
 # %%
@@ -191,13 +192,15 @@ overexpression_causal.samples[overexpression].mean("sample")
 # %%
 overexpression_causal.plot_features()
 
-# %% tags=["hide-input", "remove-output"]
+# %% tags=["remove-input", "remove-output"]
 from myst_nb import glue
 
-glue("conditional", f"P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)")
+glue("conditional", f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$")
 
 # %% [markdown]
-# Mathematically, this plot represents the conditional posterior: {glue:}`conditional`.
+# Mathematically, this plot represents the conditional posterior:
+#
+# $$P(\mu|\mathregular{overexpression} = ...)$$
 
 # %% [markdown]
 # The plot above shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the soft and hard priors of the model, where the actual average value of the gene expression will lie.
@@ -228,19 +231,13 @@ overexpression_causal.sample_random()
 # %% [markdown]
 # To check the impact of a variable on our observation, we calculate a (log-)likelihood ratio: how much more likely is the observed expression before and after we perturbed our upstream variable?
 
-# %% tags=["hide-input", "remove-output"]
-from myst_nb import glue
-
-glue(
-    "conditional",
-    rf"\frac{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{optimal}})}}{{P({transcriptome.symbol}|{overexpression.symbol} = {overexpression.symbol}_{{random}})}}",
-)
-
 # %%
 overexpression_causal.likelihood_ratio
 
 # %% [markdown]
-# Mathematically, this plot represents the ratio between posteriors: {glue:}`conditional`.
+# Mathematically, this plot represents the ratio between posteriors probabilities:
+#
+# $$\frac{P(\mu|\text{overexpression})}{P(\mu|\text{overexpression}_\text{shuffled})}$$
 
 # %% [markdown]
 # These likelihood ratios were also automatically added to our scores table:
@@ -268,7 +265,7 @@ transcriptome.plot()
 # Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same:
 #
 # - We model the counts as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
-# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
+# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\mathit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
 # - The $\rho$ itself is a linear combination of the average expression of each gene in the cell $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
 # - When modelling cellular processes, we typically adapt the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
 
@@ -308,8 +305,7 @@ foldchange.plot()
 #
 # To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
 
-# %% tags=["remove-input", "remove-output"]
-
+# %% tags=["remove-input"]
 import pandas as pd
 import IPython.display
 
@@ -326,6 +322,8 @@ for link in links:
     )
 link_table = pd.DataFrame(link_table)
 IPython.display.Markdown(link_table.to_markdown())
+
+# %%
 
 # %% [markdown]
 # ### Multiple inputs

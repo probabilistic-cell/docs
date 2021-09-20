@@ -10,3 +10,5 @@ tmp
 .secrets
 tutorials/essentials/data
 _book
+node_modules
+package-lock.json

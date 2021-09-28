@@ -37,7 +37,6 @@ angle_value = pd.Series(
 )
 angle = la.Fixed(
     angle_value,
-    distribution=la.distributions.CircularUniform(),
     label="angle",
     symbol=r"\theta",
 )
@@ -95,6 +94,9 @@ print(corrected_likelihood - uncorrected_likelihood)
 
 # %% [markdown]
 # Alternative, assigning the transformation directly to the variable
+
+# %%
+coordinates.value_definition
 
 # %%
 dist2 = la.distributions.Normal(
@@ -212,7 +214,7 @@ trace = trainer.train(3000)
 
 
 # %%
-observed = la.posterior.Observed(observation)
+observed = la.posterior.Observed(observation, retain_samples = {observation.p, x, z.b, z.a})
 observed.sample(10)
 
 
@@ -268,7 +270,7 @@ trace = trainer.train(10000)
 
 
 # %%
-posterior = la.posterior.Posterior(observation)
+posterior = la.posterior.Posterior(observation, retain_samples = {x})
 posterior.sample(1)
 
 
@@ -281,6 +283,7 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.observed.sample(1)
 causal.sample(100)
 causal.sample_bootstrap(10)
+causal.sample_empirical()
 causal.plot_features(interpretable=observation.p.loc)
 
 

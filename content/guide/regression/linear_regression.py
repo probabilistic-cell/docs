@@ -63,6 +63,9 @@ scale = la.Fixed(
 
 # %%
 y = la.links.scalar.Linear(x=x, a=slope, b=intercept)
+
+# %%
+y = la.links.scalar.Linear(x=x, a=slope, b=intercept)
 dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
@@ -100,6 +103,14 @@ z = la.links.scalar.Linear(x, a, b)
 dist = la.distributions.Normal(loc=z, scale=s)
 
 observation = la.Observation(observation_value, dist, label="observation")
+
+# %%
+transforms = [la.transforms.Exp()]
+
+# %%
+s = la.Parameter(
+    1.0, definition=scale, transforms=transforms, label = "scale"
+)
 
 # %%
 model = la.Root(observation)

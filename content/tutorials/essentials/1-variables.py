@@ -9,7 +9,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.10.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -178,7 +178,7 @@ lfc
 # --- | --- | --- | ----
 # All positive numbers | $R^+$ | `.Exp()` | $e^x$
 # Unit interval | $[0, 1]$ | `.Logistic()` | $\frac{1}{1+e^{-x}}$
-# Circular (i.e. an angle) | $[0, 2\pi[$ | `.Circular()` | $atan2(y, x)$
+# Circular (i.e. an angle) | $[0, 2\pi[$ | `.Circular()` | $ atan2(y, x) $
 # Simplex | $\in {0, 1} \wedge \sum = 1$ | `.Softmax()` | $\frac{e^{x_i}}{\sum_i e^{x_i}}$
 
 # %%

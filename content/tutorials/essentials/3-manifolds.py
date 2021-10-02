@@ -9,7 +9,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.10.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -21,6 +21,7 @@
 # %load_ext autoreload
 # %autoreload 2
 import latenta as la
+import lacell as lac
 import numpy as np
 
 # %% [markdown]
@@ -82,10 +83,10 @@ cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes()
 sc.tl.score_genes_cell_cycle(adata, s_genes = cellcycle_genes.query("phase == 'S'")["gene"].tolist(), g2m_genes = cellcycle_genes.query("phase == 'G2/M'")["gene"].tolist())
 
 # %%
-sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression", "phase"])
+adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 
 # %%
-adata_oi = adata[adata.obs["phase"] == "G1"].copy()
+sc.pl.umap(adata_oi, color=["gene_overexpressed", "batch", "log_overexpression", "phase"])
 
 # %%
 transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
@@ -128,10 +129,10 @@ adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 sc.pl.umap(adata_oi, color = ["differentiation"])
 
 # %% [markdown]
-# Even though the differentiation is very dominant, the algorithm still used about half of the latent space to explain some heterogeneity in the control cells. This can have various reasons, for example .
+# Even though the differentiation is very dominant, the model still used about half of the latent space to explain some heterogeneity in the control cells.
 
 # %% [markdown]
-# In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and force those cells to differentiation values close to 0 by specifying an appropriate prior distribution.
+# In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and force those cells to differentiation values close to 0 by specifying an appropriate prior distribution. Note that we do not place a hard prior on these differentiation values, and that control cells can therefore still have high differentiation if this is really supported by the data.
 
 # %%
 import pandas as pd
@@ -200,5 +201,8 @@ differentiation_causal.sample_random()
 
 # %%
 differentiation_causal.plot_features();
+
+# %% [markdown]
+# ## Cell cycle: Including quite some prior knowledge
 
 # %%

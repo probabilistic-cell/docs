@@ -9,7 +9,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.10.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -195,12 +195,12 @@ overexpression_causal.plot_features();
 # %% tags=["remove-input", "remove-output"]
 from myst_nb import glue
 
-glue("conditional", f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$")
+glue("conditional", la.utils.latex.convert_mathtex_to_latex(f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$"))
 
 # %% [markdown]
 # Mathematically, this plot represents the conditional posterior:
 #
-# $$P(\mu|\mathregular{overexpression} = ...)$$
+# $$P(\mu|\text{overexpression} = ...)$$
 
 # %% [markdown]
 # The plot above shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the soft and hard priors of the model, where the actual average value of the gene expression will lie.
@@ -323,7 +323,43 @@ for link in links:
 link_table = pd.DataFrame(link_table)
 IPython.display.Markdown(link_table.to_markdown())
 
+# %% [markdown]
+# We'll illustrate {class}`latenta.links.scalar.spline.Spline`.
+
 # %%
+foldchange = transcriptome.find("foldchange")
+
+# %%
+foldchange.overexpression = la.links.scalar.Spline(
+    overexpression,
+    label="expression",
+    definition=foldchange.value_definition,
+    transforms=[la.transforms.Exp()],
+)
+
+# %%
+foldchange.plot()
+
+# %%
+inference = la.infer.svi.SVI(
+    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+)
+trainer = la.infer.trainer.Trainer(inference)
+
+# %%
+trace = trainer.train(10000)
+trace.plot();
+
+# %%
+overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+    overexpression, transcriptome
+)
+overexpression_causal.observed.sample()
+overexpression_causal.sample(30)
+overexpression_causal.sample_empirical()
+
+# %%
+overexpression_causal.plot_features();
 
 # %% [markdown]
 # ### Multiple inputs

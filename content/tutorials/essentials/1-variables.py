@@ -121,12 +121,10 @@ counts.value
 counts.value_pd.head()
 
 # %% [markdown]
-# Do note that we can also provide pandas and xarray objects to {class}`Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
+# Do note that we can also provide pandas and xarray objects to {class}`latenta.variables.Fixed`, and the definition of a variable will be inferred from the object's indices (if we gave them proper names).
 
 # %%
-overexpression = la.Fixed(
-    adata.obs["log_overexpression"], label="overexpression"
-)
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
 overexpression
 
 # %% [markdown]

@@ -123,7 +123,7 @@ trainer = la.infer.trainer.Trainer(inference)
 
 # %%
 trace = trainer.train(10000)
-trace.plot();
+trace.plot()
 
 # %% [markdown]
 # You can check that our values have changed:
@@ -190,12 +190,17 @@ overexpression_causal.samples[overexpression].mean("sample")
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %% tags=["remove-input", "remove-output"]
 from myst_nb import glue
 
-glue("conditional", la.utils.latex.convert_mathtex_to_latex(f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$"))
+glue(
+    "conditional",
+    la.utils.latex.convert_mathtex_to_latex(
+        f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$"
+    ),
+)
 
 # %% [markdown]
 # Mathematically, this plot represents the conditional posterior:
@@ -316,12 +321,12 @@ for link in links:
     link_table.append(
         {
             "name": link.__name__,
-            "reference": "{class}`" + link.__module__ + "." + link.__name__ + "`",
-            "description": link.__doc__.split("\n")[0],
+            "reference": "`" + link.__module__ + "." + link.__name__ + "`",
+            "description": link.__doc__.strip().split("\n")[0],
         }
     )
 link_table = pd.DataFrame(link_table)
-IPython.display.Markdown(link_table.to_markdown())
+IPython.display.HTML(link_table.to_html())
 
 # %% [markdown]
 # We'll illustrate {class}`latenta.links.scalar.spline.Spline`.
@@ -348,7 +353,7 @@ trainer = la.infer.trainer.Trainer(inference)
 
 # %%
 trace = trainer.train(10000)
-trace.plot();
+trace.plot()
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(

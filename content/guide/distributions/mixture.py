@@ -92,7 +92,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -134,7 +134,7 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
-causal.plot_features()
+causal.plot_features();
 
 # %% [markdown]
 # ## Modelling the mixture weights with latent x
@@ -170,7 +170,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.Posterior(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -188,7 +188,7 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
-causal.plot_features()
+causal.plot_features();
 
 # %% [markdown]
 # ## Modelling the mixture weights with given x and unknown distribution parameters
@@ -205,8 +205,7 @@ coefficients = la.links.scalar.Spline(
     x,
     output=la.Definition([cells, distributions_dim]),
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
-    step_distribution=la.distributions.Normal(),
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)]
 )
 dist = la.distributions.Mixture(weight=coefficients, distributions=distributions)
 observation = la.Observation(observation_value, dist, label="observation")
@@ -220,7 +219,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -262,7 +261,7 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
-causal.plot_features()
+causal.plot_features();
 
 # %% [markdown]
 # ## Modelling the mixture weights with given x and latent distribution parameters
@@ -298,7 +297,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -330,7 +329,7 @@ kl_divergence = (
     evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))
 ).sum()
 
-assert (evaluated_modelled - evaluated_groundtruth).sum() > -0.5
+assert (evaluated_modelled - evaluated_groundtruth).sum() > -1.
 
 # %% [markdown]
 # Assess how x changes the observation
@@ -340,7 +339,7 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
-causal.plot_features()
+causal.plot_features();
 
 # %%
 

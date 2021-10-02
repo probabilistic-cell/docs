@@ -11,7 +11,7 @@ parts:
     - file: tutorials/essentials/2-regression
     - file: tutorials/essentials/3-manifolds
     - file: tutorials/essentials/4-model_selection
-    - file: tutorials/essentials/5-serialization
+    - file: tutorials/essentials/5-workflow
   # - file: tutorials/overview
     # title: Overview
 - caption: "User guide"

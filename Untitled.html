@@ -1,0 +1,1825 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;no title&gt;</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/js/custom.js"></script>
+    <script src="_static/js/canvas-latex.js"></script>
+    <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/main_logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   Overview
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorials/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="tutorials/essentials/0-modelling.html">
+   Essentials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/1-variables.html">
+     Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/2-regression.html">
+     Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/3-manifolds.html">
+     Manifolds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/4-model_selection.html">
+     Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="tutorials/essentials/5-workflow.html">
+     Workflows
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  User guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="guide/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/variables/leaves.html">
+     Leaf variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="guide/distributions/distributions.html">
+   Distributions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/distributions/mixture.html">
+     Mixture distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/distributions/discrete.html">
+     Discrete distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/distributions/count.html">
+     Count distributions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="guide/dynamics/dynamics.html">
+   Dynamics
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/dynamics/sde.html">
+     Stochastic differential equations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="guide/model_selection/index.html">
+   Model selection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="guide/model_selection/toy.html">
+     Model selection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="guide/transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="reference/latenta/index.html">
+   latenta
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="reference/latenta/variables.html">
+     .variables
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/Untitled.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/probabilistic-cell/docs"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2FUntitled.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./Untitled.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">git</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;../../latenta/&#39;</span><span class="p">,</span> <span class="n">odbt</span><span class="o">=</span><span class="n">git</span><span class="o">.</span><span class="n">GitCmdObjectDB</span><span class="p">)</span>
+<span class="n">repo</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;git.repo.base.Repo &#39;/home/wsaelens/projects/probabilistic-cell/latenta/.git&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">repo</span><span class="o">.</span><span class="n">iter_commits</span><span class="p">(</span><span class="s1">&#39;devel&#39;</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span>
+<span class="n">commits</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>raw</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cd11dc4d461ce130e33e23a21259caa14cf67632</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2efb19ee920859225758cb0b872a8de807192d07</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>55e14a762dbde48cd8ad230de40c30305f6f7b70</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6b7261e44bff20896f23799b309f31091295f73a</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="p">[</span><span class="s1">&#39;author&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">commits</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>raw</th>
+      <th>author</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cd11dc4d461ce130e33e23a21259caa14cf67632</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2efb19ee920859225758cb0b872a8de807192d07</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>55e14a762dbde48cd8ad230de40c30305f6f7b70</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6b7261e44bff20896f23799b309f31091295f73a</td>
+      <td>Wouter Saelens</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+<span class="n">commits</span><span class="p">[</span><span class="s1">&#39;committed_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">committed_datetime</span><span class="p">))</span>
+<span class="n">commits</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="n">commits</span><span class="p">[</span><span class="s1">&#39;sha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">commits</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>raw</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>cd11dc4d461ce130e33e23a21259caa14cf67632</td>
+    </tr>
+    <tr>
+      <th>author</th>
+      <td>Wouter Saelens</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>email</th>
+      <td>wouter.saelens@gmail.com</td>
+      <td>wouter.saelens@gmail.com</td>
+    </tr>
+    <tr>
+      <th>committed_date</th>
+      <td>2021-08-27 17:38:58+02:00</td>
+      <td>2021-08-27 16:13:58+02:00</td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td>remove prints\n</td>
+      <td>update categorical\n</td>
+    </tr>
+    <tr>
+      <th>sha</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>cd11dc4d461ce130e33e23a21259caa14cf67632</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">commits</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">files</span><span class="p">))</span><span class="o">.</span><span class="n">stack</span><span class="p">())</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span> <span class="s1">&#39;level_1&#39;</span> <span class="p">:</span> <span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="s1">&#39;stats_modifications&#39;</span><span class="p">})</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_1653395/2736862140.py:2: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+  lambda x: pd.Series(x.stats.files)).stack()).reset_index(level=1)
+/tmp/ipykernel_1653395/2736862140.py:2: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+  lambda x: pd.Series(x.stats.files)).stack()).reset_index(level=1)
+/tmp/ipykernel_1653395/2736862140.py:2: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+  lambda x: pd.Series(x.stats.files)).stack()).reset_index(level=1)
+/tmp/ipykernel_1653395/2736862140.py:2: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+  lambda x: pd.Series(x.stats.files)).stack()).reset_index(level=1)
+/tmp/ipykernel_1653395/2736862140.py:2: DeprecationWarning: The default dtype for empty Series will be &#39;object&#39; instead of &#39;float64&#39; in a future version. Specify a dtype explicitly to silence this warning.
+  lambda x: pd.Series(x.stats.files)).stack()).reset_index(level=1)
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>stats_modifications</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>{'insertions': 2, 'deletions': 2, 'lines': 4}</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>{'insertions': 0, 'deletions': 1, 'lines': 1}</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/posterior/vector/discrete/causal.py</td>
+      <td>{'insertions': 5, 'deletions': 1, 'lines': 6}</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>src/latenta/distributions/categorical.py</td>
+      <td>{'insertions': 1, 'deletions': 0, 'lines': 1}</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>src/latenta/variables/discrete/discrete.py</td>
+      <td>{'insertions': 8, 'deletions': 11, 'lines': 19}</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats_modifications</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;stats_modifications&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">stats_modifications</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>insertions</th>
+      <th>deletions</th>
+      <th>lines</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>5</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>8</td>
+      <td>11</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>8</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>48</td>
+      <td>17</td>
+      <td>65</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stats_modifications</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>stats_modifications</th>
+      <th>insertions</th>
+      <th>deletions</th>
+      <th>lines</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>{'insertions': 2, 'deletions': 2, 'lines': 4}</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>{'insertions': 2, 'deletions': 2, 'lines': 4}</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>{'insertions': 2, 'deletions': 2, 'lines': 4}</td>
+      <td>5</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>{'insertions': 0, 'deletions': 1, 'lines': 1}</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>{'insertions': 0, 'deletions': 1, 'lines': 1}</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;stats_modifications&#39;</span><span class="p">])</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>insertions</th>
+      <th>deletions</th>
+      <th>lines</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>5</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span> <span class="o">=</span> <span class="n">commits</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+<span class="n">commits</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>raw</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+    </tr>
+    <tr>
+      <th>author</th>
+      <td>Wouter Saelens</td>
+      <td>Wouter Saelens</td>
+    </tr>
+    <tr>
+      <th>email</th>
+      <td>wouter.saelens@gmail.com</td>
+      <td>wouter.saelens@gmail.com</td>
+    </tr>
+    <tr>
+      <th>committed_date</th>
+      <td>2021-08-27 17:38:58+02:00</td>
+      <td>2021-08-27 17:38:58+02:00</td>
+    </tr>
+    <tr>
+      <th>message</th>
+      <td>remove prints\n</td>
+      <td>remove prints\n</td>
+    </tr>
+    <tr>
+      <th>sha</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+    </tr>
+    <tr>
+      <th>filename</th>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+    </tr>
+    <tr>
+      <th>insertions</th>
+      <td>2.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>deletions</th>
+      <td>2.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>lines</th>
+      <td>4.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">],</span> <span class="n">utc</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0     2021-08-27 15:38:58+00:00
+0     2021-08-27 15:38:58+00:00
+0     2021-08-27 15:38:58+00:00
+0     2021-08-27 15:38:58+00:00
+0     2021-08-27 15:38:58+00:00
+                 ...           
+834   2020-08-28 14:32:43+00:00
+834   2020-08-28 14:32:43+00:00
+834   2020-08-28 14:32:43+00:00
+834   2020-08-28 14:32:43+00:00
+834   2020-08-28 14:32:43+00:00
+Name: committed_date, Length: 310589, dtype: datetime64[ns, UTC]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">],</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;Yinsertions&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/wsaelens/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/seaborn/_decorators.py:36: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;committed_date&#39;, ylabel=&#39;insertions&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/Untitled_13_2.png" src="_images/Untitled_13_2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>raw</th>
+      <th>author</th>
+      <th>email</th>
+      <th>committed_date</th>
+      <th>message</th>
+      <th>sha</th>
+      <th>filename</th>
+      <th>insertions</th>
+      <th>deletions</th>
+      <th>lines</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2021-08-27 15:38:58+00:00</td>
+      <td>remove prints\n</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2021-08-27 15:38:58+00:00</td>
+      <td>remove prints\n</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2021-08-27 15:38:58+00:00</td>
+      <td>remove prints\n</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>src/latenta/introspect/viz/component_graph.py</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2021-08-27 15:38:58+00:00</td>
+      <td>remove prints\n</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2021-08-27 15:38:58+00:00</td>
+      <td>remove prints\n</td>
+      <td>ed7cf2f652232871bdef6288adb33eef36fb89b8</td>
+      <td>src/latenta/links/vector/matmul.py</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2020-08-28 14:32:43+00:00</td>
+      <td>initial\n</td>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>src/designercells/cellmodels/onoff.py</td>
+      <td>83.0</td>
+      <td>0.0</td>
+      <td>83.0</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2020-08-28 14:32:43+00:00</td>
+      <td>initial\n</td>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>src/designercells/cellmodels/onoff.py</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2020-08-28 14:32:43+00:00</td>
+      <td>initial\n</td>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>src/designercells/cellmodels/onoff.py</td>
+      <td>14.0</td>
+      <td>0.0</td>
+      <td>14.0</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2020-08-28 14:32:43+00:00</td>
+      <td>initial\n</td>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>src/designercells/cellmodels/onoff.py</td>
+      <td>63.0</td>
+      <td>0.0</td>
+      <td>63.0</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>Wouter Saelens</td>
+      <td>wouter.saelens@gmail.com</td>
+      <td>2020-08-28 14:32:43+00:00</td>
+      <td>initial\n</td>
+      <td>bb2360d790e78f9522038e3d8221d5eaa0c76823</td>
+      <td>src/designercells/cellmodels/onoff.py</td>
+      <td>197.0</td>
+      <td>0.0</td>
+      <td>197.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>310589 rows × 10 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;committed_date&quot;</span><span class="p">)[</span><span class="s2">&quot;lines&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0         NaN
+0         NaN
+0         NaN
+0         NaN
+0         NaN
+        ...  
+834     868.0
+834     866.0
+834     848.0
+834     908.0
+834    1093.0
+Name: lines, Length: 310589, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">datetime</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">commits</span><span class="p">[</span><span class="s2">&quot;week&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()</span><span class="o">.</span><span class="n">week</span>
+<span class="n">commits</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">isocalendar</span><span class="p">()</span><span class="o">.</span><span class="n">year</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">week_summary</span> <span class="o">=</span> <span class="n">commits</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">week_summary</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>insertions</th>
+      <th>deletions</th>
+      <th>lines</th>
+    </tr>
+    <tr>
+      <th>year</th>
+      <th>week</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="16" valign="top">2020</th>
+      <th>35</th>
+      <td>17700.0</td>
+      <td>0.0</td>
+      <td>17700.0</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>10492.0</td>
+      <td>3981.0</td>
+      <td>14473.0</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>15680.0</td>
+      <td>5540.0</td>
+      <td>21220.0</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>48121.0</td>
+      <td>11592.0</td>
+      <td>59713.0</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>211788.0</td>
+      <td>139920.0</td>
+      <td>351708.0</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>21556.0</td>
+      <td>8046.0</td>
+      <td>29602.0</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>243968.0</td>
+      <td>65498.0</td>
+      <td>309466.0</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>56370.0</td>
+      <td>46642.0</td>
+      <td>103012.0</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>25945.0</td>
+      <td>12468.0</td>
+      <td>38413.0</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>562581.0</td>
+      <td>250070.0</td>
+      <td>812651.0</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>227953.0</td>
+      <td>443826.0</td>
+      <td>671779.0</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>448229.0</td>
+      <td>374220.0</td>
+      <td>822449.0</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>13408.0</td>
+      <td>10219.0</td>
+      <td>23627.0</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>564324.0</td>
+      <td>426843.0</td>
+      <td>991167.0</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>978250.0</td>
+      <td>2167798.0</td>
+      <td>3146048.0</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>25381.0</td>
+      <td>13139.0</td>
+      <td>38520.0</td>
+    </tr>
+    <tr>
+      <th rowspan="24" valign="top">2021</th>
+      <th>1</th>
+      <td>1292405.0</td>
+      <td>2007428.0</td>
+      <td>3299833.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>17654.0</td>
+      <td>22847.0</td>
+      <td>40501.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>223091.0</td>
+      <td>214493.0</td>
+      <td>437584.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>172179.0</td>
+      <td>146795.0</td>
+      <td>318974.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>84232.0</td>
+      <td>67576.0</td>
+      <td>151808.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>71056.0</td>
+      <td>31961.0</td>
+      <td>103017.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>560.0</td>
+      <td>193.0</td>
+      <td>753.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>183.0</td>
+      <td>57.0</td>
+      <td>240.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>704.0</td>
+      <td>147.0</td>
+      <td>851.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>590.0</td>
+      <td>598.0</td>
+      <td>1188.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>57533.0</td>
+      <td>22942.0</td>
+      <td>80475.0</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>7.0</td>
+      <td>2.0</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>10877.0</td>
+      <td>4536.0</td>
+      <td>15413.0</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>101.0</td>
+      <td>15.0</td>
+      <td>116.0</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>4.0</td>
+      <td>1.0</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>665.0</td>
+      <td>108.0</td>
+      <td>773.0</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>215.0</td>
+      <td>160.0</td>
+      <td>375.0</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>822346.0</td>
+      <td>585440.0</td>
+      <td>1407786.0</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>181296.0</td>
+      <td>112987.0</td>
+      <td>294283.0</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>27374.0</td>
+      <td>17119.0</td>
+      <td>44493.0</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>1124829.0</td>
+      <td>659613.0</td>
+      <td>1784442.0</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>367032.0</td>
+      <td>202733.0</td>
+      <td>569765.0</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>3174.0</td>
+      <td>1860.0</td>
+      <td>5034.0</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>2275.0</td>
+      <td>478.0</td>
+      <td>2753.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+
+<span class="k">def</span> <span class="nf">render_latex</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Renders LaTeX formula into image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;$</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">formula</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">buffer_</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">buffer_</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">format_</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fig</span><span class="o">.</span><span class="n">get_size_inches</span><span class="p">()</span><span class="o">*</span><span class="n">fig</span><span class="o">.</span><span class="n">dpi</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buffer_</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+<span class="n">image_bytes</span> <span class="o">=</span> <span class="n">render_latex</span><span class="p">(</span>
+    <span class="sa">r</span><span class="s1">&#39;\theta=\theta+C(1+\theta-\beta)\sqrt{1-\theta}succ_</span><span class="si">{mul}</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+<span class="n">encoding</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">image_bytes</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;img src=&#39;data:image/png;base64, </span><span class="si">{</span><span class="n">encoding</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.72 0.72]
+</pre></div>
+</div>
+<div class="output text_html"><img src='data:image/png;base64, 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'></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sa">f</span><span class="s2">&quot;&lt;img src=&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">encoding</span><span class="si">}</span><span class="s2">&#39;&gt;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;&lt;img src=&#39;data:image/png;base64,b&#39;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&#39;&#39;&gt;&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">week_summary</span><span class="p">[</span><span class="s2">&quot;lines&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;year,week&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/Untitled_24_1.png" src="_images/Untitled_24_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;lines&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1653395</span><span class="o">/</span><span class="mf">48293959.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;committed_date&quot;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span> <span class="n">commits</span><span class="p">[</span><span class="s2">&quot;lines&quot;</span><span class="p">])</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/seaborn/distributions.py</span> in <span class="ni">histplot</span><span class="nt">(data, x, y, hue, weights, stat, bins, binwidth, binrange, discrete, cumulative, common_bins, common_norm, multiple, element, fill, shrink, kde, kde_kws, line_kws, thresh, pthresh, pmax, cbar, cbar_ax, cbar_kws, palette, hue_order, hue_norm, color, log_scale, legend, ax, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1478</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1479</span> 
+<span class="ne">-&gt; </span><span class="mi">1480</span>         <span class="n">p</span><span class="o">.</span><span class="n">plot_bivariate_histogram</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1481</span>             <span class="n">common_bins</span><span class="o">=</span><span class="n">common_bins</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1482</span>             <span class="n">common_norm</span><span class="o">=</span><span class="n">common_norm</span><span class="p">,</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/seaborn/distributions.py</span> in <span class="ni">plot_bivariate_histogram</span><span class="nt">(self, common_bins, common_norm, thresh, pthresh, pmax, color, legend, cbar, cbar_ax, cbar_kws, estimate_kws, **plot_kws)</span>
+<span class="g g-Whitespace">    </span><span class="mi">762</span> 
+<span class="g g-Whitespace">    </span><span class="mi">763</span>         <span class="n">full_heights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">--&gt; </span><span class="mi">764</span>         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sub_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_data</span><span class="p">(</span><span class="n">from_comp_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">765</span>             <span class="n">sub_data</span> <span class="o">=</span> <span class="n">sub_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">766</span>             <span class="n">sub_heights</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">estimator</span><span class="p">(</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/seaborn/_core.py</span> in <span class="ni">iter_data</span><span class="nt">(self, grouping_vars, reverse, from_comp_data)</span>
+<span class="g g-Whitespace">    </span><span class="mi">981</span> 
+<span class="g g-Whitespace">    </span><span class="mi">982</span>         <span class="k">if</span> <span class="n">from_comp_data</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">983</span>             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comp_data</span>
+<span class="g g-Whitespace">    </span><span class="mi">984</span>         <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">985</span>             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/seaborn/_core.py</span> in <span class="ni">comp_data</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1055</span>                     <span class="n">orig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1056</span>                 <span class="n">comp_col</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">orig</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1057</span>                 <span class="n">comp_col</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">orig</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">axis</span><span class="o">.</span><span class="n">convert_units</span><span class="p">(</span><span class="n">orig</span><span class="p">))</span>
+<span class="g g-Whitespace">   </span><span class="mi">1058</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1059</span>                 <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_scale</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;log&quot;</span><span class="p">:</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexing.py</span> in <span class="ni">__setitem__</span><span class="nt">(self, key, value)</span>
+<span class="g g-Whitespace">    </span><span class="mi">717</span>         <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">718</span>             <span class="n">key</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="n">apply_if_callable</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">719</span>         <span class="n">indexer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_setitem_indexer</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">720</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_has_valid_setitem_indexer</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">721</span> 
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexing.py</span> in <span class="ni">_get_setitem_indexer</span><span class="nt">(self, key)</span>
+<span class="g g-Whitespace">    </span><span class="mi">664</span> 
+<span class="g g-Whitespace">    </span><span class="mi">665</span>         <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">666</span>             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_indexer</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">is_setter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">667</span>         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">668</span> 
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexing.py</span> in <span class="ni">_convert_to_indexer</span><span class="nt">(self, key, axis, is_setter)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1255</span>                 <span class="k">return</span> <span class="n">inds</span>
+<span class="g g-Whitespace">   </span><span class="mi">1256</span>             <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1257</span>                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_listlike_indexer</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">axis</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1258</span>         <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1259</span>             <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexing.py</span> in <span class="ni">_get_listlike_indexer</span><span class="nt">(self, key, axis)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1310</span>             <span class="n">keyarr</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">keyarr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1311</span>         <span class="k">else</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1312</span>             <span class="n">keyarr</span><span class="p">,</span> <span class="n">indexer</span><span class="p">,</span> <span class="n">new_indexer</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">_reindex_non_unique</span><span class="p">(</span><span class="n">keyarr</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1313</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1314</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_read_indexer</span><span class="p">(</span><span class="n">keyarr</span><span class="p">,</span> <span class="n">indexer</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexes/base.py</span> in <span class="ni">_reindex_non_unique</span><span class="nt">(self, target)</span>
+<span class="g g-Whitespace">   </span><span class="mi">3865</span>             <span class="k">return</span> <span class="bp">self</span><span class="p">[:</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">intp</span><span class="p">),</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">3866</span> 
+<span class="ne">-&gt; </span><span class="mi">3867</span>         <span class="n">indexer</span><span class="p">,</span> <span class="n">missing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indexer_non_unique</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">3868</span>         <span class="n">check</span> <span class="o">=</span> <span class="n">indexer</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="g g-Whitespace">   </span><span class="mi">3869</span>         <span class="n">new_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">indexer</span><span class="p">[</span><span class="n">check</span><span class="p">])</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/core/indexes/base.py</span> in <span class="ni">get_indexer_non_unique</span><span class="nt">(self, target)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5257</span>         <span class="n">tgt_values</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">_get_engine_target</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">5258</span> 
+<span class="ne">-&gt; </span><span class="mi">5259</span>         <span class="n">indexer</span><span class="p">,</span> <span class="n">missing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="o">.</span><span class="n">get_indexer_non_unique</span><span class="p">(</span><span class="n">tgt_values</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5260</span>         <span class="k">return</span> <span class="n">ensure_platform_int</span><span class="p">(</span><span class="n">indexer</span><span class="p">),</span> <span class="n">ensure_platform_int</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">5261</span> 
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/pandas/_libs/index.pyx</span> in <span class="ni">pandas._libs.index.IndexEngine.get_indexer_non_unique</span><span class="nt">()</span>
+
+<span class="nn">&lt;__array_function__ internals&gt;</span> in <span class="ni">resize</span><span class="nt">(*args, **kwargs)</span>
+
+<span class="nn">~/projects/probabilistic-cell/.venv/lib/python3.8/site-packages/numpy/core/fromnumeric.py</span> in <span class="ni">resize</span><span class="nt">(a, new_shape)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1430</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1431</span>     <span class="n">repeats</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">new_size</span> <span class="o">//</span> <span class="n">a</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>  <span class="c1"># ceil division</span>
+<span class="ne">-&gt; </span><span class="mi">1432</span>     <span class="n">a</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">((</span><span class="n">a</span><span class="p">,)</span> <span class="o">*</span> <span class="n">repeats</span><span class="p">)[:</span><span class="n">new_size</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1433</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1434</span>     <span class="k">return</span> <span class="n">reshape</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">new_shape</span><span class="p">)</span>
+
+<span class="nn">&lt;__array_function__ internals&gt;</span> in <span class="ni">concatenate</span><span class="nt">(*args, **kwargs)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+<img alt="_images/Untitled_25_1.png" src="_images/Untitled_25_1.png" />
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By the latenta team<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

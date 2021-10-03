@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -42,49 +42,11 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script src="../../_static/js/canvas-latex.js"></script>
     <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script kind="giscuss">
-
-    var commentsRunWhenDOMLoaded = cb => {
-    if (document.readyState != 'loading') {
-        cb()
-    } else if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', cb)
-    } else {
-        document.attachEvent('onreadystatechange', function() {
-        if (document.readyState == 'complete') cb()
-        })
-    }
-}
-
-var addGiscus = () => {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://giscus.app/client.js";
-    script.async = "async";
-
-    script.setAttribute("data-repo", "probabilistic-cell/latenta");
-    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
-    script.setAttribute("data-theme", "light");
-    script.setAttribute("data-category", "Documentation");
-    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
-    script.setAttribute("data-mapping", "pathname");
-    script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("crossorigin", "anonymous");
-
-    sections = document.querySelectorAll("div.prev-next-bottom");
-    if (sections !== null) {
-        section = sections[sections.length-1];
-        section.parentNode.appendChild(script);
-    }
-}
-commentsRunWhenDOMLoaded(addGiscus);
-</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
@@ -94,7 +56,7 @@ commentsRunWhenDOMLoaded(addGiscus);
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Leaf variables" href="leaves.html" />
-    <link rel="prev" title="Serialization" href="../../tutorials/essentials/5-serialization.html" />
+    <link rel="prev" title="Workflows" href="../../tutorials/essentials/5-workflow.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -112,6 +74,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -171,8 +137,8 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/5-serialization.html">
-     Serialization
+    <a class="reference internal" href="../../tutorials/essentials/5-workflow.html">
+     Workflows
     </a>
    </li>
   </ul>
@@ -480,11 +446,11 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="../../tutorials/essentials/5-serialization.html" title="previous page">
+        <a class="left-prev" href="../../tutorials/essentials/5-workflow.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Serialization</p>
+                <p class="prevnext-title">Workflows</p>
             </div>
         </a>
     </div>
@@ -505,11 +471,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     <footer class="footer">
     <div class="container">
       <p>
-        <!-- 
+        
           By the latenta team<br/>
-         -->
-          <!--
-            &copy; Copyright 2021.<br/> -->
+        
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>

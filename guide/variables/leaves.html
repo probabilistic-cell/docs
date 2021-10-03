@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -42,49 +42,11 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/js/custom.js"></script>
+    <script src="../../_static/js/canvas-latex.js"></script>
     <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script kind="giscuss">
-
-    var commentsRunWhenDOMLoaded = cb => {
-    if (document.readyState != 'loading') {
-        cb()
-    } else if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', cb)
-    } else {
-        document.attachEvent('onreadystatechange', function() {
-        if (document.readyState == 'complete') cb()
-        })
-    }
-}
-
-var addGiscus = () => {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://giscus.app/client.js";
-    script.async = "async";
-
-    script.setAttribute("data-repo", "probabilistic-cell/latenta");
-    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
-    script.setAttribute("data-theme", "light");
-    script.setAttribute("data-category", "Documentation");
-    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
-    script.setAttribute("data-mapping", "pathname");
-    script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("crossorigin", "anonymous");
-
-    sections = document.querySelectorAll("div.prev-next-bottom");
-    if (sections !== null) {
-        section = sections[sections.length-1];
-        section.parentNode.appendChild(script);
-    }
-}
-commentsRunWhenDOMLoaded(addGiscus);
-</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
@@ -112,6 +74,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -171,8 +137,8 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/5-serialization.html">
-     Serialization
+    <a class="reference internal" href="../../tutorials/essentials/5-workflow.html">
+     Workflows
     </a>
    </li>
   </ul>
@@ -485,6 +451,16 @@ commentsRunWhenDOMLoaded(addGiscus);
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#file-loader">
+     File loader
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sparse-file-loader">
+     Sparse File Loader
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -503,9 +479,10 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
 <span class="k">if</span> <span class="n">get_ipython</span><span class="p">():</span>
-    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;load_ext&#39;</span><span class="p">,</span> <span class="s1">&#39;autoreload&#39;</span><span class="p">)</span>
-    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;autoreload&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;load_ext&quot;</span><span class="p">,</span> <span class="s2">&quot;autoreload&quot;</span><span class="p">)</span>
+    <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;autoreload&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
@@ -517,11 +494,45 @@ commentsRunWhenDOMLoaded(addGiscus);
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;cell&quot;</span><span class="p">)</span>
-<span class="n">genes</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s2">&quot;gene&quot;</span><span class="p">)</span>
+<span class="n">genes</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;gene&quot;</span><span class="p">)</span>
+<span class="n">definition</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filesize</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.2922792434692383
 </pre></div>
 </div>
 </div>
@@ -530,9 +541,9 @@ commentsRunWhenDOMLoaded(addGiscus);
 <h2>Loaders<a class="headerlink" href="#loaders" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">cells</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-    <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="mf">1.0</span>
 </pre></div>
 </div>
 </div>
@@ -553,8 +564,8 @@ commentsRunWhenDOMLoaded(addGiscus);
 <h3>Memory loader<a class="headerlink" href="#memory-loader" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">MemoryLoader</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="n">fixed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">definition</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">MemoryLoader</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="n">fixed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -573,10 +584,11 @@ commentsRunWhenDOMLoaded(addGiscus);
 <span class="c1"># Exclude modules as well.</span>
 <span class="n">BLACKLIST</span> <span class="o">=</span> <span class="nb">type</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">,</span> <span class="n">FunctionType</span>
 
+
 <span class="k">def</span> <span class="nf">getsize</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;sum size of object &amp; members.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">BLACKLIST</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;getsize() does not take argument of type: &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;getsize() does not take argument of type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span>
     <span class="n">seen_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">objects</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span>
@@ -598,12 +610,12 @@ commentsRunWhenDOMLoaded(addGiscus);
 <p>Obviously, a large difference in memory usage.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">getsize</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span><span class="o">/</span><span class="mi">1024</span><span class="o">/</span><span class="mi">1024</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">getsize</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>381.47050285339355
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3814.6980419158936
 </pre></div>
 </div>
 </div>
@@ -611,35 +623,45 @@ commentsRunWhenDOMLoaded(addGiscus);
 <p>Using 3GB (or more) on current GPUs would be prohibitive.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader_sparse</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">SparseDenseMemoryLoader</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
-<span class="n">fixed_sparse</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">loader_sparse</span><span class="p">,</span> <span class="n">definition</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sparse</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COOMatrix</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="n">loader_sparse</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">SparseMemoryLoader</span><span class="p">(</span>
+    <span class="n">sparse</span>
+<span class="p">)</span>
+<span class="n">fixed_sparse</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">loader_sparse</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">getsize</span><span class="p">(</span><span class="n">loader_sparse</span><span class="p">)</span><span class="o">/</span><span class="mi">1024</span><span class="o">/</span><span class="mi">1024</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loader_sparse</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">fixed_sparse</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">getsize</span><span class="p">(</span><span class="n">loader_sparse</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.5413875579833984
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17.58980369567871
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="initialization">
 <h4>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h4>
-<p>There are several ways to initialize the COO:</p>
+<p>There are several ways to initialize the COOMatrix:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COOMatrix</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COO(row=tensor([   0,    1,    2,  ..., 9997, 9998, 9999]), col=tensor([2824, 8021, 3284,  ..., 2262, 7725, 7124]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(10000, 10000), mapping=None)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COOMatrix(row=tensor([    0,     1,     2,  ..., 99997, 99998, 99999]), col=tensor([1931, 3859, 5623,  ...,  525, 5523, 9345]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(100000, 10000), mapping=None)
 </pre></div>
 </div>
 </div>
@@ -647,12 +669,12 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">value_scipy_coo</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">from_scipy_coo</span><span class="p">(</span><span class="n">value_scipy_coo</span><span class="p">)</span>
+<span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COOMatrix</span><span class="o">.</span><span class="n">from_scipy_coo</span><span class="p">(</span><span class="n">value_scipy_coo</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COO(row=tensor([   0,    1,    2,  ..., 9997, 9998, 9999]), col=tensor([2824, 8021, 3284,  ..., 2262, 7725, 7124]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(10000, 10000), mapping=None)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COOMatrix(row=tensor([    0,     1,     2,  ..., 99997, 99998, 99999]), col=tensor([1931, 3859, 5623,  ...,  525, 5523, 9345]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(100000, 10000), mapping=None)
 </pre></div>
 </div>
 </div>
@@ -660,12 +682,12 @@ commentsRunWhenDOMLoaded(addGiscus);
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">value_scipy_csr</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-<span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">from_scipy_csr</span><span class="p">(</span><span class="n">value_scipy_csr</span><span class="p">)</span>
+<span class="n">la</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">COOMatrix</span><span class="o">.</span><span class="n">from_scipy_csr</span><span class="p">(</span><span class="n">value_scipy_csr</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COO(row=tensor([   0,    1,    2,  ..., 9997, 9998, 9999]), col=tensor([2824, 8021, 3284,  ..., 2262, 7725, 7124]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(10000, 10000), mapping=None)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>COOMatrix(row=tensor([    0,     1,     2,  ..., 99997, 99998, 99999]), col=tensor([1931, 3859, 5623,  ...,  525, 5523, 9345]), values=tensor([1., 1., 1.,  ..., 1., 1., 1.], dtype=torch.float64), shape=(100000, 10000), mapping=None)
 </pre></div>
 </div>
 </div>
@@ -673,7 +695,7 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <div class="section" id="timing">
 <h4>Timing<a class="headerlink" href="#timing" title="Permalink to this headline">¶</a></h4>
-<p>When data is accessed from a SparseDenseMemoryLoader, it is converted to a dense tensor. This can cause a slowdown:</p>
+<p>When data is accessed from a SparseMemoryLoader, it is converted to a dense tensor. This can cause a slowdown:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">timeit</span>
@@ -683,62 +705,234 @@ commentsRunWhenDOMLoaded(addGiscus);
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader.get()&quot;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader.get()&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">())</span>
 <span class="n">time</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.7599820643663406e-06
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.500143066048622e-06
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader_sparse.get()&quot;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader_sparse.get()&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">())</span>
 <span class="n">time</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.055712130037136376
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.7765716260764748
 </pre></div>
 </div>
 </div>
 </div>
-<p>Speed is however more competitive when taking only a subsample:</p>
+<p>Speed is however much more competitive when taking only a subsample, which is the typical use case anyway when working with large sparse tensors:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cell&quot;</span><span class="p">:</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">))}</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader.get(idx)&quot;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">())</span>
-<span class="n">time</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.002127855899743736
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">))}</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader_sparse.get(idx)&quot;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader.get(idx)&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">())</span>
 <span class="n">time</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0034821300068870187
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.001256783027201891
 </pre></div>
 </div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;loader_sparse.get(idx)&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">())</span>
+<span class="n">time</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.0043448100332170725
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="file-loader">
+<h3>File loader<a class="headerlink" href="#file-loader" title="Permalink to this headline">¶</a></h3>
+<p>Supply a path to a pickle. The value will not be saved along with the loader</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filesize</span><span class="p">,</span> <span class="s2">&quot;Mb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7629.3946924209595 Mb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">filesize</span> <span class="o">&gt;</span> <span class="mi">1024</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">definition</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">fixed_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">fixed_path</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filesize</span><span class="p">,</span> <span class="s2">&quot;Mb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.060612678527832 Mb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">filesize</span> <span class="o">&lt;</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="sparse-file-loader">
+<h3>Sparse File Loader<a class="headerlink" href="#sparse-file-loader" title="Permalink to this headline">¶</a></h3>
+<p>Similarly, we can load a sparse matrix from a file. This is especially useful with larger tensors, i.e. over a billion values (e.g. hundred thousands cells and ten thousand genes)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sparse</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filesize</span><span class="p">,</span> <span class="s2">&quot;Mb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>30.111458778381348 Mb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">filesize</span> <span class="o">&gt;</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+    <span class="n">la</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">COOMatrixFileLoader</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Definition</span><span class="p">([</span><span class="n">cells</span><span class="p">,</span> <span class="n">genes</span><span class="p">])</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">fixed_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">fixed_path</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filesize</span><span class="p">,</span> <span class="s2">&quot;Mb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0606231689453125 Mb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">filesize</span> <span class="o">&lt;</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed2</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fixed_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed2</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tensor([[0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.],
+        [0., 0., 0.,  ..., 0., 0., 0.]], dtype=torch.float64)
+</pre></div>
 </div>
 </div>
 </div>
@@ -801,11 +995,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     <footer class="footer">
     <div class="container">
       <p>
-        <!-- 
+        
           By the latenta team<br/>
-         -->
-          <!--
-            &copy; Copyright 2021.<br/> -->
+        
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>

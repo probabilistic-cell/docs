@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
@@ -42,57 +42,19 @@
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script src="../../../_static/js/custom.js"></script>
+    <script src="../../../_static/js/canvas-latex.js"></script>
     <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script kind="giscuss">
-
-    var commentsRunWhenDOMLoaded = cb => {
-    if (document.readyState != 'loading') {
-        cb()
-    } else if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', cb)
-    } else {
-        document.attachEvent('onreadystatechange', function() {
-        if (document.readyState == 'complete') cb()
-        })
-    }
-}
-
-var addGiscus = () => {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://giscus.app/client.js";
-    script.async = "async";
-
-    script.setAttribute("data-repo", "probabilistic-cell/latenta");
-    script.setAttribute("data-repo-id", "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg=");
-    script.setAttribute("data-theme", "light");
-    script.setAttribute("data-category", "Documentation");
-    script.setAttribute("data-category-id", "DIC_kwDOEVlZHM4B-mVU");
-    script.setAttribute("data-mapping", "pathname");
-    script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("crossorigin", "anonymous");
-
-    sections = document.querySelectorAll("div.prev-next-bottom");
-    if (sections !== null) {
-        section = sections[sections.length-1];
-        section.parentNode.appendChild(script);
-    }
-}
-commentsRunWhenDOMLoaded(addGiscus);
-</script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../../../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title=".vector" href="vector.html" />
@@ -114,6 +76,10 @@ commentsRunWhenDOMLoaded(addGiscus);
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
       
       <img src="../../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -173,8 +139,8 @@ commentsRunWhenDOMLoaded(addGiscus);
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/5-serialization.html">
-     Serialization
+    <a class="reference internal" href="../../../tutorials/essentials/5-workflow.html">
+     Workflows
     </a>
    </li>
   </ul>
@@ -457,7 +423,7 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.scalar.Scalar</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
 </ul>
 </dd></dl>
 
@@ -467,9 +433,9 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.scalar.Scalar</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
 </ul>
 </dd></dl>
 
@@ -479,10 +445,10 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«shift»:  If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«shift»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
 </ul>
 </dd></dl>
 
@@ -493,8 +459,8 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <p>Converting polar to cartesian coordinates</p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»:</p></li>
-<li><p>«radius»:</p></li>
+<li><p>«x»:  Has one less dimension as parent.</p></li>
+<li><p>«radius»:  Has one less dimension as parent.</p></li>
 </ul>
 </dd></dl>
 
@@ -504,9 +470,9 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.scalar.Scalar</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«sign»:</p></li>
-<li><p>«shift»:</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«sign»:  Has same or a subset of dimensions as parent.</p></li>
+<li><p>«shift»:  Has same or a subset of dimensions as parent.</p></li>
 </ul>
 </dd></dl>
 
@@ -516,10 +482,10 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.link.InvertibleLinkMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«rate»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«rate»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -529,10 +495,10 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«rate»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«rate»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -542,10 +508,10 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«rate»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«rate»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -555,7 +521,7 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.scalar.Scalar</span></code></p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
 </ul>
 </dd></dl>
 
@@ -563,13 +529,14 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dt id="latenta.links.scalar.Sigmoid">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.links.scalar.</span></code><code class="sig-name descname"><span class="pre">Sigmoid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">latenta.variables.variable.Variable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/links/scalar/sigmoid.html#Sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.links.scalar.Sigmoid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
+<p>Standard sigmoid kinetics</p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«halfmaximal»:  If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
-<li><p>«cooperativity»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The slope (also known as weight). Denotes how much the output changes with each addition of «x». Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«halfmaximal»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
+<li><p>«cooperativity»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -577,13 +544,14 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dt id="latenta.links.scalar.Logistic">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.links.scalar.</span></code><code class="sig-name descname"><span class="pre">Logistic</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/links/scalar/sigmoid.html#Logistic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.links.scalar.Logistic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.link.InvertibleLinkMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
+<p>Logistic function</p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The final value of the logistic function. Denotes the output at high values of «x», far away from &lt;&lt;switch&gt;&gt;. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«switch»:  If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
-<li><p>«skew»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The final value of the logistic function. Denotes the output at high values of «x», far away from &lt;&lt;switch&gt;&gt;. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«switch»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
+<li><p>«skew»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -591,13 +559,14 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <dt id="latenta.links.scalar.Switch">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.links.scalar.</span></code><code class="sig-name descname"><span class="pre">Switch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/links/scalar/sigmoid.html#Switch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.links.scalar.Switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.sigmoid.Logistic</span></code></p>
+<p>A sudden jump</p>
 <p>Components:</p>
 <ul class="simple">
-<li><p>«x»: The input.</p></li>
-<li><p>«a»: The final value of the logistic function. Denotes the output at high values of «x», far away from &lt;&lt;switch&gt;&gt;. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
-<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
-<li><p>«switch»:  If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
-<li><p>«skew»:  If True, the component will be initialized as a Latent variable</p></li>
+<li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
+<li><p>«a»: The final value of the logistic function. Denotes the output at high values of «x», far away from &lt;&lt;switch&gt;&gt;. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the output difference distribution as prior.</p></li>
+<li><p>«b»: The intercept (also known as bias). Denotes the output when «x» = 0. Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using a Normal distribution with both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> as parameters.</p></li>
+<li><p>«switch»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable, using the distribution of «x» as prior.</p></li>
+<li><p>«skew»:  Has same or a subset of dimensions as parent. If True, the component will be initialized as a Latent variable</p></li>
 </ul>
 </dd></dl>
 
@@ -658,11 +627,10 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
     <footer class="footer">
     <div class="container">
       <p>
-        <!-- 
+        
           By the latenta team<br/>
-         -->
-          <!--
-            &copy; Copyright 2021.<br/> -->
+        
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>

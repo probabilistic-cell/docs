@@ -196,7 +196,7 @@ causal.plot_features();
 # %%
 x = x_gs.clone()
 distributions = {
-    distribution_id: la.distributions.Normal(la.Parameter(0.0), la.Parameter(1.0))
+    distribution_id: la.distributions.Normal(la.Parameter(0.0), la.Parameter(1.0), transforms = [la.transforms.Affine(a = 5.)])
     for distribution_id in "abc"
 }
 distributions_dim = la.Dim(distributions.keys(), "distribution")
@@ -205,7 +205,8 @@ coefficients = la.links.scalar.Spline(
     x,
     output=la.Definition([cells, distributions_dim]),
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension=distributions_dim)]
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
+    step_distribution = la.distributions.Normal(scale = 2.)
 )
 dist = la.distributions.Mixture(weight=coefficients, distributions=distributions)
 observation = la.Observation(observation_value, dist, label="observation")
@@ -213,10 +214,13 @@ observation.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    observation, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
+    observation, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.001)
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
+
+# %%
+{dist.loc.prior() for dist in distributions.values()}
 
 # %%
 posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
@@ -234,6 +238,9 @@ modelled_value = (
 )
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
+
+# %%
+{dist.loc.prior() for dist in distributions.values()}
 
 # %% [markdown]
 # Quantitatively check whether the densities are modelled correctly
@@ -312,6 +319,12 @@ modelled_value = (
 )
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
+
+# %%
+{dist.loc.q.loc.prior() for dist in distributions.values()}
+
+# %%
+sns.histplot(observation_value)
 
 # %% [markdown]
 # Quantitatively check whether the densities are modelled correctly

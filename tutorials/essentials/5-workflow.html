@@ -55,7 +55,7 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Variables" href="../../guide/variables/index.html" />
+    <link rel="next" title="Scalability" href="6-scalability.html" />
     <link rel="prev" title="Model selection" href="4-model_selection.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -139,6 +139,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Workflows
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-scalability.html">
+     Scalability
     </a>
    </li>
   </ul>
@@ -429,7 +434,8 @@
                 
   <div class="section" id="workflows">
 <h1>Workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h1>
-<p>The true power of latenta only becomes clear once we move beyond the one-model-fits-all idea, but rather create a variety of models and connect or compare them in various ways. For a typical use case, we often already create a dozen models, but this can a couple to hundreds of models. Managing these models, which often share several components, can be tricky.</p>
+<p>For now we mainly looked at models in isolation. However, the true power of probabilistic modelling lies in its ability to move beyond this “one-model-fits-all” idea, but rather create a variety of models and connect or compare them in various ways. Indeed, even for a normal use case, we often already create a dozen models. In more complex experimental designs, this can easily go up to a hundred or more.</p>
+<p>Even in relatively simple use cases, managing different models and how they depend on each other can be a pain.</p>
 <p>It borrows elements from other workflow managers such as snakemake or nextflow, but is heavily focused on maintaining the interactivity that is so crucial for quick modelling.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -479,10 +485,10 @@
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="../../guide/variables/index.html" title="next page">
+        <a class="right-next" href="6-scalability.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Variables</p>
+                <p class="prevnext-title">Scalability</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>

@@ -143,6 +143,11 @@
      Workflows
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-scalability.html">
+     Scalability
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -929,11 +934,11 @@
 </div>
 </div>
 </div>
-<p>We can now train for a couple of iterations or until the loss function has reached a plateau (= converged):</p>
+<p>We can now train for a couple of iterations or until the loss function has reached convergence:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trace</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
-<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -2179,7 +2184,7 @@ Coordinates:
 <p>Depending on the type of causal posterior, you can plot the outcome. The <a class="reference internal" href="../../reference/latenta/posterior/scalar.html#latenta.posterior.scalar.ScalarVectorCausal" title="latenta.posterior.scalar.ScalarVectorCausal"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScalarVectorCausal</span></code></a> can for example plot each individual <em>feature</em> across all cells (in this case gene):</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overexpression_causal</span><span class="o">.</span><span class="n">plot_features</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">overexpression_causal</span><span class="o">.</span><span class="n">plot_features</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>

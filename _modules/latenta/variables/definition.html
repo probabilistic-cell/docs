@@ -132,6 +132,11 @@
      Workflows
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tutorials/essentials/6-scalability.html">
+     Scalability
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -642,7 +647,7 @@
 
 <div class="viewcode-block" id="Definition.broadcast"><a class="viewcode-back" href="../../../reference/latenta/variables.html#latenta.variables.Definition.broadcast">[docs]</a>    <span class="k">def</span> <span class="nf">broadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Makes the size of certain dimensions None, ready to be broadcasted</span>
+<span class="sd">        Broadcasts the given dimensions in-place.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
             <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span>

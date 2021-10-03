@@ -132,6 +132,11 @@
      Workflows
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../tutorials/essentials/6-scalability.html">
+     Scalability
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -387,6 +392,7 @@
   <h1>Source code for latenta.links.scalar.linear</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
 
+<span class="kn">from</span> <span class="nn">latenta.utils.oop</span> <span class="kn">import</span> <span class="n">class_or_instancemethod</span>
 <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">distributions</span><span class="p">,</span> <span class="n">domains</span>
 <span class="kn">from</span> <span class="nn">latenta.variables</span> <span class="kn">import</span> <span class="n">Variable</span>
 
@@ -394,6 +400,10 @@
 
 
 <div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../../../reference/latenta/links/scalar.html#latenta.links.scalar.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">(</span><span class="n">Scalar</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A constant function that aways returns 0: {formula}. Typically used as a placeholder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
@@ -404,10 +414,14 @@
 
 
 <div class="viewcode-block" id="Linear"><a class="viewcode-back" href="../../../../reference/latenta/links/scalar.html#latenta.links.scalar.Linear">[docs]</a><span class="k">class</span> <span class="nc">Linear</span><span class="p">(</span><span class="n">Scalar</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A linear function: {formula}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">a</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
         <span class="s2">&quot;slope&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;The slope (also known as weight). Denotes how much the output changes with each addition of «x».&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;The slope (also known as weight). Denotes how much the output changes when «x» increases with 1.&quot;</span><span class="p">,</span>
         <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;output_difference&quot;</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -437,11 +451,12 @@
 
         <span class="k">return</span> <span class="n">log_prob</span>
 
+    <span class="c1"># @class_or_instancemethod</span>
     <span class="k">def</span> <span class="nf">_repr_formula_latex_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;[x]&quot;</span><span class="p">):</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;a&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_ids</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a]\cdot &quot;</span> <span class="o">+</span> <span class="n">x</span>
-        <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_ids</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_ids</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[a] \cdot &quot;</span> <span class="o">+</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;b&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_ids</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;[b] + &quot;</span> <span class="o">+</span> <span class="n">x</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_latex</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 

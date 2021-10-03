@@ -132,6 +132,11 @@
      Workflows
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../tutorials/essentials/6-scalability.html">
+     Scalability
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -397,6 +402,19 @@
 
 
 <div class="viewcode-block" id="Sine"><a class="viewcode-back" href="../../../../reference/latenta/links/scalar.html#latenta.links.scalar.Sine">[docs]</a><span class="k">class</span> <span class="nc">Sine</span><span class="p">(</span><span class="n">Linear</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A sine function: {formula}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
+        <span class="s2">&quot;amplitude&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;The amplitude of the sine wave.&quot;</span><span class="p">,</span>
+        <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;output_difference&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="n">shift</span> <span class="o">=</span> <span class="n">CoefficientPromise</span><span class="p">(</span>
         <span class="s2">&quot;shift&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\zeta&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_distribution</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">)</span>

@@ -143,6 +143,11 @@
      Workflows
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-scalability.html">
+     Scalability
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -469,12 +474,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
-</pre></div>
-</div>
-</div>
 </div>
 <p>We’ll use the same dataset as <a class="reference internal" href="1-variables.html"><span class="doc std std-doc">before</span></a></p>
 <div class="cell docutils container">
@@ -483,6 +482,155 @@
 </pre></div>
 </div>
 </div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">adata</span>
+
+<span class="c1"># sc.pp.normalize_per_cell(adata)</span>
+<span class="c1"># sc.pp.log1p(adata)</span>
+
+<span class="c1"># sc.pp.combat(adata)</span>
+<span class="c1"># sc.pp.pca(adata)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span><span class="o">.</span><span class="n">var</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>ens_id</th>
+      <th>gene_short_name</th>
+      <th>biotype</th>
+      <th>symbol</th>
+    </tr>
+    <tr>
+      <th>gene</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ENSMUSG00000000031</th>
+      <td>11846</td>
+      <td>ENSMUSG00000000031</td>
+      <td>H19</td>
+      <td>lincRNA</td>
+      <td>H19</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000000058</th>
+      <td>11807</td>
+      <td>ENSMUSG00000000058</td>
+      <td>Cav2</td>
+      <td>protein_coding</td>
+      <td>Cav2</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000000078</th>
+      <td>11911</td>
+      <td>ENSMUSG00000000078</td>
+      <td>Klf6</td>
+      <td>protein_coding</td>
+      <td>Klf6</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000000184</th>
+      <td>11449</td>
+      <td>ENSMUSG00000000184</td>
+      <td>Ccnd2</td>
+      <td>protein_coding</td>
+      <td>Ccnd2</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000000202</th>
+      <td>13930</td>
+      <td>ENSMUSG00000000202</td>
+      <td>Btbd17</td>
+      <td>protein_coding</td>
+      <td>Btbd17</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000117278</th>
+      <td>7690</td>
+      <td>ENSMUSG00000117278</td>
+      <td>AC166110.4</td>
+      <td>lincRNA</td>
+      <td>AC166110.4</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000117515</th>
+      <td>10467</td>
+      <td>ENSMUSG00000117515</td>
+      <td>AC121783.1</td>
+      <td>processed_pseudogene</td>
+      <td>AC121783.1</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000117710</th>
+      <td>5157</td>
+      <td>ENSMUSG00000117710</td>
+      <td>AC124502.1</td>
+      <td>antisense</td>
+      <td>AC124502.1</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000118106</th>
+      <td>28421</td>
+      <td>ENSMUSG00000118106</td>
+      <td>AC115752.1</td>
+      <td>TEC</td>
+      <td>AC115752.1</td>
+    </tr>
+    <tr>
+      <th>ENSMUSG00000118365</th>
+      <td>23719</td>
+      <td>ENSMUSG00000118365</td>
+      <td>AC161119.1</td>
+      <td>antisense</td>
+      <td>AC161119.1</td>
+    </tr>
+  </tbody>
+</table>
+<p>2047 rows × 5 columns</p>
+</div></div></div>
 </div>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
@@ -545,8 +693,8 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 ... storing &#39;phase&#39; as categorical
 </pre></div>
 </div>
-<img alt="../../_images/3-manifolds_14_1.png" src="../../_images/3-manifolds_14_1.png" />
-<img alt="../../_images/3-manifolds_14_2.png" src="../../_images/3-manifolds_14_2.png" />
+<img alt="../../_images/3-manifolds_16_1.png" src="../../_images/3-manifolds_16_1.png" />
+<img alt="../../_images/3-manifolds_16_2.png" src="../../_images/3-manifolds_16_2.png" />
 </div>
 </div>
 <p>For illustration purposes, we will first remove (or reduce) the effect of the cell cycle by removing the cycling cells.</p>
@@ -946,7 +1094,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "6c8280a9870748628480ad5cda2e78fe", "version_major": 2, "version_minor": 0}
-</script><img alt="../../_images/3-manifolds_25_1.png" src="../../_images/3-manifolds_25_1.png" />
+</script><img alt="../../_images/3-manifolds_27_1.png" src="../../_images/3-manifolds_27_1.png" />
 </div>
 </div>
 <p>To extract the inferred values from the</p>
@@ -972,7 +1120,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;differentiation&#39;, ylabel=&#39;Count&#39;&gt;
 </pre></div>
 </div>
-<img alt="../../_images/3-manifolds_28_1.png" src="../../_images/3-manifolds_28_1.png" />
+<img alt="../../_images/3-manifolds_30_1.png" src="../../_images/3-manifolds_30_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -989,7 +1137,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_30_0.png" src="../../_images/3-manifolds_30_0.png" />
+<img alt="../../_images/3-manifolds_32_0.png" src="../../_images/3-manifolds_32_0.png" />
 </div>
 </div>
 <p>Even though the differentiation is very dominant, the model still used about half of the latent space to explain some heterogeneity in the control cells.</p>
@@ -1630,8 +1778,8 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 {"model_id": "7cfa0826cd114859803529745a5cfd5f", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "2b92c7639d9f4053ba4013475f39c89a", "version_major": 2, "version_minor": 0}
-</script><img alt="../../_images/3-manifolds_43_2.png" src="../../_images/3-manifolds_43_2.png" />
-<img alt="../../_images/3-manifolds_43_3.png" src="../../_images/3-manifolds_43_3.png" />
+</script><img alt="../../_images/3-manifolds_45_2.png" src="../../_images/3-manifolds_45_2.png" />
+<img alt="../../_images/3-manifolds_45_3.png" src="../../_images/3-manifolds_45_3.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1660,7 +1808,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_46_0.png" src="../../_images/3-manifolds_46_0.png" />
+<img alt="../../_images/3-manifolds_48_0.png" src="../../_images/3-manifolds_48_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1670,7 +1818,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_47_0.png" src="../../_images/3-manifolds_47_0.png" />
+<img alt="../../_images/3-manifolds_49_0.png" src="../../_images/3-manifolds_49_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1708,7 +1856,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_52_0.png" src="../../_images/3-manifolds_52_0.png" />
+<img alt="../../_images/3-manifolds_54_0.png" src="../../_images/3-manifolds_54_0.png" />
 </div>
 </div>
 </div>
@@ -2401,8 +2549,8 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 {"model_id": "2dded24bf62a4d4d900128922eda1556", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
 {"model_id": "387810805b0d4f55b290e1dca2b16659", "version_major": 2, "version_minor": 0}
-</script><img alt="../../_images/3-manifolds_64_2.png" src="../../_images/3-manifolds_64_2.png" />
-<img alt="../../_images/3-manifolds_64_3.png" src="../../_images/3-manifolds_64_3.png" />
+</script><img alt="../../_images/3-manifolds_66_2.png" src="../../_images/3-manifolds_66_2.png" />
+<img alt="../../_images/3-manifolds_66_3.png" src="../../_images/3-manifolds_66_3.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2431,7 +2579,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_67_0.png" src="../../_images/3-manifolds_67_0.png" />
+<img alt="../../_images/3-manifolds_69_0.png" src="../../_images/3-manifolds_69_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2459,7 +2607,7 @@ WARNING: genes are not in var_names and ignored: [&#39;ENSMUSG00000004880&#39;, 
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/3-manifolds_69_0.png" src="../../_images/3-manifolds_69_0.png" />
+<img alt="../../_images/3-manifolds_71_0.png" src="../../_images/3-manifolds_71_0.png" />
 </div>
 </div>
 <p>Apart from a more robust training, amortization also has a couple of additional advantages:</p>

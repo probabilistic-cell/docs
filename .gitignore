@@ -12,3 +12,4 @@ tutorials/essentials/data
 _book
 node_modules
 package-lock.json
+.jupyter_cache

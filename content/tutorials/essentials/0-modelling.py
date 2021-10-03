@@ -28,7 +28,7 @@
 # %% [markdown]
 # All these models have several aspects in common: we try to explain what we observe (the transcriptome of many cells), using things we do not know. These unknowns can be specific to a gene (such as a gene's fold change or dynamics during a trajectory), a cell (such as a cells position in a reduced space or its pseudotime) or both (e.g. the future state of a cell).
 #
-# While these models are powerful, they are all mostly one-dimensional in nature: a single clustering, trajectory or embedding that tries to explain a single modality (often transcriptome). We easily hit roadblocks if we try to explain different aspects of the cell, both in terms of cellular processes (differentiation, cell cycle, patient subtypes, ...) and modalities. Such questions can be:
+# While these models are powerful, they are all mostly one-dimensional in nature: we create a single clustering, trajectory or embedding that tries to explain one or two modalities (often the transcriptome). We easily hit roadblocks if we try to explain different aspects of the cell, both in terms of cellular processes (differentiation, cell cycle, patient subtypes, ...), modalities (transcriptome, proteome, chromatin accessibility, ...), and the functions that connect them (smooth functions, deconvolutions, interactions, ...). Such questions can be:
 #
 # * How does the remaining variation look like once I model («regress out») a time series, batch effect and cell cycle?
 # * Does my genetic perturbation affect target gene expression in a linear, sigmoid, exponential or more complex manner?
@@ -46,7 +46,7 @@
 # ## But why would I want to model data?
 
 # %% [markdown]
-# Why model data? You as a user probably have either of two goals in mind: prediction or understanding.
+# Why model data? You as a user probably have either of three goals in mind: prediction or understanding.
 #
 # - For **prediction**, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells we just killed in an experiment, but also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.
 # - For **understanding**, we care both about both interpretability and generalizability. For this reason, a model that is useful for understanding is often also good at making predictions.
@@ -55,7 +55,7 @@
 #   - Require a bit more data, because there are more free parameters
 #   - Require more effort from the modeller. It's hard to create a "black-box" interpretable model as that would require an impossible amount of data. Rather, we specify some possible models and by doing that we bring in some prior knowledge and what interpretability means for us.
 #
-# Latenta is primarily made to create models for understanding: to make it easier for the (computational) biologist to create, infer, interpret and share models.
+# Latenta is primarily made to create models for understanding: to make it easier for the (computational) biologist to create, infer, interpret, connect and share models.
 
 # %% [markdown]
 # ```{note}

@@ -25,10 +25,24 @@ import lacell as lac
 import numpy as np
 
 # %% [markdown]
-# We'll use the same dataset as [before](./1-variables)...
+# We'll use the same dataset as [before](./1-variables)
 
 # %%
 adata = la.data.load_myod1()
+
+# %%
+import scanpy as sc
+
+adata.raw = adata
+
+# sc.pp.normalize_per_cell(adata)
+# sc.pp.log1p(adata)
+
+# sc.pp.combat(adata)
+# sc.pp.pca(adata)
+
+# %%
+adata.var
 
 # %% tags=["hide-input", "remove-output"]
 import scanpy as sc
@@ -45,9 +59,6 @@ sc.pp.neighbors(adata)
 sc.tl.umap(adata)
 
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
-
-# %%
-sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 
 # %% [markdown]
 # So far, we have focused on models that basically look like this:
@@ -68,24 +79,25 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 # - **scalar** (differentiation, cell cycle, ...): Each cell is placed in a one-dimensional space, with a single pseudotime.
 
 # %% [markdown]
-# While many manifold models are relatively easy to implement, the main difficulty lies in the interpretability. Especially when different **cellular processes** are happening at the same time in a cell, a latent variable will try to explain all of them. What is therefore often required is the inclusion of prior knowledge that can help with disentangling different cellular processes.
+# While many manifold models are relatively easy to implement, the main difficulty lies in the interpretability. Especially when different **cellular processes** are happening at the same time in a cell, a single latent variable will typically try to explain all of them. What is therefore often required is the inclusion of prior knowledge that can help with disentangling different cellular processes.
 
 # %% [markdown]
 # ## Differentiation: Inferring a dominant scalar latent variable
 
 # %% [markdown]
-# Just by looking at the 2d representation, it already becomes obvious that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle.
+# Just by looking at the 2D representation, it's clear that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle. On top of that, it seems that there is some heterogeneity in the control cells, although the magnitude of this is difficult to determine based on a 2D representation.
 
 # %%
 cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes()
 sc.tl.score_genes_cell_cycle(adata, s_genes = cellcycle_genes.query("phase == 'S'")["gene"].tolist(), g2m_genes = cellcycle_genes.query("phase == 'G2/M'")["gene"].tolist())
 
 # %%
-sc.pl.umap(adata_oi, color=["gene_overexpressed", "batch", "log_overexpression", "phase"])
-sc.pl.umap(adata_oi, color=adata_oi.var.set_index("symbol").loc[symbols]["ens_id"], title = symbols)
+symbols = ["Ttn", "Myog", "Cdk1", "Pcna"]
+sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression", "phase"])
+sc.pl.umap(adata, color=adata.var.set_index("symbol").loc[symbols]["ens_id"], title = symbols)
 
 # %% [markdown]
-# For now, for illustration purpose, we can simply remove (or reduce) the effect of the cell cycle by removing the cycling cells.
+# For illustration purposes, we will first remove (or reduce) the effect of the cell cycle by removing the cycling cells.
 
 # %%
 adata_oi = adata[adata.obs["phase"] == "G1"].copy()
@@ -94,9 +106,9 @@ adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %% [markdown]
-# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a Normal distribution that captures its uncertainty.
+# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
 #
-# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. A uniform distribution is there appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
+# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
 # %%
 differentiation = la.Latent(la.distributions.Uniform(), definition = [transcriptome["cell"]], label = "differentiation")
@@ -107,7 +119,7 @@ differentiation = la.Latent(la.distributions.Uniform(), definition = [transcript
 # %% [markdown]
 # :::{note}
 #
-# Although a spline function is flexible, we still make a couple of assumptions:
+# Although a spline function is flexible, like always we do still make some assumptions, namely:
 # - The outcome is smooth, without a lot of sudden jumps.
 # - The flexibility is limited by the number of knots. There is a trade-off here, as more knots will mean more flexibility but also more chances of overfitting.
 #
@@ -116,6 +128,10 @@ differentiation = la.Latent(la.distributions.Uniform(), definition = [transcript
 # %%
 foldchange = transcriptome.find("foldchange")
 foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
+
+# %%
+batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
+foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
 
 # %%
 foldchange.plot()
@@ -155,22 +171,20 @@ sc.pl.umap(adata_oi, color = ["differentiation"])
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
 # %%
-import pandas as pd
+transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %%
+import pandas as pd
 differentiation_p = la.distributions.Beta(
-    concentration0 = la.Fixed(pd.Series([1., 100.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = la.Definition([cells])),
-    concentration1 = la.Fixed(pd.Series([1., 1.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = la.Definition([cells]))
+    concentration0 = la.Fixed(pd.Series([1., 100.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]]),
+    concentration1 = la.Fixed(pd.Series([1., 1.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]])
 )
 
 # %% [markdown]
 # Note that we do not place a hard prior on these differentiation values, and that control cells can therefore still have high differentiation if this is really supported by the data.
 
 # %%
-differentiation = la.Latent(differentiation_p, definition = la.Definition([cells]), label = "differentiation")
-
-# %%
-# encoder = la.amortization.Encoder(la.Fixed(transcriptome.loader, definition = transcriptome), differentiation, pretrain = True)
+differentiation = la.Latent(differentiation_p, definition = [transcriptome["cell"]], label = "differentiation")
 
 # %%
 differentiation.plot()
@@ -182,10 +196,21 @@ foldchange = transcriptome.find("foldchange")
 foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
 
 # %%
+batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
+foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+
+# %%
 foldchange.plot()
 
 # %%
 with transcriptome.switch("cuda"):
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot();
+    
     inference = la.infer.svi.SVI(
         transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
     )
@@ -243,13 +268,13 @@ differentiation_causal.plot_features();
 # :::
 
 # %%
-differentiation = la.Latent(differentiation_p, definition = la.Definition([cells]), label = "differentiation")
+transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %%
-transcriptome.reset()
+differentiation = la.Latent(differentiation_p, definition = [transcriptome["cell"]], label = "differentiation")
 
 # %%
-encoder = la.amortization.Encoder(la.Fixed(transcriptome.loader, definition = transcriptome), differentiation, pretrain = False, lr = 1e-2)
+encoder = la.amortization.Encoder(la.Fixed(transcriptome.loader, definition = transcriptome), differentiation, pretrain = False, lr = 1e-3)
 
 # %%
 differentiation.plot()
@@ -261,12 +286,23 @@ foldchange = transcriptome.find("foldchange")
 foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
 
 # %%
+batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
+foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+
+# %%
 foldchange.plot()
 
 # %%
 with transcriptome.switch("cuda"):
     inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-4)
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-3)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot();
+    
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-2)
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
@@ -286,23 +322,22 @@ sc.pl.umap(adata_oi, color = ["differentiation", "batch"])
 differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
     differentiation, transcriptome, observed = differentiation_observed, interpretable = transcriptome.p.mu.expression
 )
-differentiation_causal.sample(10)
-
-# %%
+differentiation_causal.sample(30)
 differentiation_causal.sample_empirical()
 differentiation_causal.sample_random()
 
 # %%
 differentiation_causal.plot_features();
 
-# %%
-
 # %% [markdown]
 # Apart from a more robust training, amortization also has a couple of additional advantages:
-# - We are more scalable because we no longer need to train parameters for each individual cell, which can easily go into hundreds of thousands. Instead, we only need to infer a few dozen or hundred parameters of the neural network.
-# - For free, we get a function that can tell us the latent space even on unseen cells. Note however, that this does not necessarily mean that our function is really generalizable, as this may depend on the assumptions, hyperparameters and structure of the neural network.
+# - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred hundred parameters of the neural network.
+# - For free, we get a function that can predict the latent space even on unseen cells. Note however, that this does not necessarily mean that our function is really generalizable, as this may depend on the assumptions, hyperparameters and structure of the neural network.
 
 # %% [markdown]
 # ## Cell cycle: Including quite some prior knowledge
+
+# %% [markdown]
+# ![](https://cdn.zmescience.com/wp-content/uploads/2018/10/giraffe-661648_960_720.jpg)
 
 # %%

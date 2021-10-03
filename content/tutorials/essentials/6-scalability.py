@@ -15,7 +15,4 @@
 # ---
 
 # %% [markdown]
-# # Serialization
-
-# %%
-import latenta as la
+# # Scalability

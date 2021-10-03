@@ -119,11 +119,11 @@ inference = la.infer.svi.SVI(
 trainer = la.infer.trainer.Trainer(inference)
 
 # %% [markdown]
-# We can now train for a couple of iterations or until the loss function has reached a plateau (= converged):
+# We can now train for a couple of iterations or until the loss function has reached convergence:
 
 # %%
 trace = trainer.train(10000)
-trace.plot()
+trace.plot();
 
 # %% [markdown]
 # You can check that our values have changed:
@@ -190,7 +190,7 @@ overexpression_causal.samples[overexpression].mean("sample")
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
-overexpression_causal.plot_features()
+overexpression_causal.plot_features();
 
 # %% tags=["remove-input", "remove-output"]
 from myst_nb import glue

@@ -1,19 +1,19 @@
 # %%
-import argparse
+try:
+    from IPython import get_ipython
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--production",
-    help="Whether in production or not.",
-    action="store_true",
-    default=False,
-)
-args = parser.parse_args()
+    ip = get_ipython()
+    if ip is None:
+        pass
+    else:
+        print("running from IPython")
+        import os
 
-import os
+        os.chdir("../")
+except:
+    # We do not even have IPython installed
+    pass
 
-if not args.production:
-    os.chdir("../")
 
 # %%
 from pathlib import Path
@@ -44,9 +44,19 @@ if skip:
         record
 
 # %%
+# Stage notebooks
 for path in notebooks:
     record = cache.stage_notebook_file(path=path)
     record
+
+# %%
+# Remove files that are no longer present
+import pathlib
+
+for record in cache.list_staged_records():
+    if not pathlib.Path(record.uri).exists():
+        cache.discard_staged_notebook(record.pk)
+
 
 # %%
 print(cache.list_staged_unexecuted())

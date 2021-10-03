@@ -2,13 +2,18 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("production", help="Whether in production or not.")
+parser.add_argument(
+    "--production",
+    help="Whether in production or not.",
+    action="store_true",
+    default=False,
+)
 args = parser.parse_args()
 
 import os
 import jupytext
 
-if not args["production"]:
+if not args.production:
     os.chdir("../")
 
 # %%

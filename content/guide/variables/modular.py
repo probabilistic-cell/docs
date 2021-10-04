@@ -51,7 +51,7 @@ x = la.Fixed(pd.Series(np.random.uniform(0, 3, n_cells), index=cells.index), lab
 
 # %%
 n_genes = 100
-genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), id="gene")
+genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), name="gene")
 
 
 def random_coefficient(n_genes):

@@ -30,20 +30,6 @@ import numpy as np
 # %%
 adata = la.data.load_myod1()
 
-# %%
-import scanpy as sc
-
-adata.raw = adata
-
-# sc.pp.normalize_per_cell(adata)
-# sc.pp.log1p(adata)
-
-# sc.pp.combat(adata)
-# sc.pp.pca(adata)
-
-# %%
-adata.var
-
 # %% tags=["hide-input", "remove-output"]
 import scanpy as sc
 

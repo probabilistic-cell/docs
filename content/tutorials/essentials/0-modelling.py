@@ -46,8 +46,10 @@
 # ## But why would I want to model data?
 
 # %% [markdown]
-# Why model data? You as a user probably have either of three goals in mind: prediction or understanding.
+# Why model data? You as a user probably have either of four goals in mind: description, understanding or prediction:
 #
+# - For **description** and **discovery**, the complexity of the model depends on the question. Sometimes, a simpler model that normalizes and visualizes the data can suffice. This is the case if we want to describe and discover the cell types within a sample, as the actual descriptive and discovery work is then done by us humans based on the 2D visualization. There are plenty of tools in the single-cell field that can do this, and if you only want to describe data, latenta may be overkill.
+# However, for more complex but (hopefully) useful descriptions, such as those encompassing multiple cellular processes and modalities, the complexity of the model increases. In those cases, a more exact description as created by latenta can be important because it's hard to objectively visualize and interpret these effects by humans.
 # - For **prediction**, we mainly care about make generalizable models. Generalizability means we want a model that not only works on the cells we just killed in an experiment, but also want to make good predictions about any future cells (and ideally, patients). When predicting, we typically do not care much about interpretability. However, just like we often want to know the mechanism of a potential drug, having an interpretable model can also be useful when making predictions.
 # - For **understanding**, we care both about both interpretability and generalizability. For this reason, a model that is useful for understanding is often also good at making predictions.
 #
@@ -55,7 +57,7 @@
 #   - Require a bit more data, because there are more free parameters
 #   - Require more effort from the modeller. It's hard to create a "black-box" interpretable model as that would require an impossible amount of data. Rather, we specify some possible models and by doing that we bring in some prior knowledge and what interpretability means for us.
 #
-# Latenta is primarily made to create models for understanding: to make it easier for the (computational) biologist to create, infer, interpret, connect and share models.
+# Latenta is primarily made to create models for making more complex descriptions and move towards understanding. It helps the (computational) biologist to create, infer, interpret, connect and share these models.
 
 # %% [markdown]
 # ```{note}
@@ -80,11 +82,12 @@
 #
 # Latenta has different layers of complexity:
 #
-# - At the highest level, we provide common functions that create a couple of variables for you. These for example include modelling of transcriptomics, proteomics, chromatin accessibility, trajectories, ...
-# - At the medium level, we provide ways to create individual variables and connect them with eachother.
-# - At the lowest level, we provide ways to create custom sets of variables.
+# - At the highest level, latenta contains workflows and pipelines for certain common tasks
+# - At the medium level, we provide ways to construct models for several common cellular processes and modalities, such as transcriptomics, proteomics, chromatin accessibility, trajectories, cell cycle, ...
+# - At a lower level, we provide ways to create individual variables and connect them with eachother.
+# - At the lowest level, we provide ways to create custom sets of variables, p[osteriors, etc
 #
-# If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) thinking.
+# If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) modelling techniques. Nontheless, in these essentials tutorials we will give an overview on each level starting from the bottom, so that
 
 # %% [markdown]
 # Any model is a mathematical representation of reality, and building models does require some mathematics. Although latenta may make this easier, it would be unwise to completely abstract away every mathematical concept. Some probability, statistics and machine learning concepts are simply too central for modelling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.

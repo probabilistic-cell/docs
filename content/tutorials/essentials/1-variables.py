@@ -62,12 +62,12 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 # ## Definition
 
 # %% [markdown]
-# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.id`). Furthermore, a dimension can also be annotation with a label, symbol and/or description.
+# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix) or more dimensions. Each dimension of a variable has coordinates (`.coords`), and identifier (`.name`). Furthermore, a dimension can also be annotation with a label, symbol and/or description.
 #
 # A "genes" dimension could be defined as follows:
 
 # %%
-genes = la.Dim(adata.var.index, id="gene")
+genes = la.Dim(adata.var.index, name="gene")
 genes
 
 # %% [markdown]
@@ -83,7 +83,7 @@ genes
 
 # %%
 adata.obs.index.name = "cell"
-cells = la.Dim(adata.obs.index, id="cell")
+cells = la.Dim(adata.obs.index, name="cell")
 cells
 
 # %% [markdown]
@@ -177,7 +177,7 @@ lfc
 # All positive numbers | $R^+$ | `.Exp()` | $e^x$
 # Unit interval | $[0, 1]$ | `.Logistic()` | $\frac{1}{1+e^{-x}}$
 # Circular (i.e. an angle) | $[0, 2\pi[$ | `.Circular()` | $ atan2(y, x) $
-# Simplex | $\in {0, 1} \wedge \sum = 1$ | `.Softmax()` | $\frac{e^{x_i}}{\sum_i e^{x_i}}$
+# Simplex | $\in [0, 1] \wedge \sum = 1$ | `.Softmax()` | $\frac{e^{x_i}}{\sum_i e^{x_i}}$
 
 # %%
 baseline = la.Parameter(
@@ -245,6 +245,25 @@ expression.plot()
 # Skew, rate | `.skew`, `.rate` | $\gamma$ or $\lambda$ | Scales the input
 # Shift | `.shift` | $\zeta$ | Shifts the input
 #
+
+# %% [markdown]
+# ## Modular
+
+# %% [markdown]
+# Sometimes, a variable is affected by several other variables. For example, our gene expression as above may not only depend on a baseline value and the overexpression of a TF, but also a batch effect, a cell cycle, etc. In such cases, we can use modular variables that allow us to easily combine these different effects:
+
+# %%
+expression = la.modular.Additive(definition=[cells, genes], label="expression")
+
+# %%
+expression.baseline = baseline
+expression.overexpression = la.links.scalar.Linear(overexpression, a=lfc)
+
+# %%
+expression
+
+# %%
+expression.plot()
 
 # %% [markdown]
 # ## Distributions
@@ -423,15 +442,10 @@ baseline.plot()
 #    - Parameters are free and have to be estimated from the data
 #    - Observations are fixed variables that follow a distribution
 # - Computed variables link different variables together in a deterministic way
-# - Distributions model uncertainty
+# - Combining several effects is possible using modular variables
+# - Distributions model uncertainty, and often (but not always) have components that model the mean and variability
 # - Latent variables are the variables we're most interested in, as they encompass both uncertainty inherent to the system and uncertainty due to the lack of data
 #
-# Once we have specified a model, the next question is how we can find optimal values for the free parameters.
-
-# %%
-
-# %%
-
-# %%
+# Now that we know how variables work, let's look at how we can combine these different variables to model and find optimal values for the free parameters in the next tutorial
 
 # %%

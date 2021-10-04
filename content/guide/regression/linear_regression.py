@@ -36,7 +36,7 @@ x = la.Fixed(pd.Series(np.random.uniform(0, 3, n_cells), index=cells.index), lab
 
 # %%
 n_genes = 100
-genes = la.Dim([str(i) for i in range(n_genes)], id="gene")
+genes = la.Dim([str(i) for i in range(n_genes)], name="gene")
 
 slope = la.Fixed(
     pd.Series(
@@ -108,9 +108,7 @@ observation = la.Observation(observation_value, dist, label="observation")
 transforms = [la.transforms.Exp()]
 
 # %%
-s = la.Parameter(
-    1.0, definition=scale, transforms=transforms, label = "scale"
-)
+s = la.Parameter(1.0, definition=scale, transforms=transforms, label="scale")
 
 # %%
 model = la.Root(observation)

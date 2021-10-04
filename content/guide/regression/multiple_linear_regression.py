@@ -43,7 +43,7 @@ la.logger.setLevel("INFO")
 
 # %%
 n_cells = 300
-cells = la.Dim(pd.Series([str(i) for i in range(n_cells)]), id="cell")
+cells = la.Dim(pd.Series([str(i) for i in range(n_cells)]), name="cell")
 
 x1 = la.Fixed(
     pd.Series(np.random.uniform(0, 3, n_cells), index=cells.index),
@@ -59,7 +59,7 @@ x2 = la.Fixed(
 
 # %%
 n_genes = 100
-genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), id="gene")
+genes = la.Dim(pd.Series([str(i) for i in range(n_genes)]), name="gene")
 
 
 def random_coefficient(n_genes):

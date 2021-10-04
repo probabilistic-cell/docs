@@ -32,14 +32,14 @@ tmpdir = tempfile.TemporaryDirectory().name
 model = laf.Model(project_root=tmpdir)
 
 # %%
-model.root_initial = la.Latent(
+model.model_initial = la.Latent(
     p=la.distributions.Normal(la.Parameter(1.0)),
     q=la.distributions.Normal(-1.0, definition=[la.Dim(500, "dim")]),
     label="latent",
 )
 
 # %%
-model.root_initial.plot()
+model.model_initial.plot()
 
 # %%
 model
@@ -47,23 +47,23 @@ model
 # %%
 model.infer_model()
 
-assert model.root_.available()
+assert model.model_.available()
 
 # %%
 model
 
 # %%
-model.trace.plot();
+model.trace.plot()
 
 # %%
 posterior = la.posterior.scalar.ScalarObserved(model.root.q)
 posterior.sample(1)
 
 # %% [markdown]
-# As explained in [], {class}`laflow.Latenta`, you can provide a `db` which will avoid that any components stored in the posterior (in this case the model.root_) will be saved multiple times.
+# As explained in [], {class}`laflow.Latenta`, you can provide a `db` which will avoid that any components stored in the posterior (in this case the model.model_) will be saved multiple times.
 
 # %%
-model.posterior = laf.Latenta(db={model.root_})
+model.posterior = laf.Latenta(db={model.model_})
 model.posterior = posterior
 
 # %%

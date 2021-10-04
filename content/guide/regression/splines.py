@@ -109,8 +109,8 @@ x = la.Fixed(pd.Series(np.random.uniform(0, 20, n_cells), index=cells.index), la
 # %%
 n_genes = 100
 n_knots = 10
-genes = la.Dim([str(i) for i in range(n_genes)], id="gene")
-knots = la.Dim(range(n_knots), id="knot")
+genes = la.Dim([str(i) for i in range(n_genes)], name="gene")
+knots = la.Dim(range(n_knots), name="knot")
 
 steps = (
     np.random.choice([-1, 1], (n_genes, n_knots))

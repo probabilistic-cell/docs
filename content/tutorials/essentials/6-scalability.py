@@ -16,3 +16,17 @@
 
 # %% [markdown]
 # # Scalability
+
+# %% [markdown]
+# ## Amortization
+
+# %% [markdown]
+# ## Minibatching
+
+# %% [markdown]
+# ## Use sparsity when possible
+
+# %% [markdown]
+# ## Load from disk when possible
+
+# %%

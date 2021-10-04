@@ -1,20 +1,21 @@
 # %%
-import argparse
+try:
+    from IPython import get_ipython
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--production",
-    help="Whether in production or not.",
-    action="store_true",
-    default=False,
-)
-args = parser.parse_args()
+    ip = get_ipython()
+    if ip is None:
+        pass
+    else:
+        print("running from IPython")
+        import os
+
+        os.chdir("../")
+except:
+    # We do not even have IPython installed
+    pass
 
 import os
 import jupytext
-
-if not args.production:
-    os.chdir("../")
 
 # %%
 from pathlib import Path

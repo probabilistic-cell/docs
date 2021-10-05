@@ -59,7 +59,7 @@ for record in cache.list_staged_records():
 
 
 # %%
-print(cache.list_staged_unexecuted())
+print("\n".join([x.uri for x in cache.list_staged_unexecuted()]))
 executor = load_executor("basic", cache=cache)
 executor
 

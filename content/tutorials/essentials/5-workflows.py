@@ -349,6 +349,8 @@ class ConstantModel(lac.transcriptome.TranscriptomeModel):
     default_name = "constant"
     dataset = laf.FlowObj()
 
+    # because we are overwriting the create_model from the parent classes
+    # we do not need to specify @laf.Step here
     def create_model(self, output, X, obs, var):
         output = super().create_model_(output, X, obs, var)
         
@@ -444,19 +446,7 @@ model.infer_model()
 model.interpret_transcriptome()
 
 # %%
-model.transcriptome_observed.samples.path.exists()
-
-# %%
 model.interpret_overexpression()
-
-# %%
-model
-
-# %%
-model.gather_gene_statistics()
-
-# %%
-model.likelihood_genes.sort_values()
 
 # %%
 model

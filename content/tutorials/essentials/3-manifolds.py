@@ -75,12 +75,18 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 
 # %%
 cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes()
-sc.tl.score_genes_cell_cycle(adata, s_genes = cellcycle_genes.query("phase == 'S'")["gene"].tolist(), g2m_genes = cellcycle_genes.query("phase == 'G2/M'")["gene"].tolist())
+sc.tl.score_genes_cell_cycle(
+    adata,
+    s_genes=cellcycle_genes.query("phase == 'S'")["gene"].tolist(),
+    g2m_genes=cellcycle_genes.query("phase == 'G2/M'")["gene"].tolist(),
+)
 
 # %%
 symbols = ["Ttn", "Myog", "Cdk1", "Pcna"]
 sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression", "phase"])
-sc.pl.umap(adata, color=adata.var.set_index("symbol").loc[symbols]["ens_id"], title = symbols)
+sc.pl.umap(
+    adata, color=adata.var.set_index("symbol").loc[symbols]["ens_id"], title=symbols
+)
 
 # %% [markdown]
 # For illustration purposes, we will first remove (or reduce) the effect of the cell cycle by removing the cycling cells.
@@ -97,7 +103,11 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 # Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
 # %%
-differentiation = la.Latent(la.distributions.Uniform(), definition = [transcriptome["cell"]], label = "differentiation")
+differentiation = la.Latent(
+    la.distributions.Uniform(),
+    definition=[transcriptome["cell"]],
+    label="differentiation",
+)
 
 # %% [markdown]
 # Now that we have defined the cellular latent space, we still have to define how this space affects the transcriptome. We typically choose a spline function for this, as this is a flexible but smooth function.
@@ -113,11 +123,13 @@ differentiation = la.Latent(la.distributions.Uniform(), definition = [transcript
 
 # %%
 foldchange = transcriptome.find("foldchange")
-foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
+foldchange.differentiation = la.links.scalar.Spline(
+    differentiation, output=foldchange.value_definition
+)
 
 # %%
 batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
-foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+foldchange.batch = la.links.vector.Matmul(batch, output=foldchange.value_definition)
 
 # %%
 foldchange.plot()
@@ -129,10 +141,10 @@ with transcriptome.switch("cuda"):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot()
 
 # %% [markdown]
-# To extract the inferred values from the 
+# To extract the inferred values from the
 
 # %%
 differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
@@ -145,7 +157,7 @@ differentiation_observed.plot()
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color = ["differentiation", "gene_overexpressed"])
+sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 
 # %% [markdown]
 # Even though the differentiation is very dominant, the model still used about half of the latent space to explain some heterogeneity in the control cells.
@@ -168,16 +180,29 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %%
 import pandas as pd
+
 differentiation_p = la.distributions.Beta(
-    beta = la.Fixed(pd.Series([1., 100.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]]),
-    alpha = la.Fixed(pd.Series([1., 1.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]])
+    beta=la.Fixed(
+        pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
+            adata_oi.obs["gene_overexpressed"]
+        ].values,
+        definition=[transcriptome["cell"]],
+    ),
+    alpha=la.Fixed(
+        pd.Series([1.0, 1.0], index=["Myod1", "mCherry"])[
+            adata_oi.obs["gene_overexpressed"]
+        ].values,
+        definition=[transcriptome["cell"]],
+    ),
 )
 
 # %% [markdown]
 # Note that we do not place a hard prior on these differentiation values, and that control cells can therefore still have high differentiation if this is really supported by the data.
 
 # %%
-differentiation = la.Latent(differentiation_p, definition = [transcriptome["cell"]], label = "differentiation")
+differentiation = la.Latent(
+    differentiation_p, definition=[transcriptome["cell"]], label="differentiation"
+)
 
 # %%
 differentiation.plot()
@@ -186,11 +211,13 @@ differentiation.plot()
 foldchange = transcriptome.find("foldchange")
 
 # %%
-foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
+foldchange.differentiation = la.links.scalar.Spline(
+    differentiation, output=foldchange.value_definition
+)
 
 # %%
 batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
-foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+foldchange.batch = la.links.vector.Matmul(batch, output=foldchange.value_definition)
 
 # %%
 foldchange.plot()
@@ -202,14 +229,14 @@ with transcriptome.switch("cuda"):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
-    
+    trace.plot()
+
     inference = la.infer.svi.SVI(
         transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot()
 
 # %%
 differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
@@ -219,14 +246,19 @@ differentiation_observed.sample(10)
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color = ["differentiation", "batch"])
+sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 
 # %%
-sc.pl.umap(adata_oi, color = adata.var.reset_index().set_index("symbol").loc[["Myog"]].gene)
+sc.pl.umap(
+    adata_oi, color=adata.var.reset_index().set_index("symbol").loc[["Myog"]].gene
+)
 
 # %%
 differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
-    differentiation, transcriptome, observed = differentiation_observed, interpretable = transcriptome.p.mu.expression
+    differentiation,
+    transcriptome,
+    observed=differentiation_observed,
+    interpretable=transcriptome.p.mu.expression,
 )
 differentiation_causal.sample(10)
 
@@ -251,12 +283,14 @@ differentiation_causal.plot_features();
 #
 # One main way to make inference of a latent space more robust is to not directly infer the latent variables for each cell individually, but instead train a _amortization function_ that provides this latent space for us. This function will typically use our observation, in this case the transcriptome's count matrix, and predict the components of the variational distribution, i.e. $\mu$ and $\sigma$. We of course still have to train some parameters, namely the parameters of this amortization function, but this makes training much easier as information is shared between all cells.
 #
-# The main challenge with amortization is that we need to choose a function that is extremely flexible, as it needs to combine information coming from all genes into a probably highly non-linear model. We therefore typically choose a neural network, with a couple . The number of layers of this function depends on the complexity of the data. A transcriptomics count matrix is fairly simple and typically on requires two layers, while imaging data typically has a more intracate and hierarchical structure that is best captured by many layers (i.e. deep learning).
+# The main challenge with amortization is that we need to choose a function that is extremely flexible, as it needs to combine information coming from all genes into a probably highly non-linear model. We therefore typically choose a neural network. The number of layers of this function depends on the complexity of the data. More specifically, how all features in the observation are related. A transcriptomics count matrix has fairly simple "co-expression" structure and therefore typically on requires two layers. The pixels and channels in imaging data on the other hand have a more intracate and hierarchical structure that is best captured by many layers (i.e. deep learning).
 
 # %% [markdown]
 # :::{note}
 #
-# Don't we lose interpretability if we use this neural network? It's certainly true that a neural network, even of a small size, can be very difficult to interpret. At best, we may be able to rank some genes according to their importance in the model. However, in our case we don't really care about this interpretability, because amortization is just a trick to make inference easier. It's important to remember that the actual interpretability always lies downstream from the variational distribution, in how the cellular latent space is related to the transcriptome. For a variational distribution, we only want accuracy, which neural networks can provide, but often not interpretability.
+# Don't we lose interpretability if we use this neural network?
+#
+# It's certainly true that a neural network, even of a small size, can be very difficult to interpret. At best, we may be able to rank some genes according to their importance in the model. However, in our case we don't really care about this interpretability, because amortization is just a trick to make inference easier. It's important to remember that the actual interpretability always lies downstream from the variational distribution, in how the cellular latent space is related to the transcriptome. The amortization function just helps us to estimate the variational distribution, but doesn't help us with explaining the transcriptome. For a variational distribution, we therefore only want accuracy and ease of inference, which neural networks can provide, but not interpretability.
 #
 # :::
 
@@ -264,10 +298,17 @@ differentiation_causal.plot_features();
 transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %%
-differentiation = la.Latent(differentiation_p, definition = [transcriptome["cell"]], label = "differentiation")
+differentiation = la.Latent(
+    differentiation_p, definition=[transcriptome["cell"]], label="differentiation"
+)
 
 # %%
-encoder = la.amortization.Encoder(la.Fixed(transcriptome.loader, definition = transcriptome), differentiation, pretrain = False, lr = 1e-3)
+encoder = la.amortization.Encoder(
+    la.Fixed(transcriptome.loader, definition=transcriptome),
+    differentiation,
+    pretrain=False,
+    lr=1e-3,
+)
 
 # %%
 differentiation.plot()
@@ -276,11 +317,13 @@ differentiation.plot()
 foldchange = transcriptome.find("foldchange")
 
 # %%
-foldchange.differentiation = la.links.scalar.Spline(differentiation, output = foldchange.value_definition)
+foldchange.differentiation = la.links.scalar.Spline(
+    differentiation, output=foldchange.value_definition
+)
 
 # %%
 batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
-foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+foldchange.batch = la.links.vector.Matmul(batch, output=foldchange.value_definition)
 
 # %%
 foldchange.plot()
@@ -292,14 +335,14 @@ with transcriptome.switch("cuda"):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
-    
+    trace.plot()
+
     inference = la.infer.svi.SVI(
         transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-2)
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot()
 
 # %%
 differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
@@ -309,11 +352,14 @@ differentiation_observed.sample(10)
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color = ["differentiation", "batch"])
+sc.pl.umap(adata_oi, color=["differentiation", "batch"])
 
 # %%
 differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
-    differentiation, transcriptome, observed = differentiation_observed, interpretable = transcriptome.p.mu.expression
+    differentiation,
+    transcriptome,
+    observed=differentiation_observed,
+    interpretable=transcriptome.p.mu.expression,
 )
 differentiation_causal.sample(30)
 differentiation_causal.sample_empirical()

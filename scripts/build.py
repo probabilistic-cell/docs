@@ -9,23 +9,28 @@ try:
         print("running from IPython")
         import os
 
-        os.chdir("../")
+        import laflow
+
+        os.chdir(laflow.get_project_root())
 except:
     # We do not even have IPython installed
     pass
 
 
 # %%
+import os
 from pathlib import Path
-import nbformat as nbf
-from jupyter_cache import get_cache
-from jupyter_cache.base import NbBundleIn
-from jupyter_cache.executors import load_executor, list_executors
-from jupyter_cache.utils import tabulate_cache_records, tabulate_stage_records
+import json
+import nbformat
+from nbconvert.preprocessors import ExecutePreprocessor
 
 # %%
-cache = get_cache(".jupyter_cache")
-cache
+cache_file = Path(".nb-cache")
+if not cache_file.exists():
+    cache = {}
+else:
+    with cache_file.open("r") as f:
+        cache = json.load(f)
 
 # %%
 notebooks = []
@@ -37,40 +42,36 @@ for path in Path("_book").rglob("./*.ipynb"):
 # %%
 skip = False
 if skip:
-    for path in notebooks:
-        record = cache.cache_notebook_file(
-            path=path, check_validity=False, overwrite=True
-        )
-        record
+    for notebook in notebooks:
+        cache[str(notebook)] = os.path.getmtime(notebook)
 
 # %%
-# Stage notebooks
-for path in notebooks:
-    record = cache.stage_notebook_file(path=path)
-    record
+dry = False
+for notebook in notebooks:
+    if str(notebook) not in cache:
+        cache[str(notebook)] = None
+
+    if (cache[str(notebook)] is None) or (
+        os.path.getmtime(notebook) != cache[str(notebook)]
+    ):
+        print(notebook)
+        with open(notebook) as f:
+            nb = nbformat.read(f, as_version=4)
+
+        ep = ExecutePreprocessor(timeout=600, kernel_name="python3")
+        try:
+            if not dry:
+                ep.preprocess(nb)
+                with open(notebook, "w", encoding="utf-8") as f:
+                    nbformat.write(nb, f)
+                cache[str(notebook)] = os.path.getmtime(notebook)
+        except Exception as e:
+            print("expected")
+            print(e)
+
 
 # %%
-# Remove files that are no longer present
-import pathlib
-
-for record in cache.list_staged_records():
-    if not pathlib.Path(record.uri).exists():
-        cache.discard_staged_notebook(record.pk)
-
-
-# %%
-print("\n".join([x.uri for x in cache.list_staged_unexecuted()]))
-executor = load_executor("basic", cache=cache)
-executor
-
-# %%
-result = executor.run_and_cache(timeout=180)
-result
-
-# %%
-for record in cache.list_staged_unexecuted():
-    print(record.traceback)
-# for record in cache.list_staged_
-
+with open(".nb-cache", "w") as f:
+    json.dump(cache, f)
 
 # %%

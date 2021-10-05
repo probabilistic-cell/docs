@@ -117,7 +117,7 @@ class Dataset(laf.Flow):
 # We can initialize this dataset as before. Note that we do not provide a name in this case as we want to use the default "dataset" name:
 
 # %%
-dataset = Dataset()
+dataset = Dataset(adata = adata)
 
 # %%
 dataset
@@ -321,6 +321,11 @@ model.interpret()
 # lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we're working with transcriptomics data, we will often inherit from {class}`~lac.transcriptome.TranscriptomeDataset` and {class}`~lac.transcriptome.TranscriptomeModel`:
 
 # %%
+project_root = pathlib.Path(tempfile.TemporaryDirectory().name)
+project_root.mkdir()
+laf.set_project_root(project_root)  # sets the default project root
+
+# %%
 dataset = lac.transcriptome.TranscriptomeDataset("dataset2")
 
 # %% [markdown]
@@ -436,9 +441,28 @@ class SplineModel(ConstantModel):
 model = LinearModel(dataset=dataset)
 model.create_model()
 model.infer_model()
-model.interpret()
+model.interpret_transcriptome()
+
+# %%
+model.transcriptome_observed.samples.path.exists()
 
 # %%
 model.interpret_overexpression()
+
+# %%
+model
+
+# %%
+model.gather_gene_statistics()
+
+# %%
+model.likelihood_genes.sort_values()
+
+# %%
+model
+
+# %%
+
+# %%
 
 # %%

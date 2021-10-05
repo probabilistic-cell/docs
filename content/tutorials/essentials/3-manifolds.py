@@ -145,7 +145,7 @@ differentiation_observed.plot()
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color = ["differentiation"])
+sc.pl.umap(adata_oi, color = ["differentiation", "gene_overexpressed"])
 
 # %% [markdown]
 # Even though the differentiation is very dominant, the model still used about half of the latent space to explain some heterogeneity in the control cells.
@@ -160,10 +160,17 @@ sc.pl.umap(adata_oi, color = ["differentiation"])
 transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 
 # %%
+# gene_overexpressed = la.variables.DiscreteFixed(adata_oi.obs["gene_overexpressed"])
+
+# %%
+# alpha_go = la.Fixed(pd.Series([1., 1.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "alpha")
+# beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
+
+# %%
 import pandas as pd
 differentiation_p = la.distributions.Beta(
-    concentration0 = la.Fixed(pd.Series([1., 100.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]]),
-    concentration1 = la.Fixed(pd.Series([1., 1.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]])
+    beta = la.Fixed(pd.Series([1., 100.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]]),
+    alpha = la.Fixed(pd.Series([1., 1.], index = ["Myod1", 'mCherry'])[adata_oi.obs["gene_overexpressed"]].values, definition = [transcriptome["cell"]])
 )
 
 # %% [markdown]

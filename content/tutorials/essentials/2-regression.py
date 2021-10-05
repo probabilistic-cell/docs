@@ -387,8 +387,6 @@ inference = la.infer.svi.SVI(
     transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
 )
 trainer = la.infer.trainer.Trainer(inference)
-
-# %%
 trace = trainer.train(10000)
 trace.plot()
 
@@ -401,7 +399,63 @@ overexpression_causal.sample(30)
 overexpression_causal.sample_empirical()
 
 # %%
-overexpression_causal.plot_features()
+overexpression_causal.plot_features();
 
 # %% [markdown]
-# ### Multiple inputs
+# ### Multiple regression
+
+# %% [markdown]
+# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression:
+
+# %%
+cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes("mm")
+sc.tl.score_genes_cell_cycle(
+    adata,
+    cellcycle_genes.query("phase == 'S'")["gene"],
+    cellcycle_genes.query("phase == 'G2/M'")["gene"],
+)
+
+# %%
+transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+foldchange = transcriptome.find("foldchange")
+
+# %%
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
+foldchange.overexpression = la.links.scalar.Linear(overexpression, a=True, definition=foldchange.value_definition)
+
+# %%
+S = la.Fixed(adata.obs["S_score"])
+foldchange.S = la.links.scalar.Linear(S, a=True, definition=foldchange.value_definition)
+
+G2M = la.Fixed(adata.obs["G2M_score"])
+foldchange.G2M = la.links.scalar.Linear(G2M, a=True, definition=foldchange.value_definition)
+
+# %%
+foldchange.plot()
+
+# %% [markdown]
+# :::{warning}
+# Given that the cell cycle is a circular process, this way of detecting modelling the cell cycle has some obvious flaws. This is merely included here for illustration purposes.
+# :::
+
+# %%
+with transcriptome.switch(la.config.device):
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot()
+
+# %%
+overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+    overexpression, transcriptome
+)
+overexpression_causal.observed.sample()
+overexpression_causal.sample(30)
+overexpression_causal.sample_empirical()
+
+# %%
+overexpression_causal.plot_features();
+
+# %%

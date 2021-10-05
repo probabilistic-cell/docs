@@ -25,15 +25,7 @@ import scanpy as sc
 
 
 # %% [markdown]
-# Modelling typically consists of several steps:
-# 1. Creating known and unknown variables
-# 2. Connect these variables in a graph structure
-# 3. Infer the value of the unknown variables
-# 4. Interpret the model
-#
-# In this tutorial, we give a brief overview of the first two steps. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), while detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
-#
-# While we will use a simple single-cell transcriptomics dataset as demonstration, in these tutorials we will primarily focus on the core that are relevant to any type of modality, latent space and experimental design.
+# In the essentials tutorials, we will primarily work with a small but nontheless interesting single-cell transcriptomics dataset:
 
 # %%
 adata = la.data.load_myod1()
@@ -56,7 +48,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 
 # %% [markdown]
-# In this data, we have overexpressed the transcription factor Myod1 in a stem cell line in different batches. As output, we get the transcriptome along with a measure of which gene was overexpressed, and by how much.
+# In this data, the transcription factor Myod1 was overexpressed in a stem cell line in different batches. As output, we get the transcriptome along with a measure of which gene was overexpressed, and by how much. The control in this case is a set of cells in which mCherry was overexpressed.
 
 # %% [markdown]
 # ## Definition

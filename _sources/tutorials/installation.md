@@ -1,12 +1,11 @@
 # Installation
 
-![](https://c.tenor.com/yTqFhUuPR0kAAAAM/love-good-luck.gif)
+## Github
 
-## Conda
+Currently, the package is only available through github. Install using e.g.
 
-Installation through conda is the easiest.
-
-For plotting a model, you should install the `graphviz` package: `conda install -c anaconda graphviz`
-
-## Pip
+```
+pip install git+https://github.com/probabilistic-cell/latenta.git
+pip install git+https://github.com/probabilistic-cell/lacell.git
+```
 

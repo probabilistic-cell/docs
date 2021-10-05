@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -56,7 +56,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Variables" href="../../guide/variables/index.html" />
-    <link rel="prev" title="Workflows" href="5-workflow.html" />
+    <link rel="prev" title="Workflows" href="5-workflows.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -74,10 +74,6 @@
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
       
       <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -137,7 +133,7 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="5-workflow.html">
+    <a class="reference internal" href="5-workflows.html">
      Workflows
     </a>
    </li>
@@ -424,6 +420,34 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#amortization">
+   Amortization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#minibatching">
+   Minibatching
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#use-sparsity-when-possible">
+   Use sparsity when possible
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#load-from-disk-when-possible">
+   Load from disk when possible
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -434,6 +458,18 @@
                 
   <div class="section" id="scalability">
 <h1>Scalability<a class="headerlink" href="#scalability" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="amortization">
+<h2>Amortization<a class="headerlink" href="#amortization" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="minibatching">
+<h2>Minibatching<a class="headerlink" href="#minibatching" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="use-sparsity-when-possible">
+<h2>Use sparsity when possible<a class="headerlink" href="#use-sparsity-when-possible" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="load-from-disk-when-possible">
+<h2>Load from disk when possible<a class="headerlink" href="#load-from-disk-when-possible" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -466,7 +502,7 @@
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="5-workflow.html" title="previous page">
+        <a class="left-prev" href="5-workflows.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
@@ -491,10 +527,11 @@
     <footer class="footer">
     <div class="container">
       <p>
-        
+        <!-- 
           By the latenta team<br/>
-        
-            &copy; Copyright 2021.<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
       </p>
     </div>
   </footer>

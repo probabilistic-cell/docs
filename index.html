@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
@@ -73,10 +73,6 @@
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="#">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
       
       <img src="_static/main_logo.png" class="logo" alt="logo">
       
@@ -414,8 +410,12 @@
         
               <div>
                 
-  <div class="container">
-<div class="row full-width">
+  <div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Latenta is currently still in beta. You can still expect drastic changes to the code base and API in the following months.</p>
+</div>
+<div class="container">
+<div class="row">
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
@@ -425,16 +425,6 @@
                 <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;" >conda</a>
                 <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;">pip</a>
                 <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">github</a>
-                <br>
-                <div style="z-index: 1; position: relative;">
-                    <code id="copyinstall">
-                    git clone https://github.com/probabilistic-cell/lacell.git <br>
-                    pip install -e lacell
-                    </code>
-                    <button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#copyinstall">
-                        Copy
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -442,7 +432,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <h3>👩‍🔬 The essentials</h3>
-                An introduction at modelling with latenta
+                An introduction to modelling with latenta
                 <a href="tutorials/essentials/0-modelling.html" class="stretched-link"></a>
             </div>
         </div>
@@ -460,7 +450,7 @@
     </div>
 </div>
 <br>
-<div class="row full-width">
+<div class="row">
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
@@ -499,7 +489,7 @@
 </div>
 </div>
 <br>
-<div class="full-width">
+<div class="">
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
 <p>Latenta models the cell as a combination of different <em>cellular processes</em> (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, …). Each of these processes influence <em>observations</em> (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, …). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable <em>mechanistic</em> models. In this way, it allows you to answer questions such as:</p>
@@ -584,10 +574,11 @@
     <footer class="footer">
     <div class="container">
       <p>
-        
+        <!-- 
           By the latenta team<br/>
-        
-            &copy; Copyright 2021.<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
       </p>
     </div>
   </footer>

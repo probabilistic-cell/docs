@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
@@ -76,10 +76,6 @@
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../../index.html">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
       
       <img src="../../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -139,7 +135,7 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/5-workflow.html">
+    <a class="reference internal" href="../../../tutorials/essentials/5-workflows.html">
      Workflows
     </a>
    </li>
@@ -541,7 +537,7 @@ Each component will often add a <strong>b</strong> variable, which has * + # dim
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">latenta.links.scalar.</span></code><code class="sig-name descname"><span class="pre">Sigmoid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">latenta.variables.variable.Variable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/latenta/links/scalar/sigmoid.html#Sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#latenta.links.scalar.Sigmoid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">latenta.links.scalar.linear.Linear</span></code></p>
 <p>Standard sigmoid kinetics:</p>
-<p>$$ f(x, …) = left. «a» frac{({«x»}^{«cooperativity»}}{{«halfmaximal»}^{«cooperativity»} + {«x»}^{«cooperativity»}$$</p>
+<p>$$ f(x, …) = «a» cdot frac{{«x»}^{«cooperativity»}}{{«halfmaximal»}^{«cooperativity»} + {«x»}^{«cooperativity»}}$$</p>
 <p>Components:</p>
 <ul class="simple">
 <li><p>«x»: The input. Has same or a subset of dimensions as parent.</p></li>
@@ -646,10 +642,11 @@ end{cases}$$</p>
     <footer class="footer">
     <div class="container">
       <p>
-        
+        <!-- 
           By the latenta team<br/>
-        
-            &copy; Copyright 2021.<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
       </p>
     </div>
   </footer>

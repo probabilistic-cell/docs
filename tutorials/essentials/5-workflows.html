@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -74,10 +74,6 @@
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
       
       <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -435,13 +431,13 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#modularization">
-   Modularization
+  <a class="reference internal nav-link" href="#modularization-building-workflows">
+   Modularization &amp; building workflows
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#building-pipelines">
-   Building pipelines
+  <a class="reference internal nav-link" href="#building-from-existing-workflows">
+   Building from existing workflows
   </a>
  </li>
 </ul>
@@ -504,39 +500,34 @@
 </div>
 <div class="section" id="persistence">
 <h2>Persistence<a class="headerlink" href="#persistence" title="Permalink to this headline">¶</a></h2>
-<div class="margin sidebar">
-<p class="sidebar-title"></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In the tutorials, we will always work from a temporary directory. In a real situation, the root directory will be typically your project’s root directory or one of its subdirectories.</p>
-</div>
-</div>
+<p>The basis of laflow is the <code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code> class. Each instance we create is associated with a particular folder on disk, starting from a given root directory. We work from a temporary directory in these tutorials, but in real life use cases this root is typically  your project’s root directory or one of its subdirectories.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
+
 <span class="n">project_root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 <span class="n">project_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
-<span class="n">laf</span><span class="o">.</span><span class="n">set_project_root</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span> <span class="c1"># sets the default project root</span>
+<span class="n">laf</span><span class="o">.</span><span class="n">set_project_root</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>  <span class="c1"># sets the default project root</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>The basis of laflow is the <code class="xref py py-class docutils literal notranslate"><span class="pre">laflow.Flow</span></code> class. Each instance we create is associated with a particular folder on disk, starting from a given root directory.</p>
+<p>We can then create a <code class="xref py py-class docutils literal notranslate"><span class="pre">Flow</span></code> object as follows. Because we set the default root for this python session, we don’t have to provide this any longer.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">path</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">path</span>  <span class="c1"># the path associated with this flow</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/tmp/tmpzawf8pcm/dataset&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/tmp/tmp83k7b1hj/dataset&#39;)
 </pre></div>
 </div>
 </div>
 </div>
-<p>This folder will store information on each object, links to other objects or flows, and the objects themselves if they are labeled as persistent. We can easily store an object inside a flow by simply assigning it:</p>
+<p>This folder will store information on each object, links to other objects or flows, and the objects themselves if they are labeled as persistent. We can store a python object inside a flow by simply assigning it:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span>
@@ -553,8 +544,8 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>total 6.4M
--rw-r--r-- 1 wsaelens updepla  156 Oct  3 19:59 adata.info
--rw-r--r-- 1 wsaelens updepla 6.4M Oct  3 19:59 adata.pkl
+-rw-r--r-- 1 wsaelens updepla  155 Oct  4 22:45 adata.info
+-rw-r--r-- 1 wsaelens updepla 6.4M Oct  4 22:45 adata.pkl
 </pre></div>
 </div>
 </div>
@@ -567,8 +558,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script6086" onload="loaded6086"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -589,7 +579,24 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>dataset <span class='soft'>(laflow.flow.Flow)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded6086() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset <span class='soft'>(laflow.flow.Flow)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
 </div>
 <p>Even if we restart our session (simulated here by removing the flow object), we can always retrieve it by recreating a flow object in the correct folder:</p>
 <div class="cell docutils container">
@@ -608,8 +615,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script3430" onload="loaded3430"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -630,11 +636,28 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>dataset <span class='soft'>(laflow.flow.Flow)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded3430() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset <span class='soft'>(laflow.flow.Flow)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
 </div>
 </div>
-<div class="section" id="modularization">
-<h2>Modularization<a class="headerlink" href="#modularization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modularization-building-workflows">
+<h2>Modularization &amp; building workflows<a class="headerlink" href="#modularization-building-workflows" title="Permalink to this headline">¶</a></h2>
 <p>To make our workflows more modular, we use Python’s OOP system to systematically let certain flows depend on each other and share common code. For example, a dataset in our example would be defined as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -648,7 +671,7 @@
 <p>We can initialize this dataset as before. Note that we do not provide a name in this case as we want to use the default “dataset” name:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -660,8 +683,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script6397" onload="loaded6397"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -682,66 +704,123 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>dataset <span class='soft'>(__main__.Dataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded6397() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset <span class='soft'>(__main__.Dataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
 </div>
 <p>We can now define our model as another Flow. It contains a link to the dataset flow, along with three methods that create, infer and interpret the model:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstantModel</span><span class="p">(</span><span class="n">laf</span><span class="o">.</span><span class="n">Flow</span><span class="p">):</span>
+    <span class="c1"># sets the default name</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
-    
+
+    <span class="c1"># lets the flow know that it can contain a link to another flow called dataset</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
-    
-    <span class="n">root_initial</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">persistent</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-    
-    <span class="n">root</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
-    
-    <span class="k">def</span> <span class="nf">create_root_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
-        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+    <span class="c1"># lets the flow know that it can expect a model_initial object, that is not persistent</span>
+    <span class="n">model_initial</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># creates a particular step, that expects adata as input, and that outputs model initial</span>
+    <span class="c1"># note the way we access the adata from the dataset object</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
+        <span class="c1"># define the model as before</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+            <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
+        <span class="p">)</span>
         <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">Transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
         <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
 
-        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span><span class="p">)</span>
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">transcriptome</span><span class="p">,</span> 
-        
-    <span class="k">def</span> <span class="nf">infer_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_initial</span><span class="p">):</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">root_initial</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-        <span class="k">with</span> <span class="n">root</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+        <span class="c1"># apart from each input, the step function will also receive an output object</span>
+        <span class="c1"># you should put any expected outputs in this object either by assigning it </span>
+        <span class="c1"># or by using the update function</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_initial</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="p">)</span>
+
+    <span class="c1"># the (final) model is persistent by default</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
+    
+    <span class="c1"># another step, that receives the model_initial as input, and outputs the model</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">infer_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model_initial</span><span class="p">):</span>
+        <span class="c1"># infer the model as before</span>
+        <span class="c1"># we first clone the model_initial so that we do not overwrite it</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">model</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
             <span class="n">inference</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">svi</span><span class="o">.</span><span class="n">SVI</span><span class="p">(</span>
-                <span class="n">root</span><span class="p">,</span> <span class="p">[</span><span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">ELBO</span><span class="p">()],</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">5e-2</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">ELBO</span><span class="p">()],</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">5e-2</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">trainer</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">inference</span><span class="p">)</span>
             <span class="n">trace</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
-            
-        <span class="k">return</span> <span class="n">root</span><span class="p">,</span> 
+
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">)</span>
+
+    <span class="c1"># define our three posteriors, each one with a &quot;db&quot; argument</span>
+    <span class="c1"># this will make sure that any model objects are not stored in the posterior,</span>
+    <span class="c1"># but are rather extracted each time from the model object as defined earlier</span>
+    <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
     
-    <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
-    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
-    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
-            
-    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
-        <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">VectorObserved</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">VectorObserved</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="n">transcriptome_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        
-        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
-        
+        <span class="n">output</span><span class="o">.</span><span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">transcriptome_observed</span>
+
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
         <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarObserved</span><span class="p">(</span><span class="n">overexpression</span><span class="p">)</span>
         <span class="n">overexpression_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-        
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+
         <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarVectorCausal</span><span class="p">(</span>
-            <span class="n">overexpression</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">interpretable</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="n">observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+            <span class="n">overexpression</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">interpretable</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">overexpression_observed</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">observed</span>
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
         
-        <span class="k">return</span> <span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span>
+        <span class="c1"># we directly assigned the outputs to each </span>
+        <span class="k">return</span> <span class="n">output</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Note that we typically define these flows in a separate file as a python module, and import them in our notebooks or other interactive sessions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ConstantModel</span><span class="p">()</span>
@@ -756,8 +835,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script28116" onload="loaded28116"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -778,7 +856,24 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; dataset <span class='soft'>(FlowLink)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; root_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; root <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded28116() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; dataset <span class='soft'>(FlowLink)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_model</li><li>infer_model</li><li>interpret</li></ul></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -794,8 +889,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script16190" onload="loaded16190"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -816,7 +910,24 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; root_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; root <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded16190() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_model</li><li>infer_model</li><li>interpret</li></ul></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -825,8 +936,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script173" onload="loaded173"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -847,11 +957,34 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>dataset <span class='soft'>(__main__.Dataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded173() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset <span class='soft'>(__main__.Dataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> adata <span class='soft'>(Py)</span></li></ul><ul class='steps'></ul></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">,</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create_root_initial</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | constant/create_model                                                                               
+✅ | constant/create_model                                                                               
 </pre></div>
 </div>
 </div>
@@ -863,8 +996,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script1816" onload="loaded1816"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -885,35 +1017,61 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> root_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; root <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded1816() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-times' style='color:#FF4136;' title='unavailable'></i>&nbsp; overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_model</li><li>infer_model</li><li>interpret</li></ul></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | constant/infer_model                                                                                
+</pre></div>
+</div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "98ac0b1e8202495b91d63145278b1c10", "version_major": 2, "version_minor": 0}
-</script></div>
+{"model_id": "d607146094814b3f8c71620172a6c50c", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | constant/infer_model                                                                                
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | constant/interpret                                                                                  
+</pre></div>
+</div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "2dcd2d59c67c445990485ca6734ca2f6", "version_major": 2, "version_minor": 0}
+{"model_id": "c47ff438775c4428b4c51eb2d54e78bd", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "3ac6668d819f4f5ea3faf1f9730b440d", "version_major": 2, "version_minor": 0}
+{"model_id": "0df7cc20fe45424591066ccee1f1afc1", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "b558a4b206594c2c9eeab9b39025df2b", "version_major": 2, "version_minor": 0}
+{"model_id": "528269f5ac7d494dbe9f55a7cdf83809", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "6d9cab286a734fcd8014c44ef2fc8662", "version_major": 2, "version_minor": 0}
-</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmppluw9g_b/constant/root.pkl: 559.2 KiB / 11.2 MiB = 0.049, 0:02
+{"model_id": "4ffd72cfb0a1458f86fe0fd7a753695c", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | constant/interpret                                                                                  
 </pre></div>
 </div>
 </div>
@@ -925,8 +1083,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script47352" onload="loaded47352"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -947,117 +1104,193 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> root_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> root <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'></ul></div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmppluw9g_b/constant/transcriptome_observed.pkl: 3,177.5 KiB / 24.7 MiB = 0.126, 6.2 MiB/s, 0:04
-/tmp/tmppluw9g_b/constant/overexpression_causal.pkl: 3,618.5 KiB / 40.6 MiB = 0.087, 10 MiB/s, 0:03
-</pre></div>
-</div>
-</div>
+
+<script>
+function loaded47352() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>constant <span class='soft'>(__main__.ConstantModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_model</li><li>infer_model</li><li>interpret</li></ul></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">overexpression_causal</span><span class="o">.</span><span class="n">plot_features</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">overexpression_causal</span><span class="o">.</span><span class="n">plot_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/5-workflows_39_0.png" src="../../_images/5-workflows_39_0.png" />
+<img alt="../../_images/5-workflows_40_0.png" src="../../_images/5-workflows_40_0.png" />
+<img alt="../../_images/5-workflows_40_1.png" src="../../_images/5-workflows_40_1.png" />
 </div>
 </div>
 <p>We can now define our spline and linear models through inheritance, and only change the bits that are different. In this case, this is at the level of model creation:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
+    <span class="c1"># we change the default name, as to make sure this model is put in a different folder</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
-    
-    <span class="k">def</span> <span class="nf">create_root_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
-        <span class="n">root_initial</span><span class="p">,</span>  <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_root_initial</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
+        <span class="c1"># we can access the inherited function by adding a &quot;_&quot; at the end</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span>
         
-        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">root_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
-        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">root_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+        <span class="c1"># extract the model_initial from the output</span>
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
         
-        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span><span class="p">)</span>
+        <span class="c1"># now we can further adapt the model to our wish</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">root_initial</span><span class="p">,</span> 
-    
+        <span class="c1"># again return the output</span>
+        <span class="c1"># because we only adapted the model inplace, we do not need to update the output</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+
 <span class="k">class</span> <span class="nc">SplineModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;spline&quot;</span>
-    
-    <span class="k">def</span> <span class="nf">create_root_initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
-        <span class="n">root_initial</span><span class="p">,</span>  <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_root_initial</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span>
         
-        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">root_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
-        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">root_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
-        
-        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Spline</span><span class="p">(</span><span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">root_initial</span><span class="p">,</span> 
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Spline</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">,</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create_root_initial</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "3c9ed29efd4c41328f6000082f4e0503", "version_major": 2, "version_minor": 0}
-</script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "5d53247edaab4aef8bc3949a89074668", "version_major": 2, "version_minor": 0}
-</script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "6d5cffb34a5540349dc2b3fb8bd288b2", "version_major": 2, "version_minor": 0}
-</script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "307e8806f6be427fade7e6a12d5f3b74", "version_major": 2, "version_minor": 0}
-</script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "fa2dc8b41142462392903eec27d45c6d", "version_major": 2, "version_minor": 0}
-</script></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">,</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">create_root_initial</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root_initial</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "b4e1f76421a94b6dadc19dc900892cac", "version_major": 2, "version_minor": 0}
-</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmppluw9g_b/linear/root.pkl: 574.1 KiB / 11.3 MiB = 0.050, 0:02
-/tmp/tmppluw9g_b/linear/transcriptome_observed.pkl: 4,663.6 KiB / 24.7 MiB = 0.184, 5.6 MiB/s, 0:04
-/tmp/tmppluw9g_b/linear/overexpression_causal.pkl: 12.1 MiB / 40.6 MiB = 0.299, 9.0 MiB/s, 0:04
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | linear/create_model                                                                                 
+✅ | linear/create_model                                                                                 
+▶️ | linear/infer_model                                                                                  
 </pre></div>
 </div>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "0ecb5982169e4c21986c186853903cfc", "version_major": 2, "version_minor": 0}
+{"model_id": "0a83383a19644c2ca85e738bed5899dd", "version_major": 2, "version_minor": 0}
+</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmpvunj_qpt/constant/model.pkl: 558.5 KiB / 11.2 MiB = 0.049, 0:02
+/tmp/tmpvunj_qpt/constant/overexpression_causal.pkl: 513.8 KiB / 16.1 MiB = 0.031, 0:02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/infer_model                                                                                  
+▶️ | linear/interpret                                                                                    
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "36901d50e6e246fb9af86ed654dc4e63", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "78701a5bb61c4eadbd21553b1ce8879a", "version_major": 2, "version_minor": 0}
+{"model_id": "d52f98ffb5f64e708c360290f5096c4d", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "739cd9515594475fae96cc870bf13dda", "version_major": 2, "version_minor": 0}
+{"model_id": "55c5f2e12134461492f339f32f0a45e6", "version_major": 2, "version_minor": 0}
 </script><script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "82abea1834b94c8b9fbb159255357469", "version_major": 2, "version_minor": 0}
-</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmppluw9g_b/spline/root.pkl: 682.9 KiB / 11.6 MiB = 0.058, 0:02
-/tmp/tmppluw9g_b/spline/transcriptome_observed.pkl: 4,848.0 KiB / 25.1 MiB = 0.189, 5.6 MiB/s, 0:04
-/tmp/tmppluw9g_b/spline/overexpression_causal.pkl: 12.1 MiB / 40.9 MiB = 0.296, 8.8 MiB/s, 0:04
+{"model_id": "fdbe6401f67c42fb81735419e5cf8ec9", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/interpret                                                                                    
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">SplineModel</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">interpret</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-<script src="https://kit.fontawesome.com/77f7a120e4.js" crossorigin="anonymous"></script>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | spline/create_model                                                                                 
+✅ | spline/create_model                                                                                 
+▶️ | spline/infer_model                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "2f6a6e9238a04efbb7de63a7285f1411", "version_major": 2, "version_minor": 0}
+</script><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmpvunj_qpt/linear/model.pkl: 578.1 KiB / 11.3 MiB = 0.050, 0:02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | spline/infer_model                                                                                  
+▶️ | spline/interpret                                                                                    
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmpvunj_qpt/linear/overexpression_causal.pkl: 7,867.7 KiB / 16.1 MiB = 0.477, 3.6 MiB/s, 0:04
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "37aeb79985d048368a05f22abec2bca7", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "bfbf73debfd44ecca8f83018d82470be", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "ffde8e39ae11497c94cbc7dd82d5083e", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "aa6c1954c63b4acc84780c4d4a0b449b", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | spline/interpret                                                                                    
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmpvunj_qpt/spline/model.pkl: 684.2 KiB / 11.6 MiB = 0.058, 0:02
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="building-from-existing-workflows">
+<h2>Building from existing workflows<a class="headerlink" href="#building-from-existing-workflows" title="Permalink to this headline">¶</a></h2>
+<p>lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we’re working with transcriptomics data, we will often inherit from <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeDataset</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeModel</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">project_root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">project_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+<span class="n">laf</span><span class="o">.</span><span class="n">set_project_root</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>  <span class="c1"># sets the default project root</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeDataset</span><span class="p">(</span><span class="s2">&quot;dataset2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It contains information from one modality, namely the transcriptome:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script29892" onload="loaded29892"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -1078,11 +1311,421 @@
     opacity:0.5;
 }
 </style>
-<div class='la-flow'>spline <span class='soft'>(__main__.SplineModel)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> root_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> root <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'></ul></div></div>
+
+<script>
+function loaded29892() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset2/transcriptome <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeModality)</span><ul class='instances'><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; X <span class='soft'>(Py)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; obs <span class='soft'>(Py)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; var <span class='soft'>(Py)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; obs_id <span class='soft'>(Py)</span></li></ul><ul class='steps'><li>from_adata</li></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
-<div class="section" id="building-pipelines">
-<h2>Building pipelines<a class="headerlink" href="#building-pipelines" title="Permalink to this headline">¶</a></h2>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | dataset2/transcriptome/from_adata                                                                   
+✅ | dataset2/transcriptome/from_adata                                                                   
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script42962" onload="loaded42962"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded42962() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset2/transcriptome <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeModality)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> X <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> obs <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> var <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> obs_id <span class='soft'>(Py)</span></li></ul><ul class='steps'><li>from_adata</li></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script10529" onload="loaded10529"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded10529() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>dataset2 <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeDataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> modality_ids <span class='soft'>(Py)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; adata <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome <span class='soft'>(FlowLink)</span></li></ul><ul class='steps'></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstantModel</span><span class="p">(</span><span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="p">):</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+        
+        <span class="c1"># define the model as before</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+            <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
+        <span class="p">)</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="o">.</span><span class="n">model</span>
+    
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">interpret_overexpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarObserved</span><span class="p">(</span><span class="n">overexpression</span><span class="p">)</span>
+        <span class="n">overexpression_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+
+        <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarVectorCausal</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">interpretable</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">overexpression_observed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">observed</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
+        
+        <span class="k">return</span> <span class="n">output</span>
+    
+<span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
+    <span class="c1"># we change the default name, as to make sure this model is put in a different folder</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="c1"># we can access the inherited function by adding a &quot;_&quot; at the end</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="c1"># extract the model_initial from the output</span>
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+        
+        <span class="c1"># now we can further adapt the model to our wish</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># again return the output</span>
+        <span class="c1"># because we only adapted the model inplace, we do not need to update the output</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">class</span> <span class="nc">SplineModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;spline&quot;</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Spline</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">interpret_transcriptome</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | linear/create_model                                                                                 
+✅ | linear/create_model                                                                                 
+▶️ | linear/create_scheme                                                                                
+✅ | linear/create_scheme                                                                                
+▶️ | linear/infer_model                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "47abc641acf046bb9e37c7da35963b06", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "5e34af48a4954340b51a9da107135947", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/infer_model                                                                                  
+▶️ | linear/interpret_transcriptome                                                                      
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "50647389cab44b86867c3b7cdcc3abbe", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/interpret_transcriptome                                                                      
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/tmpwa3xuhqr/linear/model.pkl: 574.8 KiB / 11.3 MiB = 0.050, 0:02
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">transcriptome_observed</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">interpret_overexpression</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | linear/interpret_overexpression                                                                     
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "15ad4f4b5df944e99c1e5e99192ccf89", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "d25086a19f904e229fc820dd1a487cae", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "7b7a66784963457c9f65ebbcc832ac92", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/interpret_overexpression                                                                     
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script4722" onload="loaded4722"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded4722() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'>linear <span class='soft'>(__main__.LinearModel)</span><ul class='instances'><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> trace <span class='soft'>(Py)</span></li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> scheme <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset2</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome <span class='soft'>(FlowLink)</span> <span class='soft'>Original: dataset2/transcriptome</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; likelihood_genes <span class='soft'>(Py)</span></li><li><i class='far fa-circle' style='color:#FF4136;' title='unavailable'></i>&nbsp; elbo_genes <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_scheme</li><li>infer_model</li><li>create_model</li><li>interpret_transcriptome</li><li>gather_gene_statistics</li><li>interpret_overexpression</li></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">gather_gene_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✔️ | linear/gather_gene_statistics                                                                       
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">likelihood_genes</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gene
+ENSMUSG00000005360   -3016.560059
+ENSMUSG00000041959   -2981.655762
+ENSMUSG00000026385   -2883.860352
+ENSMUSG00000031765   -2875.299316
+ENSMUSG00000037894   -2779.372803
+                         ...     
+ENSMUSG00000042345     -67.022728
+ENSMUSG00000026475     -66.722015
+ENSMUSG00000050359     -58.783718
+ENSMUSG00000034981     -57.452663
+ENSMUSG00000066705     -36.923592
+Length: 2047, dtype: float32
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script34898" onload="loaded34898"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded34898() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'><strong>linear</strong> <span class='soft'>(__main__.LinearModel)</span><ul class='instances'><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> trace <span class='soft'>(Py)</span></li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> scheme <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset2</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome <span class='soft'>(FlowLink)</span> <span class='soft'>Original: dataset2/transcriptome</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> likelihood_genes <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> elbo_genes <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_scheme → scheme</li><li>infer_model → trace, model</li><li>create_model → model_initial</li><li>interpret_transcriptome → transcriptome_observed</li><li>gather_gene_statistics → likelihood_genes, elbo_genes</li><li>interpret_overexpression → overexpression_observed, overexpression_causal</li></ul></div></div>
+</div>
 </div>
 </div>
 
@@ -1141,10 +1784,11 @@
     <footer class="footer">
     <div class="container">
       <p>
-        
+        <!-- 
           By the latenta team<br/>
-        
-            &copy; Copyright 2021.<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
       </p>
     </div>
   </footer>

@@ -23,7 +23,7 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -72,10 +72,6 @@
     
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
       
       <img src="../../_static/main_logo.png" class="logo" alt="logo">
       
@@ -135,7 +131,7 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/5-workflow.html">
+    <a class="reference internal" href="../../tutorials/essentials/5-workflows.html">
      Workflows
     </a>
    </li>
@@ -497,7 +493,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_cells</span> <span class="o">=</span> <span class="mi">300</span>
-<span class="n">cells</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cells</span><span class="p">)]),</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;cell&quot;</span><span class="p">)</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cells</span><span class="p">)]),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cell&quot;</span><span class="p">)</span>
 
 <span class="n">x1</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_cells</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">cells</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
@@ -516,7 +512,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_genes</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">genes</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_genes</span><span class="p">)]),</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">)</span>
+<span class="n">genes</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Dim</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_genes</span><span class="p">)]),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;gene&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">random_coefficient</span><span class="p">(</span><span class="n">n_genes</span><span class="p">):</span>
@@ -1119,10 +1115,11 @@
     <footer class="footer">
     <div class="container">
       <p>
-        
+        <!-- 
           By the latenta team<br/>
-        
-            &copy; Copyright 2021.<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
       </p>
     </div>
   </footer>

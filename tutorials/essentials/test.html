@@ -1,0 +1,1089 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&lt;no title&gt;</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
+    <script src="../../_static/js/canvas-latex.js"></script>
+    <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      <img src="../../_static/main_logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../index.html">
+   Overview
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="0-modelling.html">
+   Essentials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-variables.html">
+     Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-regression.html">
+     Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-manifolds.html">
+     Manifolds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-model_selection.html">
+     Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="5-workflows.html">
+     Workflows
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6-scalability.html">
+     Scalability
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  User guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/variables/leaves.html">
+     Leaf variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/distributions/distributions.html">
+   Distributions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/mixture.html">
+     Mixture distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/discrete.html">
+     Discrete distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/distributions/count.html">
+     Count distributions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/dynamics/dynamics.html">
+   Dynamics
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/dynamics/sde.html">
+     Stochastic differential equations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../guide/model_selection/index.html">
+   Model selection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../guide/model_selection/toy.html">
+     Model selection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../guide/transcriptomics/index.html">
+   Transcriptomics
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reference/latenta/index.html">
+   latenta
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reference/latenta/variables.html">
+     .variables
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/tutorials/essentials/test.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/probabilistic-cell/docs"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Ftutorials/essentials/test.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./tutorials/essentials/test.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.1/tippy.css">
+
+<div id="graph893" style="text-align: center;"></div>
+
+<style>
+.edge{
+    animation: edge 1s infinite;
+}
+
+.edge text{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #fff;
+    z-index: 10;
+}
+</style>
+
+<script>
+    function loadgraph893() {
+
+    require.config({
+        paths: {
+            jquery: 'https://code.jquery.com/jquery-3.6.0.min',
+            d3: 'https://d3js.org/d3.v5.min',
+            'd3-interpolate': 'https://d3js.org/d3-interpolate.v2',
+            'd3-selection': 'https://d3js.org/d3-selection.v2',
+            'd3-dispatch': 'https://d3js.org/d3-dispatch.v2',
+            'd3-ease': 'https://d3js.org/d3-ease.v2',
+            'd3-transition': 'https://d3js.org/d3-transition.v2',
+            'd3-timer': 'https://d3js.org/d3-timer.v2',
+            'd3-drag': 'https://d3js.org/d3-drag.v2',
+            'd3-zoom': 'https://d3js.org/d3-zoom.v2',
+            'd3-color': 'https://d3js.org/d3-color.v2',
+            'd3-path': 'https://d3js.org/d3-path.v2',
+            'd3-format': 'https://d3js.org/d3-format.v2',
+            '@hpcc-js/wasm': "https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index",
+            graphviz: "https://unpkg.com/d3-graphviz@4.0.0/build/d3-graphviz",
+            "@popperjs/core":"https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min",
+            tippy:"https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.1/tippy.umd",
+            // webfontloader: "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min",
+            // createjs: "https://code.createjs.com/1.0.0/createjs",
+            // canvaslatex: "https://gist.githack.com/zouter/2c56290a0ccef0133b8b70931cd347da/raw/038dc05e488d07e844e559feb01572dcd21e65be/canvas-latex",
+            laplot: 'main',
+        }
+    });
+
+    let source = `digraph {
+	graph [dpi=72 start=0]
+	edge [splines=ortho]
+
+	subgraph cluster_139627811626528 {
+		color="#FFFFFF" fillcolor=white label="" margin=5 penwidth=0 style=striped
+		139627811626528 [label="" color="#FFFFFF" fillcolor="#FFFFFF" fontcolor="#000000" fontname="sans-serif" image="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIKICAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyBoZWlnaHQ9IjMuODU5NTMxcHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDQuMTE1IDMuODU5NTMxIiB3aWR0aD0iNC4xMTVwdCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8bWV0YWRhdGE+CiAgPHJkZjpSREYgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICA8Y2M6V29yaz4KICAgIDxkYzp0eXBlIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiLz4KICAgIDxkYzpkYXRlPjIwMjEtMTAtMDVUMTY6MDc6MzIuMzYxOTc2PC9kYzpkYXRlPgogICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICA8ZGM6Y3JlYXRvcj4KICAgICA8Y2M6QWdlbnQ+CiAgICAgIDxkYzp0aXRsZT5NYXRwbG90bGliIHYzLjQuMywgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy88L2RjOnRpdGxlPgogICAgIDwvY2M6QWdlbnQ+CiAgICA8L2RjOmNyZWF0b3I+CiAgIDwvY2M6V29yaz4KICA8L3JkZjpSREY+CiA8L21ldGFkYXRhPgogPGRlZnM+CiAgPHN0eWxlIHR5cGU9InRleHQvY3NzIj4qe3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO308L3N0eWxlPgogPC9kZWZzPgogPGcgaWQ9ImZpZ3VyZV8xIj4KICA8ZyBpZD0icGF0Y2hfMSI+CiAgIDxwYXRoIGQ9Ik0gMCAzLjg1OTUzMSAKTCA0LjExNSAzLjg1OTUzMSAKTCA0LjExNSAwIApMIDAgMCAKegoiIHN0eWxlPSJmaWxsOm5vbmU7Ii8+CiAgPC9nPgogIDxnIGlkPSJ0ZXh0XzEiPgogICA8IS0tICRcbWF0aHJlZ3VsYXJ7Pz99JCAtLT4KICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC43MiAyLjYxOTYwOSlzY2FsZSgwLjAyNSAtMC4wMjUpIj4KICAgIDxkZWZzPgogICAgIDxwYXRoIGQ9Ik0gMTIyMiA3OTQgCkwgMTg1NiA3OTQgCkwgMTg1NiAwIApMIDEyMjIgMCAKTCAxMjIyIDc5NCAKegpNIDE4MzggMTI1MyAKTCAxMjQxIDEyNTMgCkwgMTI0MSAxNzM0IApRIDEyNDEgMjA1MCAxMzI4IDIyNTMgClEgMTQxNiAyNDU2IDE2OTcgMjcyNSAKTCAxOTc4IDMwMDMgClEgMjE1NiAzMTY5IDIyMzYgMzMxNiAKUSAyMzE2IDM0NjMgMjMxNiAzNjE2IApRIDIzMTYgMzg5NCAyMTExIDQwNjYgClEgMTkwNiA0MjM4IDE1NjkgNDIzOCAKUSAxMzIyIDQyMzggMTA0MiA0MTI4IApRIDc2MyA0MDE5IDQ1OSAzODA5IApMIDQ1OSA0Mzk3IApRIDc1MyA0NTc1IDEwNTQgNDY2MiAKUSAxMzU2IDQ3NTAgMTY3OCA0NzUwIApRIDIyNTMgNDc1MCAyNjAxIDQ0NDcgClEgMjk1MCA0MTQ0IDI5NTAgMzY0NyAKUSAyOTUwIDM0MDkgMjgzNyAzMTk1IApRIDI3MjUgMjk4MSAyNDQ0IDI3MTMgCkwgMjE2OSAyNDQ0IApRIDIwMjIgMjI5NyAxOTYxIDIyMTQgClEgMTkwMCAyMTMxIDE4NzUgMjA1MyAKUSAxODU2IDE5ODggMTg0NyAxODk0IApRIDE4MzggMTgwMCAxODM4IDE2MzggCkwgMTgzOCAxMjUzIAp6CiIgaWQ9IkRlamFWdVNhbnMtM2YiIHRyYW5zZm9ybT0ic2NhbGUoMC4wMTU2MjUpIi8+CiAgICA8L2RlZnM+CiAgICA8dXNlIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgMC43ODEyNSkiIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTNmIi8+CiAgICA8dXNlIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUzLjA3NjE3MiAwLjc4MTI1KSIgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtM2YiLz4KICAgPC9nPgogIDwvZz4KIDwvZz4KPC9zdmc+Cg==" shape=rect style=filled]
+	}
+	subgraph cluster_root {
+	}
+}`;
+
+    let info = {"edges": {}, "nodes": {"139627811626528": {"data": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIKICAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPHN2ZyBoZWlnaHQ9IjMuODU5NTMxcHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDQuMTE1IDMuODU5NTMxIiB3aWR0aD0iNC4xMTVwdCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiA8bWV0YWRhdGE+CiAgPHJkZjpSREYgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICA8Y2M6V29yaz4KICAgIDxkYzp0eXBlIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiLz4KICAgIDxkYzpkYXRlPjIwMjEtMTAtMDVUMTY6MDc6MzIuMzYxOTc2PC9kYzpkYXRlPgogICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICA8ZGM6Y3JlYXRvcj4KICAgICA8Y2M6QWdlbnQ+CiAgICAgIDxkYzp0aXRsZT5NYXRwbG90bGliIHYzLjQuMywgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy88L2RjOnRpdGxlPgogICAgIDwvY2M6QWdlbnQ+CiAgICA8L2RjOmNyZWF0b3I+CiAgIDwvY2M6V29yaz4KICA8L3JkZjpSREY+CiA8L21ldGFkYXRhPgogPGRlZnM+CiAgPHN0eWxlIHR5cGU9InRleHQvY3NzIj4qe3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kO308L3N0eWxlPgogPC9kZWZzPgogPGcgaWQ9ImZpZ3VyZV8xIj4KICA8ZyBpZD0icGF0Y2hfMSI+CiAgIDxwYXRoIGQ9Ik0gMCAzLjg1OTUzMSAKTCA0LjExNSAzLjg1OTUzMSAKTCA0LjExNSAwIApMIDAgMCAKegoiIHN0eWxlPSJmaWxsOm5vbmU7Ii8+CiAgPC9nPgogIDxnIGlkPSJ0ZXh0XzEiPgogICA8IS0tICRcbWF0aHJlZ3VsYXJ7Pz99JCAtLT4KICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC43MiAyLjYxOTYwOSlzY2FsZSgwLjAyNSAtMC4wMjUpIj4KICAgIDxkZWZzPgogICAgIDxwYXRoIGQ9Ik0gMTIyMiA3OTQgCkwgMTg1NiA3OTQgCkwgMTg1NiAwIApMIDEyMjIgMCAKTCAxMjIyIDc5NCAKegpNIDE4MzggMTI1MyAKTCAxMjQxIDEyNTMgCkwgMTI0MSAxNzM0IApRIDEyNDEgMjA1MCAxMzI4IDIyNTMgClEgMTQxNiAyNDU2IDE2OTcgMjcyNSAKTCAxOTc4IDMwMDMgClEgMjE1NiAzMTY5IDIyMzYgMzMxNiAKUSAyMzE2IDM0NjMgMjMxNiAzNjE2IApRIDIzMTYgMzg5NCAyMTExIDQwNjYgClEgMTkwNiA0MjM4IDE1NjkgNDIzOCAKUSAxMzIyIDQyMzggMTA0MiA0MTI4IApRIDc2MyA0MDE5IDQ1OSAzODA5IApMIDQ1OSA0Mzk3IApRIDc1MyA0NTc1IDEwNTQgNDY2MiAKUSAxMzU2IDQ3NTAgMTY3OCA0NzUwIApRIDIyNTMgNDc1MCAyNjAxIDQ0NDcgClEgMjk1MCA0MTQ0IDI5NTAgMzY0NyAKUSAyOTUwIDM0MDkgMjgzNyAzMTk1IApRIDI3MjUgMjk4MSAyNDQ0IDI3MTMgCkwgMjE2OSAyNDQ0IApRIDIwMjIgMjI5NyAxOTYxIDIyMTQgClEgMTkwMCAyMTMxIDE4NzUgMjA1MyAKUSAxODU2IDE5ODggMTg0NyAxODk0IApRIDE4MzggMTgwMCAxODM4IDE2MzggCkwgMTgzOCAxMjUzIAp6CiIgaWQ9IkRlamFWdVNhbnMtM2YiIHRyYW5zZm9ybT0ic2NhbGUoMC4wMTU2MjUpIi8+CiAgICA8L2RlZnM+CiAgICA8dXNlIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgMC43ODEyNSkiIHhsaW5rOmhyZWY9IiNEZWphVnVTYW5zLTNmIi8+CiAgICA8dXNlIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUzLjA3NjE3MiAwLjc4MTI1KSIgeGxpbms6aHJlZj0iI0RlamFWdVNhbnMtM2YiLz4KICAgPC9nPgogIDwvZz4KIDwvZz4KPC9zdmc+Cg==", "description": ["\u003cspan style=\u0027font-weight:bold;\u0027\u003e??\u003c/span\u003e", "", "[]"], "formula": "\\mathregular{??}", "height": 23.157186, "width": 24.69}}};
+
+
+    define("laplotgraph893", ['d3-selection', '@hpcc-js/wasm', 'graphviz', "@popperjs/core", 'tippy'], function (d3, wasm, graphviz, Popper, tippy) {
+            wasm.wasmFolder("https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/");
+        var update = function (graphviz, node_info, edge_info, diviz) {
+            data_info = diviz.attr("data-info")
+
+            // edges
+            var node_edges = {}
+            selection = diviz.selectAll(".edge")
+            selection.each(function (p, j) {
+                var edge = d3.select(this)
+                var data = edge.datum()
+                var text = edge.select("text")
+                var path = edge.select("path")
+
+                var text2 = text.clone().text(text.text())
+                text.style("stroke", "#FFFFFF77").style("stroke-width", "0.6em")
+
+                // add tooltip
+                if (edge_info[data.key] !== undefined) {
+                    info = edge_info[data.key]
+
+                    tippy(text.node(), { content: info.description });
+                }
+
+                text.style("visibility", "hidden")
+                text2.style("visibility", "hidden")
+
+                // Add to node_edges for showing edge labels on hover over node
+                node_id = data.key.split("->")[1]
+                if (node_edges[node_id] === undefined) {
+                    node_edges[node_id] = []
+                }
+                node_edges[node_id].push(text)
+                node_edges[node_id].push(text2)
+            });
+
+            // nodes
+            selection = diviz.selectAll(".node")
+            selection.each(function (p, j) {
+                var node = d3.select(this)
+                var data = node.datum()
+                var node_id = data.key
+
+                // add tooltip
+                if (node_info[node_id] !== undefined) {
+                    info = node_info[node_id]
+
+                    description = info.description.join("<br>")
+
+                    if (info.description !== undefined) {
+                        tippy(this, { content: description, placement: "bottom", allowHTML: true,});
+                    }
+                }
+
+                // add edges mouseover
+
+                node.on("mouseover", () => {
+                    if (node_edges[node_id] !== undefined) {
+                        node_edges[node_id].forEach(function(element) {
+                            element.style("visibility", "visible")
+                        })
+                    }
+                })
+                node.on("mouseout", () => {
+                    if (node_edges[node_id] !== undefined) {
+                        node_edges[node_id].forEach(function(element) {
+                            element.style("visibility", "hidden")
+                        })
+                    }
+                })
+
+                // reset title
+                node.attr("title", null)
+            });
+        }
+
+        var main = function (selector, info, source) {
+            let node_info = info["nodes"]
+            let edge_info = info["edges"]
+
+            window.d3_initialized = true
+            let diviz = d3.select(selector)
+
+            // create graphviz
+            let graphviz = diviz.graphviz({ zoom: false }).fit(false)
+
+            // add images
+            console.log(info)
+            Object.entries(node_info).forEach(([key, value], index) => {
+                graphviz.addImage(value.data, value.width, value.height)
+            });
+
+            // render image
+            graphviz.renderDot(source).on("end", function () {
+            update(graphviz, node_info, edge_info, diviz)
+
+            scale = 3/3
+            svg = diviz.select("svg")
+            svg.style("width", parseInt(svg.attr("width")) * scale)
+            svg.style("height", parseInt(svg.attr("height")) * scale)
+            });
+
+            delete graphviz
+
+        }
+
+        return {
+            main: main
+        };
+        });
+
+        require(['laplotgraph893'], function (laplot) {
+            laplot.main(
+            "#graph893",
+            info,
+            source
+            )
+        })
+    }
+
+    // Add script tag for requirejs
+    // If script tag not present => first add it
+    // If script tag already present => add to event listener to load the graph
+    // If already loaded => just load the graph
+
+    var lib = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js';
+
+    if (!isLoadedScript(lib)) {
+        loadScript(lib);
+    }
+
+    // Detect if library loaded
+    function isLoadedScript(lib) {
+        return document.querySelectorAll('[src="' + lib + '"]').length > 0
+    }
+
+    // Load library
+    function loadScript(lib) {
+        var script = document.createElement('script');
+        script.setAttribute('src', lib);
+        document.getElementById('graph893').appendChild(script);
+        return script;
+    }
+
+    // Add listener
+    function listenScript(lib, callback){
+        script = document.querySelectorAll('[src="' + lib + '"]')[0]
+        script.addEventListener('load', function() {
+            callback();
+        });
+    }
+
+    // Determine whether to listen or directly load
+    if( typeof require === 'undefined' || require === null ){
+        console.log("listening")
+        listenScript(lib, loadgraph893)
+    } else {
+        console.log(require)
+        console.log("loading")
+        loadgraph893();
+    }
+
+
+</script></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;latenta.introspect.viz.component_graph.ComponentGraph at 0x7effe85c0e20&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi4&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hi4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basic_workflow_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">import laflow as laf</span>
+<span class="s2">import latenta as la</span>
+<span class="s2">import lacell as lac</span>
+
+<span class="s2">class LinearModel(laf.Flow):</span>
+<span class="s2">    # sets the default name</span>
+<span class="s2">    default_name = &quot;linear&quot;</span>
+
+<span class="s2">    # lets the flow know that it can contain a link to another flow called dataset</span>
+<span class="s2">    dataset = laf.FlowObj()</span>
+
+<span class="s2">    # lets the flow know that it can expect a model_initial object, that is not persistent</span>
+<span class="s2">    model_initial = laf.LatentaObj(persistent=False)</span>
+
+<span class="s2">    # creates a particular step, that expects adata as input, and that outputs model initial</span>
+<span class="s2">    # note the way we access the adata from the dataset object</span>
+<span class="s2">    @laf.Step(</span>
+<span class="s2">        laf.Inputs(adata = dataset.adata),</span>
+<span class="s2">        laf.Outputs(model_initial)</span>
+<span class="s2">    )</span>
+<span class="s2">    def create_model(self, output, adata):</span>
+<span class="s2">        # define the model as before</span>
+<span class="s2">        overexpression = la.Fixed(</span>
+<span class="s2">            adata.obs[&quot;log_overexpression&quot;], label=&quot;overexpression&quot;</span>
+<span class="s2">        )</span>
+<span class="s2">        transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)</span>
+<span class="s2">        foldchange = transcriptome.find(&quot;foldchange&quot;)</span>
+
+<span class="s2">        foldchange.overexpression = la.links.scalar.Linear(</span>
+<span class="s2">            overexpression, a = True, definition=foldchange.value_definition</span>
+<span class="s2">        )</span>
+<span class="s2">        </span>
+<span class="s2">        # apart from each input, the step function will also receive an output object</span>
+<span class="s2">        # you should put any expected outputs in this object either by assigning it </span>
+<span class="s2">        # or by using the update function</span>
+<span class="s2">        return output.update(model_initial = transcriptome)</span>
+
+<span class="s2">    # the (final) model is persistent by default</span>
+<span class="s2">    model = laf.LatentaObj()</span>
+<span class="s2">    </span>
+<span class="s2">    # another step, that receives the model_initial as input, and outputs the model</span>
+<span class="s2">    @laf.Step(</span>
+<span class="s2">        laf.Inputs(model_initial),</span>
+<span class="s2">        laf.Outputs(model)</span>
+<span class="s2">    )</span>
+<span class="s2">    def infer_model(self, output, model_initial):</span>
+<span class="s2">        # infer the model as before</span>
+<span class="s2">        # we first clone the model_initial so that we do not overwrite it</span>
+<span class="s2">        model = model_initial.clone()</span>
+<span class="s2">        with model.switch(la.config.device):</span>
+<span class="s2">            inference = la.infer.svi.SVI(</span>
+<span class="s2">                model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=5e-2)</span>
+<span class="s2">            )</span>
+<span class="s2">            trainer = la.infer.trainer.Trainer(inference)</span>
+<span class="s2">            trace = trainer.train(10000)</span>
+
+<span class="s2">        return output.update(model = model)</span>
+
+<span class="s2">    # define our three posteriors, each one with a &quot;db&quot; argument</span>
+<span class="s2">    # this will make sure that any model objects are not stored in the posterior,</span>
+<span class="s2">    # but are rather extracted each time from the model object as defined earlier</span>
+<span class="s2">    transcriptome_observed = laf.LatentaObj(db = </span><span class="si">{model}</span><span class="s2">)</span>
+<span class="s2">    overexpression_observed = laf.LatentaObj(db = </span><span class="si">{model}</span><span class="s2">)</span>
+<span class="s2">    overexpression_causal = laf.LatentaObj(db = </span><span class="si">{model}</span><span class="s2">)</span>
+<span class="s2">    </span>
+<span class="s2">    @laf.Step(</span>
+<span class="s2">        laf.Inputs(model),</span>
+<span class="s2">        laf.Outputs(transcriptome_observed, overexpression_observed, overexpression_causal)</span>
+<span class="s2">    )</span>
+<span class="s2">    def interpret(self, output, model):</span>
+<span class="s2">        transcriptome_observed = la.posterior.vector.VectorObserved(model)</span>
+<span class="s2">        transcriptome_observed.sample(5)</span>
+<span class="s2">        output.transcriptome_observed = transcriptome_observed</span>
+
+<span class="s2">        overexpression = model.find(&quot;overexpression&quot;)</span>
+
+<span class="s2">        overexpression_observed = la.posterior.scalar.ScalarObserved(overexpression)</span>
+<span class="s2">        overexpression_observed.sample(5)</span>
+<span class="s2">        output.overexpression_observed = overexpression_observed</span>
+
+<span class="s2">        overexpression_causal = la.posterior.scalar.ScalarVectorCausal(</span>
+<span class="s2">            overexpression,</span>
+<span class="s2">            model,</span>
+<span class="s2">            interpretable=model.p.mu.expression,</span>
+<span class="s2">            observed=overexpression_observed,</span>
+<span class="s2">        )</span>
+<span class="s2">        overexpression_causal.sample(10)</span>
+<span class="s2">        overexpression_causal.sample_random(10)</span>
+<span class="s2">        overexpression_causal.observed</span>
+<span class="s2">        overexpression_causal.sample_empirical()</span>
+<span class="s2">        output.overexpression_causal = overexpression_causal</span>
+<span class="s2">        </span>
+<span class="s2">        # we directly assigned the outputs to each </span>
+<span class="s2">        return output</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./basic_workflow.py&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">basic_workflow_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3746
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./basic_workflow.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;cool_text&quot;</span><span class="p">,</span> <span class="n">display</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;```python</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">```&quot;</span><span class="p">),</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">laflow</span> <span class="k">as</span> <span class="nn">laf</span>
+<span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">import</span> <span class="nn">lacell</span> <span class="k">as</span> <span class="nn">lac</span>
+
+<span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">laf</span><span class="o">.</span><span class="n">Flow</span><span class="p">):</span>
+    <span class="c1"># sets the default name</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
+
+    <span class="c1"># lets the flow know that it can contain a link to another flow called dataset</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
+
+    <span class="c1"># lets the flow know that it can expect a model_initial object, that is not persistent</span>
+    <span class="n">model_initial</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># creates a particular step, that expects adata as input, and that outputs model initial</span>
+    <span class="c1"># note the way we access the adata from the dataset object</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
+        <span class="c1"># define the model as before</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+            <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
+        <span class="p">)</span>
+        <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">Transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># apart from each input, the step function will also receive an output object</span>
+        <span class="c1"># you should put any expected outputs in this object either by assigning it </span>
+        <span class="c1"># or by using the update function</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_initial</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="p">)</span>
+
+    <span class="c1"># the (final) model is persistent by default</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
+    
+    <span class="c1"># another step, that receives the model_initial as input, and outputs the model</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">infer_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model_initial</span><span class="p">):</span>
+        <span class="c1"># infer the model as before</span>
+        <span class="c1"># we first clone the model_initial so that we do not overwrite it</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">model</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+            <span class="n">inference</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">svi</span><span class="o">.</span><span class="n">SVI</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">ELBO</span><span class="p">()],</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">5e-2</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">trainer</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">inference</span><span class="p">)</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">)</span>
+
+    <span class="c1"># define our three posteriors, each one with a &quot;db&quot; argument</span>
+    <span class="c1"># this will make sure that any model objects are not stored in the posterior,</span>
+    <span class="c1"># but are rather extracted each time from the model object as defined earlier</span>
+    <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">VectorObserved</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">transcriptome_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">transcriptome_observed</span>
+
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarObserved</span><span class="p">(</span><span class="n">overexpression</span><span class="p">)</span>
+        <span class="n">overexpression_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+
+        <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarVectorCausal</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">interpretable</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">overexpression_observed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">observed</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
+        
+        <span class="c1"># we directly assigned the outputs to each </span>
+        <span class="k">return</span> <span class="n">output</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<details class="sphinx-bs dropdown card mb-3">
+<summary class="summary-title card-header">
+basic_workflow.py<div class="summary-down docutils">
+<svg version="1.1" width="24" height="24" class="octicon octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="summary-up docutils">
+<svg version="1.1" width="24" height="24" class="octicon octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="summary-content card-body docutils">
+<div class="cell_output docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">laflow</span> <span class="k">as</span> <span class="nn">laf</span>
+<span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">import</span> <span class="nn">lacell</span> <span class="k">as</span> <span class="nn">lac</span>
+
+<span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">laf</span><span class="o">.</span><span class="n">Flow</span><span class="p">):</span>
+    <span class="c1"># sets the default name</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
+
+    <span class="c1"># lets the flow know that it can contain a link to another flow called dataset</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
+
+    <span class="c1"># lets the flow know that it can expect a model_initial object, that is not persistent</span>
+    <span class="n">model_initial</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># creates a particular step, that expects adata as input, and that outputs model initial</span>
+    <span class="c1"># note the way we access the adata from the dataset object</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">adata</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">adata</span><span class="p">):</span>
+        <span class="c1"># define the model as before</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+            <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
+        <span class="p">)</span>
+        <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">Transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># apart from each input, the step function will also receive an output object</span>
+        <span class="c1"># you should put any expected outputs in this object either by assigning it </span>
+        <span class="c1"># or by using the update function</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model_initial</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="p">)</span>
+
+    <span class="c1"># the (final) model is persistent by default</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">()</span>
+    
+    <span class="c1"># another step, that receives the model_initial as input, and outputs the model</span>
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model_initial</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">infer_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model_initial</span><span class="p">):</span>
+        <span class="c1"># infer the model as before</span>
+        <span class="c1"># we first clone the model_initial so that we do not overwrite it</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">model</span><span class="o">.</span><span class="n">switch</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+            <span class="n">inference</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">svi</span><span class="o">.</span><span class="n">SVI</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">ELBO</span><span class="p">()],</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">5e-2</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">trainer</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">infer</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">inference</span><span class="p">)</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">)</span>
+
+    <span class="c1"># define our three posteriors, each one with a &quot;db&quot; argument</span>
+    <span class="c1"># this will make sure that any model objects are not stored in the posterior,</span>
+    <span class="c1"># but are rather extracted each time from the model object as defined earlier</span>
+    <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">transcriptome_observed</span><span class="p">,</span> <span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">VectorObserved</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">transcriptome_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">transcriptome_observed</span> <span class="o">=</span> <span class="n">transcriptome_observed</span>
+
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarObserved</span><span class="p">(</span><span class="n">overexpression</span><span class="p">)</span>
+        <span class="n">overexpression_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+
+        <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarVectorCausal</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">interpretable</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">overexpression_observed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">observed</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
+        
+        <span class="c1"># we directly assigned the outputs to each </span>
+        <span class="k">return</span> <span class="n">output</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</details>
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./tutorials/essentials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        <!-- 
+          By the latenta team<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-3PHE6TL2WD"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('config', 'G-3PHE6TL2WD');
+                </script>
+
+  </body>
+</html>

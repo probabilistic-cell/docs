@@ -65,7 +65,6 @@ scale = la.Fixed(
 y = la.links.scalar.Linear(x=x, a=slope, b=intercept)
 
 # %%
-y = la.links.scalar.Linear(x=x, a=slope, b=intercept)
 dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
@@ -89,13 +88,13 @@ sns.heatmap(observation_value.loc[cell_order], ax=ax0)
 
 # %%
 a = la.Parameter(
-    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0, definition=slope
 )
 b = la.Parameter(
-    0.0, definition=intercept, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0, definition=intercept
 )
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=[la.transforms.Exp()]
 )
 
 z = la.links.scalar.Linear(x, a, b)
@@ -103,12 +102,6 @@ z = la.links.scalar.Linear(x, a, b)
 dist = la.distributions.Normal(loc=z, scale=s)
 
 observation = la.Observation(observation_value, dist, label="observation")
-
-# %%
-transforms = [la.transforms.Exp()]
-
-# %%
-s = la.Parameter(1.0, definition=scale, transforms=transforms, label="scale")
 
 # %%
 model = la.Root(observation = observation)

@@ -174,7 +174,7 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 # %%
 # gene_overexpressed = la.variables.DiscreteFixed(adata_oi.obs["gene_overexpressed"])
 
-# %%
+# %% tags=["remove-input", "remove-output"]
 # alpha_go = la.Fixed(pd.Series([1., 1.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "alpha")
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 

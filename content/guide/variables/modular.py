@@ -122,7 +122,7 @@ scale = la.Fixed(
 dist = la.distributions.Normal(loc=y, scale=scale)
 
 # %%
-model_gs = la.Root(dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -145,9 +145,15 @@ y = la.modular.Multiplicative(
     linear_subset=y_linear_subset,
     definition=y_linear.value_definition,
     subsettable={genes},
+    label = "multi"
 )
 
 # %%
+y.plot()
+
+# %%
 y.prior_pd()
+
+# %%
 
 # %%

@@ -56,7 +56,7 @@ model
 model.trace.plot()
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(model.root.q)
+posterior = la.posterior.scalar.ScalarObserved(model.model.q)
 posterior.sample(1)
 
 # %% [markdown]

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -130,7 +130,7 @@ assert all(la.variables.is_dim_broadcasted(dim) for dim in z)
 dist = la.distributions.Normal(loc=z, scale=scale)
 
 # %%
-model_gs = la.Root(dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -167,7 +167,7 @@ dist = la.distributions.Normal(loc=z, scale=scale)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation, label="maximum likelihood", symbol="ml")
+model = la.Root(observation = observation, label="maximum likelihood", symbol="ml")
 model.plot()
 
 
@@ -181,7 +181,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.Posterior(observation)
+observed = la.posterior.Posterior(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10, subsample_n=3)
 
 
@@ -245,7 +245,7 @@ dist = la.distributions.Normal(loc=z, scale=scale)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation)
+model = la.Root(observation = observation)
 model.plot()
 
 
@@ -259,7 +259,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.Posterior(observation)
+observed = la.posterior.Posterior(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10)
 
 
@@ -320,7 +320,7 @@ observation = la.Observation(observation_value, dist, label="observation")
 
 
 # %%
-model = la.Root(observation)
+model = la.Root(observation = observation)
 model.plot()
 
 
@@ -334,7 +334,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.vector.VectorObserved(observation)
+observed = la.posterior.vector.VectorObserved(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10)
 
 
@@ -350,18 +350,23 @@ z.empirical = xr.DataArray(observation_value)
 causal_x2 = la.posterior.scalar.ScalarVectorCausal(x2, observation, observed=observed)
 causal_x2.sample(10)
 causal_x2.sample_random(10)
-causal_x2.plot_features()
+causal_x2.sample_empirical()
+causal_x2.plot_features();
+
+# %%
+causal_x2.scores
 
 # %%
 causal_x1 = la.posterior.scalar.ScalarVectorCausal(x1, observation, observed=observed)
 causal_x1.sample(10)
 causal_x1.sample_random(10)
-causal_x1.plot_features()
+causal_x1.sample_empirical()
+causal_x1.plot_features();
 
 # %%
 causal_x1_x2 = la.posterior.scalarscalar.ScalarScalarVectorCausal(causal_x1, causal_x2)
 causal_x1_x2.sample(10)
-causal_x1_x2.plot_likelihood_ratio()
+causal_x1_x2.plot_likelihood_ratio();
 
 # %%
 sns.scatterplot(
@@ -371,7 +376,7 @@ sns.scatterplot(
 )
 
 # %%
-causal_x1_x2.plot_features_contour()
+causal_x1_x2.plot_features_contour();
 
 # %%
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 5))

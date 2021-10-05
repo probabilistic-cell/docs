@@ -130,7 +130,7 @@ assert all(la.variables.is_dim_broadcasted(dim) for dim in z)
 dist = la.distributions.Normal(loc=z, scale=scale)
 
 # %%
-model_gs = la.Root(dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -167,7 +167,7 @@ dist = la.distributions.Normal(loc=z, scale=scale)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation, label="maximum likelihood", symbol="ml")
+model = la.Root(observation = observation, label="maximum likelihood", symbol="ml")
 model.plot()
 
 
@@ -181,7 +181,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.Posterior(observation)
+observed = la.posterior.Posterior(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10, subsample_n=3)
 
 

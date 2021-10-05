@@ -67,7 +67,7 @@ dist = la.distributions.Normal(loc=y, scale=scale)
 
 
 # %%
-model_gs = la.Root(dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -102,7 +102,7 @@ dist = la.distributions.Normal(loc=z, scale=s)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation)
+model = la.Root(observation = observation)
 model.plot()
 
 
@@ -116,7 +116,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.Posterior(observation)
+observed = la.posterior.Posterior(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10, subsample_n=1)
 
 
@@ -135,9 +135,9 @@ parameter_values = la.qa.cookbooks.check_parameters(
 
 # %%
 causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
-causal.sample(10, samples=la.posterior.FileSamples("./test6.nc"))
+causal.sample(10, samples=la.posterior.FileSamples())
 causal.sample_random(10)
-causal.sample_empirical(samples=la.posterior.FileSamples("./test7.nc"))
-causal.plot_features(observation.p.loc)
+causal.sample_empirical(samples=la.posterior.FileSamples())
+causal.plot_features(observation.p.loc);
 
 # %%

@@ -140,7 +140,7 @@ dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
 # %%
-model_gs = la.Root(dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -184,7 +184,7 @@ dist = la.distributions.Normal(loc=z, scale=s)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation)
+model = la.Root(observation = observation)
 model.plot()
 
 

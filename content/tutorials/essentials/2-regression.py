@@ -147,7 +147,7 @@ trainer = la.infer.trainer.Trainer(inference)
 
 # %%
 trace = trainer.train(10000)
-trace.plot()
+trace.plot();
 
 # %% [markdown]
 # You can check that our values have changed:
@@ -228,7 +228,7 @@ overexpression_causal.samples[overexpression].mean("sample")
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
 
 # %%
-overexpression_causal.plot_features()
+overexpression_causal.plot_features();
 
 # %% [markdown]
 # This plot shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
@@ -339,7 +339,7 @@ foldchange.overexpression = la.links.scalar.Linear(
 transcriptome.plot()
 
 # %% [markdown]
-# ## More complex regression problems
+# ## Other regression problems
 
 
 # %% [markdown]
@@ -388,7 +388,7 @@ inference = la.infer.svi.SVI(
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
-trace.plot()
+trace.plot();
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -400,6 +400,39 @@ overexpression_causal.sample_empirical()
 
 # %%
 overexpression_causal.plot_features();
+
+# %% [markdown]
+# ### Discrete
+
+# %% [markdown]
+# To model discrete (or categorical) variables, we first have to convert it to a "one-hot" encoding, where each cells and categories are located in respectively rows and columns, and where a 1 indicates membership to the category. We can use the {class}`la.variables.DiscreteFixed` helper for this purpose. It expects a pandas categorical variable as input:
+
+# %%
+batch = la.variables.DiscreteFixed(adata.obs["batch"].astype("category"))
+
+# %%
+batch.prior_pd().head()
+
+# %% [markdown]
+# :::{seealso}
+# You can convert a pandas Series to categorical using `series = series.astype("category")`. The `series.cat` accessor contains many functions to access and change the categories, see https://pandas.pydata.org/docs/user_guide/categorical.html
+# :::
+
+# %%
+foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+
+# %% [markdown]
+# :::{note}
+# In constrast to the previous link functions we have seen, this time around our link function is included in the `la.links.vector` module. The reason for this is that we are processing the input by vector (i.e. the batch status of each cell). Other link functions in the `la.links.vector` module include things like scaling and centering data.
+# :::
+
+# %%
+foldchange.batch.plot()
+
+# %%
+# foldchange.batch.a = la.Latent(
+#     la.distributions.CenteredNormal(la.Parameter(0.), la.Parameter(1., transforms = [la.transforms.Exp()]), definition = foldchange.batch.a.value_definition)
+# )
 
 # %% [markdown]
 # ### Multiple regression

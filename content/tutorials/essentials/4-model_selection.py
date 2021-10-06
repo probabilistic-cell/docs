@@ -205,6 +205,32 @@ models["constant"] = {
 # %% [markdown]
 # ## Model selection
 
+# %% [markdown]
+# ### The Bayes factor
+
+# %% [markdown]
+# How do we compare models? Because we are creating probabilistic models, it makes sense to also compare models themselves with probabilities. What we want to know is how much more likely one model is over the other. This is mostly driven by how much _evidence_ we have of this, because if we have barely any data, . On the other hand, having a lot of data opens up the possibility to move to ever more complex models with a lot of free parameters.
+#
+# To calculate the _evidence_ for a model, we therefore have 
+#
+# It turns out that we actually already have all the information we need to answer this question. Namely, we added priors {citel}
+
+# %% [markdown]
+# {citel}`kass_bayes_1995`
+
+# %% [markdown]
+#
+#
+# |    $\textit{BF}$   	|        Strength of evidence        	| $\log_{10} $ 	|   $\log$  	|
+# |:---------:	|:----------------------------------:	|:------------:	|:------------:	|
+# |  1 to 3.2 	| Not worth more than a bare mention 	|   0 to 1/2   	|   0 to ~1.1  	|
+# | 3.2 to 10 	|             Substantial            	|   1/2 to 1   	| ~1.1 to ~2.3 	|
+# | 10 to 100 	|               Strong               	|    1 to 2    	| ~2.3 to ~4.6 	|
+# |   > 100   	|              Decisive              	|      > 2     	|    > ~4.6    	|
+
+# %% [markdown]
+# $\log_{10} bf $
+
 # %%
 import pandas as pd
 

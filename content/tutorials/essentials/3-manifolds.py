@@ -112,6 +112,12 @@ differentiation = la.Latent(
 # %% [markdown]
 # Now that we have defined the cellular latent space, we still have to define how this space affects the transcriptome. We typically choose a spline function for this, as this is a flexible but smooth function.
 
+# %%
+foldchange = transcriptome.find("foldchange")
+foldchange.differentiation = la.links.scalar.Spline(
+    differentiation, output=foldchange.value_definition
+)
+
 # %% [markdown]
 # :::{note}
 #
@@ -121,11 +127,8 @@ differentiation = la.Latent(
 #
 # :::
 
-# %%
-foldchange = transcriptome.find("foldchange")
-foldchange.differentiation = la.links.scalar.Spline(
-    differentiation, output=foldchange.value_definition
-)
+# %% [markdown]
+# As before, we also want to correct for the batch effect:
 
 # %%
 batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])

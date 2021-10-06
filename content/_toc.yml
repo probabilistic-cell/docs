@@ -40,6 +40,8 @@ parts:
     # sections:
     # - file: guide/circular/toy
   - file: guide/transcriptomics/index
+    sections:
+    - file: guide/transcriptomics/transcriptome_model
 # - caption: "Explanation"
   # chapters:
   # - file: explanation/amortization

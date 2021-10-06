@@ -28,7 +28,7 @@ import lacell as lac
 import numpy as np
 
 # %% [markdown]
-# Even in relatively simple use cases, managing different models, storing them across sessions, and let them depend on each other can be a pain. To make this easier, we created a small workflow manager in the `laflow` package. It borrows elements from other workflow managers such as snakemake or nextflow. However, it is much more focused on interactivity, modularization and model inheritance, all concepts very central to the modelling we're doing here.
+# Even in relatively simple use cases, managing different models, storing them across sessions, and let them depend on each other can be a pain. To make this easier, we created a small workflow manager in the _laflow_ package. It borrows elements from other workflow managers such as snakemake or nextflow. However, it is much more focused on interactivity, modularization and model inheritance, all concepts very central to the modelling we're doing here.
 #
 # The core tasks of laflow is:
 # - **Persistence**, to store sure models and its derivatives on disk
@@ -64,7 +64,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # ## Persistence
 
 # %% [markdown]
-# The basis of laflow is the {class}`~laflow.Flow` class. Each instance we create is associated with a particular folder on disk, starting from a given root directory. We work from a temporary directory in these tutorials, but in real life use cases this root is typically  your project's root directory or one of its subdirectories.
+# The basis of _laflow_ is the {class}`~laflow.Flow` class. Each instance we create is associated with a particular folder on disk, starting from a given root directory. We work from a temporary directory in these tutorials, but in real life use cases this root is typically  your project's root directory or one of its subdirectories.
 
 # %%
 import tempfile
@@ -111,9 +111,10 @@ dataset = laf.Flow("dataset")
 dataset
 
 # %% [markdown]
-# We can also have persistence of other objects. If you for example provide a 
+# We can also have persistence of other objects. If you provide a matplotlib object, this will be stored as a png and pdf:
 
 # %%
+# don't forget the return_fig, or this function will return None and that will be stored as a pickle
 dataset.basic_umap = sc.pl.umap(dataset.adata, return_fig=True)
 
 # %%
@@ -377,7 +378,7 @@ class ConstantModel(LinearModel):
     def create_model(self, output, adata):
         # we can access the parent function by adding a "_" at the end
         # without this, we would call the actual step itself, and not the user-defined function
-        output = super().create_model_(output, adata)
+        output = super().create_model_(output = output, adata = adata)
         
         # extract the model_initial from the output
         model_initial = output.model_initial
@@ -399,7 +400,7 @@ class SplineModel(LinearModel):
     default_name = "spline"
 
     def create_model(self, output, adata):
-        output = super().create_model_(output, adata)
+        output = super().create_model_(output = output, adata = adata)
         
         model_initial = output.model_initial
 
@@ -437,5 +438,11 @@ model = basic_workflow.SplineModel(dataset=dataset)
 model.create_model()
 model.infer_model()
 model.interpret()
+
+# %% [markdown]
+# :::{seealso}
+# _lacell_ contains different pre-built workflows for particular use cases. For example, {class}`~lacell.transcriptome.TranscriptomeDataset` and {class}`~lacell.transcriptome.TranscriptomeModel` already contain a blueprint on how to efficiently store and infer transcriptomics models. See "[](/guide/transcriptomics/transcriptome_model)" for an explanation.
+# :::
+#
 
 # %%

@@ -1,0 +1,941 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcriptome models</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.6f1dddbb2c004b24a78d611b3f88cfa6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
+    <script src="../../_static/js/canvas-latex.js"></script>
+    <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="latenta" href="../../reference/latenta/index.html" />
+    <link rel="prev" title="Transcriptomics" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      <img src="../../_static/main_logo.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../index.html">
+   Overview
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../tutorials/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../tutorials/essentials/0-modelling.html">
+   Essentials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/1-variables.html">
+     Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/2-regression.html">
+     Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/3-manifolds.html">
+     Manifolds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/4-model_selection.html">
+     Model selection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/5-workflows.html">
+     Workflows
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../tutorials/essentials/6-scalability.html">
+     Scalability
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  User guide
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../variables/leaves.html">
+     Leaf variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../distributions/distributions.html">
+   Distributions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../distributions/mixture.html">
+     Mixture distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../distributions/discrete.html">
+     Discrete distributions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../distributions/count.html">
+     Count distributions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../dynamics/dynamics.html">
+   Dynamics
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../dynamics/sde.html">
+     Stochastic differential equations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../model_selection/index.html">
+   Model selection
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_selection/toy.html">
+     Model selection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Transcriptomics
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Transcriptome models
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reference/latenta/index.html">
+   latenta
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/links.html">
+     .links
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/scalar.html">
+       .scalar
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/links/vector.html">
+       .vector
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reference/latenta/variables.html">
+     .variables
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../reference/latenta/posterior.html">
+     .posterior
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../reference/latenta/posterior/scalar.html">
+       .scalar
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Developer guide
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../development/variables/index.html">
+   Variables
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../development/variables/custom.html">
+     Custom variables
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/guide/transcriptomics/transcriptome_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/probabilistic-cell/docs"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/probabilistic-cell/docs/issues/new?title=Issue%20on%20page%20%2Fguide/transcriptomics/transcriptome_model.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/probabilistic-cell/docs/main?urlpath=lab/tree/./guide/transcriptomics/transcriptome_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="transcriptome-models">
+<h1>Transcriptome models<a class="headerlink" href="#transcriptome-models" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="kn">import</span> <span class="nn">latenta</span> <span class="k">as</span> <span class="nn">la</span>
+<span class="kn">import</span> <span class="nn">lacell</span> <span class="k">as</span> <span class="nn">lac</span>
+<span class="kn">import</span> <span class="nn">laflow</span> <span class="k">as</span> <span class="nn">laf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we’re working with transcriptomics data, we will often inherit from <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeDataset</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeModel</span></code>. These already contain the core elements for storing and inferring transcriptomics models.</p>
+<p>We’ll will showcase this with the same dataset as from the <span class="xref myst">essentials tutorial</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">adata</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_myod1</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">adata</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_per_cell</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">combat</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">tl</span><span class="o">.</span><span class="n">umap</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;overexpression&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">project_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+<span class="n">laf</span><span class="o">.</span><span class="n">set_project_root</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>  <span class="c1"># sets the default project root</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeDataset</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It contains information from one modality, namely the transcriptome:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script31417" onload="loaded31417"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded31417() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'><strong>dataset/transcriptome</strong> <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeModality)</span><ul class='instances'><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> X <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> obs <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> var <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> obs_id <span class='soft'>(Py)</span></li></ul><ul class='steps'><li>from_adata → X, obs, var, obs_id</li></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | dataset/transcriptome/from_adata                                                                    
+✅ | dataset/transcriptome/from_adata                                                                    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script6361" onload="loaded6361"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded6361() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'><strong>dataset/transcriptome</strong> <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeModality)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> X <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> obs <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> var <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> obs_id <span class='soft'>(Py)</span></li></ul><ul class='steps'><li>from_adata → X, obs, var, obs_id</li></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script21580" onload="loaded21580"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded21580() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'><strong>dataset</strong> <span class='soft'>(lacell.transcriptome.transcriptome.TranscriptomeDataset)</span><ul class='instances'><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> modality_ids <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> adata <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome <span class='soft'>(FlowLink)</span></li></ul><ul class='steps'></ul></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstantModel</span><span class="p">(</span><span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="p">):</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
+
+    <span class="c1"># because we are overwriting the create_model from the parent classes</span>
+    <span class="c1"># we do not need to specify @laf.Step here</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+        
+        <span class="c1"># define the model as before</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
+            <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
+        <span class="p">)</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="o">.</span><span class="n">model</span>
+    
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    
+    <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">interpret_overexpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarObserved</span><span class="p">(</span><span class="n">overexpression</span><span class="p">)</span>
+        <span class="n">overexpression_observed</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">overexpression_observed</span>
+
+        <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">ScalarVectorCausal</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">interpretable</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">mu</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span>
+            <span class="n">observed</span><span class="o">=</span><span class="n">overexpression_observed</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
+        
+        <span class="k">return</span> <span class="n">output</span>
+    
+<span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
+    <span class="c1"># we change the default name, as to make sure this model is put in a different folder</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="c1"># we can access the inherited function by adding a &quot;_&quot; at the end</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="c1"># extract the model_initial from the output</span>
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+        
+        <span class="c1"># now we can further adapt the model to our wish</span>
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+        
+        <span class="c1"># again return the output</span>
+        <span class="c1"># because we only adapted the model inplace, we do not need to update the output</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+
+<span class="k">class</span> <span class="nc">SplineModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
+    <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;spline&quot;</span>
+
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        
+        <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
+
+        <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
+
+        <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Spline</span><span class="p">(</span>
+            <span class="n">overexpression</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">interpret_transcriptome</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | linear/create_model                                                                                 
+✅ | linear/create_model                                                                                 
+▶️ | linear/create_scheme                                                                                
+✅ | linear/create_scheme                                                                                
+▶️ | linear/infer_model                                                                                  
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "1593f87e9178488782ca1fff7dbbb17b", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "91d1865d65364333aef0c11354473d26", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/infer_model                                                                                  
+▶️ | linear/interpret_transcriptome                                                                      
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "7c50893c265349039fc86c3f51cfacaa", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/interpret_transcriptome                                                                      
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">interpret_overexpression</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | linear/interpret_overexpression                                                                     
+</pre></div>
+</div>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "d3e9b41b29784d2f9edb775fa23cc4f9", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "068466ce7ee241bcba0f3fcf3cf48fe7", "version_major": 2, "version_minor": 0}
+</script><script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "5ad621681fda43c6994fb4caa762a804", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ | linear/interpret_overexpression                                                                     
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script14884" onload="loaded14884"></script>
+<style>
+.la-flow ul {
+    margin-top:0;
+    list-style: none;
+    padding: 0;
+    padding-left: 10px !important;
+}
+.la-flow li {
+    padding-left: 10px;
+}
+.la-flow .instances li {
+    border-left: 1px dashed #ccc;
+}
+.la-flow .steps li {
+    border-left: 1px dotted #ccc;
+}
+.la-flow .soft {
+    opacity:0.5;
+}
+</style>
+
+<script>
+function loaded14884() {
+    require.config({
+    paths: {
+        'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
+    }
+    })
+
+    require(['fontawesome'], function (fontawesome) {
+    console.log('Congrats, Font Awesome is installed using Require.js')
+    })
+}
+</script>
+
+
+
+        <div class='la-flow'><strong>linear</strong> <span class='soft'>(__main__.LinearModel)</span><ul class='instances'><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> model_initial <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> model <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> trace <span class='soft'>(Py)</span></li><li><i class='fas fa-check' style='color:#2ECC40;' title='available but not persistent'></i> scheme <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> dataset <span class='soft'>(FlowLink)</span> → dataset</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome <span class='soft'>(FlowLink)</span> <span class='soft'>Original: dataset/transcriptome</li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> transcriptome_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> likelihood_genes <span class='soft'>(Py)</span></li><li><i class='fas fa-minus' style='color:#FF4136;' title='unavailable'></i> elbo_genes <span class='soft'>(Py)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_observed <span class='soft'>(Latenta)</span></li><li><i class='fas fa-check-square' style='color:#2ECC40;' title='available and persistent'></i> overexpression_causal <span class='soft'>(Latenta)</span></li></ul><ul class='steps'><li>create_scheme → scheme</li><li>infer_model → trace, model</li><li>create_model → model_initial</li><li>interpret_transcriptome → transcriptome_observed</li><li>gather_gene_statistics → likelihood_genes, elbo_genes</li><li>interpret_overexpression → overexpression_observed, overexpression_causal</li></ul></div></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./guide/transcriptomics"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="index.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Transcriptomics</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="../../reference/latenta/index.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">latenta</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        <!-- 
+          By the latenta team<br/>
+         -->
+          <!--
+            &copy; Copyright 2021.<br/> -->
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-3PHE6TL2WD"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('config', 'G-3PHE6TL2WD');
+                </script>
+
+  </body>
+</html>

@@ -339,6 +339,50 @@ foldchange.overexpression = la.links.scalar.Linear(
 transcriptome.plot()
 
 # %% [markdown]
+# ## Doing inference on other devices
+
+# %% [markdown]
+# :::{note}
+# See the [installation instructions](/tutorials/installation) for additional steps you may need to perform to make GPUs work
+# :::
+
+# %% [markdown]
+# You can check out the default device that is used on your system using (which may be different from the one noted here):
+
+# %%
+la.config.device
+
+# %% [markdown]
+# Inference of models can be much faster on some GPUs using `cuda`, and this will be your default device if latenta detects that there is a GPU available. Even when working on a GPU, we typically still create and store our full model on the CPU memory, i.e. RAM. We only move the model to GPU when necessary for inference, where it will be stored on the GPU's memory, i.e. VRAM, which is typically much smaller than your regular RAM. We can do this for the full model by doing:
+
+# %% [markdown]
+# ```python
+# transcriptome.to("cuda")
+# ```
+
+# %% [markdown]
+# You will however typically temporarily switch a device to another device using a context manager, e.g.:
+
+# %% [markdown]
+# ```python
+# with transcriptome.switch("cuda"):
+#     print(f"transcriptome is on device: {transcriptome.device}")
+# print(f"transcriptome is on device: {transcriptome.device}")
+# ```
+
+# %% [markdown]
+# We will illustrate this for inference, in this case using latenta's default device:
+
+# %%
+with transcriptome.switch(la.config.device):
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot();
+
+# %% [markdown]
 # ## Other regression problems
 
 
@@ -383,12 +427,13 @@ foldchange.overexpression = la.links.scalar.Spline(
 foldchange.plot()
 
 # %%
-inference = la.infer.svi.SVI(
-    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
-)
-trainer = la.infer.trainer.Trainer(inference)
-trace = trainer.train(10000)
-trace.plot();
+with transcriptome.switch(la.config.device):
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot();
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -418,21 +463,20 @@ batch.prior_pd().head()
 # You can convert a pandas Series to categorical using `series = series.astype("category")`. The `series.cat` accessor contains many functions to access and change the categories, see https://pandas.pydata.org/docs/user_guide/categorical.html
 # :::
 
+# %% [markdown]
+# To calculate the batch effect, we want to multiply this one-hot encoding with another matrix in which each combination of batch and gene has a value that represents the fold difference in a particular batch. This is a perfect case for a matrix multiplication:
+
 # %%
-foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+foldchange.batch = la.links.vector.Matmul(batch, definition=foldchange.value_definition)
+foldchange.batch.plot()
+
+# %% [markdown]
+# The latent variable in this case contains one value for each gene and batch. The matrix multiplication will for each combination of cells and genes multiply and sum all the values for each batch.
 
 # %% [markdown]
 # :::{note}
-# In constrast to the previous link functions we have seen, this time around our link function is included in the `la.links.vector` module. The reason for this is that we are processing the input by vector (i.e. the batch status of each cell). Other link functions in the `la.links.vector` module include things like scaling and centering data.
+# In constrast to the previous link functions we have seen, this time around our link function is included in the `la.links.vector` module. The reason for this is that we are processing the input by vector (i.e. the batch status of each cell). `la.links.vector` contains many other link functions that work in a similar fashion, for example to scale and center data across a dimension.
 # :::
-
-# %%
-foldchange.batch.plot()
-
-# %%
-# foldchange.batch.a = la.Latent(
-#     la.distributions.CenteredNormal(la.Parameter(0.), la.Parameter(1., transforms = [la.transforms.Exp()]), definition = foldchange.batch.a.value_definition)
-# )
 
 # %% [markdown]
 # ### Multiple regression
@@ -454,21 +498,25 @@ foldchange = transcriptome.find("foldchange")
 
 # %%
 overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
-foldchange.overexpression = la.links.scalar.Linear(overexpression, a=True, definition=foldchange.value_definition)
+foldchange.overexpression = la.links.scalar.Linear(
+    overexpression, a=True, definition=foldchange.value_definition
+)
 
 # %%
 S = la.Fixed(adata.obs["S_score"])
 foldchange.S = la.links.scalar.Linear(S, a=True, definition=foldchange.value_definition)
 
 G2M = la.Fixed(adata.obs["G2M_score"])
-foldchange.G2M = la.links.scalar.Linear(G2M, a=True, definition=foldchange.value_definition)
+foldchange.G2M = la.links.scalar.Linear(
+    G2M, a=True, definition=foldchange.value_definition
+)
 
 # %%
 foldchange.plot()
 
 # %% [markdown]
 # :::{warning}
-# Given that the cell cycle is a circular process, this way of detecting modelling the cell cycle has some obvious flaws. This is merely included here for illustration purposes.
+# Given that the cell cycle is a circular process, this way of modelling the cell cycle has a lot of flaws. This is merely included here for illustration purposes.
 # :::
 
 # %%
@@ -487,8 +535,49 @@ overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
 overexpression_causal.observed.sample()
 overexpression_causal.sample(30)
 overexpression_causal.sample_empirical()
+overexpression_causal.sample_random()
 
 # %%
 overexpression_causal.plot_features();
+
+# %%
+G2M_causal = la.posterior.scalar.ScalarVectorCausal(
+    G2M, transcriptome
+)
+G2M_causal.observed.sample()
+G2M_causal.sample(30)
+G2M_causal.sample_empirical()
+G2M_causal.sample_random()
+
+# %%
+G2M_causal.plot_features();
+
+# %%
+S_causal = la.posterior.scalar.ScalarVectorCausal(
+    S, transcriptome
+)
+S_causal.observed.sample()
+S_causal.sample(30)
+S_causal.sample_empirical()
+S_causal.sample_random()
+
+# %%
+S_causal.plot_features();
+
+# %% [markdown]
+# ## Main points
+
+# %% [markdown]
+# - Inferring a model means finding the optimal values for the free parameters
+# - The optimal value of parameters is defined by the loss function. In our case, this loss function tries to find a good balance between the wishes of
+#    - The observations, that want to be have the highest likelihood possible
+#    - The wishes of the latent variables, which want the variational distribution $q$ to resemble the prior distribution $p$ as best as possible
+# - To find optimal values, we typically perform gradient descent
+# - To interpret a model, we sample from the posterior and track intermediate values and/or probabilities:
+#    - An observed posterior is used to check out the values of one variable, such as the observations or latent variables
+#    - A causal posterior is used to check out the effect of one variable on another, such as how a latent variable affects the mean of an observation's distribution
+#    - A perturbed posterior is used to quantify the effect that one variable has on the likelihood of another, such as how a latent variable affects an observation
+# - _lacell_ contains many modules that make the creation of models for single-cell omics easier
+# - With latenta we can also do non-linear regression, use multiple variables as input, and/or discrete variables as input
 
 # %%

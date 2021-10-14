@@ -58,6 +58,7 @@ expression = la.links.scalar.Linear(
     a=True,
     b=True,
     label="expression",
+    symbol = r"\mu",
     definition=la.Definition([cells, genes]),
     transforms=[la.transforms.Exp()],
 )
@@ -66,7 +67,7 @@ expression = la.links.scalar.Linear(
 # Although the latent slope and baseline were created automatically for us by specifying `a = True, b = True`, it's important to remember that we could have easily created these variables ourselves:
 #
 # ```python
-# lfc = la.Latent(
+# slope = la.Latent(
 #     p = la.distributions.Normal(scale = la.Parameter(1., transforms = [la.transforms.Exp()])),
 #     definition = la.Definition([genes])
 # )
@@ -97,7 +98,7 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the  number of parameters that form the leaves of our model. But, why are there so many even for a simple case of linear regression?
+# Note the  number of parameters that form the leaves of our model. Why are there so many even for a simple case of linear regression?
 #
 # Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. 
 #
@@ -106,7 +107,7 @@ transcriptome.plot()
 # So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
 # - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities.
-# - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes.
+# - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes by specifying its distribution.
 #
 # All these parameters thus serve two purposes: 
 # * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 
@@ -115,7 +116,15 @@ transcriptome.plot()
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 
 # %% [markdown]
-# But how do we infer these parameters in practice? We have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into better values. These tasks are fullfilled by a loss function (`ELBO`), an optimizer (`Adam`), and an overarching training class (`SVI`):
+# But how do we infer these parameters in practice? We have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
+#
+# These tasks are fullfilled by:
+# * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it. 
+# * an optimizer (`Adam`), tries to select the best values with regards to our priors/constrains
+# * an overarching training class (`SVI`):
+
+# %% [markdown] tags=["remove-output", "remove-input"]
+# I put it in bullet points in case we would like to explain a bit more what each do, but it's maybe unecessary and a bit too much? Anyway my explanations might not be the best :P
 
 # %%
 inference = la.infer.svi.SVI(
@@ -131,10 +140,13 @@ trace = trainer.train(10000)
 trace.plot()
 
 # %% [markdown]
-# You can check that our values have changed:
+# You can check that our values have changed. For example, let's look at the 
+
+# %% [markdown] tags=["remove-output", "remove-input"]
+# Changed with the iterations? Maybe in the code would be good to see a "before"/beggining and after?
 
 # %%
-transcriptome.p.mu.a.q.loc.run_local()
+transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -154,6 +166,9 @@ transcriptome_observed.sample(5)
 
 # %% [markdown]
 # `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome. We can access each variable either by providing the variable itself:
+
+# %% [markdown] tags=["remove-input", "remove-output"]
+# either by ... or by...?
 
 # %%
 transcriptome_observed.samples[expression.a]
@@ -190,7 +205,7 @@ overexpression_causal.sample(10)
 overexpression_causal.samples[overexpression].mean("sample").head()
 
 # %% [markdown]
-# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
+# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ (in this case gene) across all cells:
 
 # %%
 overexpression_causal.plot_features()
@@ -250,11 +265,11 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
-# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same:
+# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
 #
-# - We model the counts as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
-# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
-# - The $\rho$ itself is a linear combination of the average expression of each gene in the cell $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
+# - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
+# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
+# - The relative expression in a cell $\rho$ is itself a linear combination of the average expression of each gene in the cell, $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
 # - When modelling cellular processes, we typically adapt the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
 
 # %% [markdown]
@@ -267,6 +282,7 @@ transcriptome.plot()
 
 # %%
 foldchange = transcriptome.find("foldchange")
+foldchange
 
 # %% [markdown]
 # The fold change in this case is a {class}`~latenta.modular.Additive` variable, to which you can add as many variables as you want which will all be summed:
@@ -282,7 +298,7 @@ foldchange.overexpression = la.links.scalar.Linear(
 )
 
 # %%
-foldchange.plot()
+transcriptome.plot()
 
 # %% [markdown]
 # ## More complex regression problems

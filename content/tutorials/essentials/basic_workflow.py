@@ -16,12 +16,12 @@ class LinearModel(laf.Flow):
     # creates a particular step, that expects adata as input, and that outputs model initial
     # note the way we access the adata from the dataset object
     @laf.Step(laf.Inputs(adata=dataset.adata), laf.Outputs(model_initial))
-    def create_model(self, output, adata):
+    def create(self, output, adata):
         # define the model as before
         overexpression = la.Fixed(
             adata.obs["log_overexpression"], label="overexpression"
         )
-        transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+        transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
         foldchange = transcriptome.find("foldchange")
 
         foldchange.overexpression = la.links.scalar.Linear(
@@ -38,7 +38,7 @@ class LinearModel(laf.Flow):
 
     # another step, that receives the model_initial as input, and outputs the model
     @laf.Step(laf.Inputs(model_initial), laf.Outputs(model))
-    def infer_model(self, output, model_initial):
+    def infer(self, output, model_initial):
         # infer the model as before
         # we first clone the model_initial so that we do not overwrite it
         model = model_initial.clone()
@@ -94,10 +94,10 @@ class ConstantModel(LinearModel):
     # we change the default name, as to make sure this model is put in a different folder
     default_name = "constant"
 
-    def create_model(self, output, adata):
+    def create(self, output, adata):
         # we can access the parent function by adding a "_" at the end
         # without this, we would call the actual step itself, and not the user-defined function
-        output = super().create_model_(output=output, adata=adata)
+        output = super().create_(output=output, adata=adata)
 
         # extract the model_initial from the output
         model_initial = output.model_initial
@@ -118,8 +118,8 @@ class ConstantModel(LinearModel):
 class SplineModel(LinearModel):
     default_name = "spline"
 
-    def create_model(self, output, adata):
-        output = super().create_model_(output=output, adata=adata)
+    def create(self, output, adata):
+        output = super().create_(output=output, adata=adata)
 
         model_initial = output.model_initial
 

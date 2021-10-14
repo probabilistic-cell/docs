@@ -137,7 +137,7 @@ class Dataset(laf.Flow):
 # We can initialize this dataset as before. Note that we do not provide a name in this case as we want to use the default "dataset" name:
 
 # %%
-dataset = Dataset(adata = adata)
+dataset = Dataset(adata=adata)
 
 # %%
 dataset
@@ -153,7 +153,7 @@ class Model(laf.Flow):
 
 
 # %%
-model = Model(dataset = dataset)
+model = Model(dataset=dataset)
 
 # %%
 model
@@ -193,39 +193,36 @@ class LinearModel(laf.Flow):
     # creates a particular step, that expects adata as input, and that outputs model_initial
     # note that our function not only expects "output" as an argument
     # this object should be used to store the outputs
-    @laf.Step(
-        laf.Inputs(adata = dataset.adata),
-        laf.Outputs(model_initial)
-    )
-    def create_model(self, output, adata):
+    @laf.Step(laf.Inputs(adata=dataset.adata), laf.Outputs(model_initial))
+    def create(self, output, adata):
         # define the model as before
         overexpression = la.Fixed(
             adata.obs["log_overexpression"], label="overexpression"
         )
-        transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+        transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
         foldchange = transcriptome.find("foldchange")
 
         foldchange.overexpression = la.links.scalar.Constant(
             overexpression, definition=foldchange.value_definition
         )
-        
+
         # apart from each input, the step function will also receive an output object
-        # you should put any expected outputs in this object either by assigning it 
+        # you should put any expected outputs in this object either by assigning it
         # or by using the update function
-        return output.update(model_initial = transcriptome)
+        return output.update(model_initial=transcriptome)
 
 
 # %% [markdown]
 # Apart from all inputs, your function will also receive a special `output` object in which you can store all the outputs that are produced. These will then be saved for you.
 
 # %%
-model = LinearModel(dataset = dataset)
+model = LinearModel(dataset=dataset)
 
 # %%
 model
 
 # %%
-model.create_model()
+model.create()
 
 # %% [markdown]
 # In real use cases, we will typically store our workflows in a separate file so that they are easier to maintain. A full linear regression workflow, that includes inference and interpretation, is contained in the `basic_workflow.py` file:
@@ -252,12 +249,12 @@ class LinearModel(laf.Flow):
         laf.Inputs(adata = dataset.adata),
         laf.Outputs(model_initial)
     )
-    def create_model(self, output, adata):
+    def create(self, output, adata):
         # define the model as before
         overexpression = la.Fixed(
             adata.obs["log_overexpression"], label="overexpression"
         )
-        transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+        transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
         foldchange = transcriptome.find("foldchange")
 
         foldchange.overexpression = la.links.scalar.Linear(
@@ -277,7 +274,7 @@ class LinearModel(laf.Flow):
         laf.Inputs(model_initial),
         laf.Outputs(model)
     )
-    def infer_model(self, output, model_initial):
+    def infer(self, output, model_initial):
         # infer the model as before
         # we first clone the model_initial so that we do not overwrite it
         model = model_initial.clone()
@@ -333,7 +330,10 @@ with open("./basic_workflow.py", "w") as f:
 text = open("./basic_workflow.py").read()
 from myst_nb import glue
 from IPython import display
-glue("basic_workflow_1", display.Markdown("```python\n" + text + "\n```"), display = False)
+
+glue(
+    "basic_workflow_1", display.Markdown("```python\n" + text + "\n```"), display=False
+)
 
 # %% [markdown]
 # ::::{dropdown} 📃 basic_workflow.py (1)
@@ -352,7 +352,7 @@ model = basic_workflow.LinearModel()
 model
 
 # %%
-model.infer_model()
+model.infer()
 
 # %%
 model.interpret()
@@ -361,13 +361,13 @@ model.interpret()
 model
 
 # %%
-model.overexpression_causal.plot_features();
+model.overexpression_causal.plot_features()
 
 # %% [markdown]
 # ## Sharing and inheriting workflow steps
 
 # %% [markdown]
-# We defined a basic linear model, but what we actually want is to create many different models and infer/interpret them in the same way. We do this using inheritance: we first create the linear model by using `super().create_model_`, and then make the desired adaptations to the model:
+# We defined a basic linear model, but what we actually want is to create many different models and infer/interpret them in the same way. We do this using inheritance: we first create the linear model by using `super().create_`, and then make the desired adaptations to the model:
 
 # %% tags=["remove-output", "remove-input"]
 extended_workflow_text = """
@@ -375,10 +375,10 @@ class ConstantModel(LinearModel):
     # we change the default name, as to make sure this model is put in a different folder
     default_name = "constant"
 
-    def create_model(self, output, adata):
+    def create(self, output, adata):
         # we can access the parent function by adding a "_" at the end
         # without this, we would call the actual step itself, and not the user-defined function
-        output = super().create_model_(output = output, adata = adata)
+        output = super().create_(output = output, adata = adata)
         
         # extract the model_initial from the output
         model_initial = output.model_initial
@@ -399,8 +399,8 @@ class ConstantModel(LinearModel):
 class SplineModel(LinearModel):
     default_name = "spline"
 
-    def create_model(self, output, adata):
-        output = super().create_model_(output = output, adata = adata)
+    def create(self, output, adata):
+        output = super().create_(output = output, adata = adata)
         
         model_initial = output.model_initial
 
@@ -417,9 +417,11 @@ with open("./basic_workflow.py", "a") as f:
     f.write(extended_workflow_text)
 
 # %% tags=["remove-input", "remove-output"]
-# glue the 
+# glue the
 text = extended_workflow_text
-glue("basic_workflow_2", display.Markdown("```python\n" + text + "\n```"), display = False)
+glue(
+    "basic_workflow_2", display.Markdown("```python\n" + text + "\n```"), display=False
+)
 
 # %% [markdown]
 # ::::{dropdown} 📃 basic_workflow.py (2)
@@ -429,14 +431,14 @@ glue("basic_workflow_2", display.Markdown("```python\n" + text + "\n```"), displ
 
 # %%
 model = basic_workflow.ConstantModel(dataset=dataset)
-model.create_model()
-model.infer_model()
+model.create()
+model.infer()
 model.interpret()
 
 # %%
 model = basic_workflow.SplineModel(dataset=dataset)
-model.create_model()
-model.infer_model()
+model.create()
+model.infer()
 model.interpret()
 
 # %% [markdown]

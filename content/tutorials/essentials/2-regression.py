@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.11.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -65,6 +65,7 @@ expression = la.links.scalar.Linear(
     a=True,
     b=True,
     label="expression",
+    symbol = r"\mu",
     definition=la.Definition([cells, genes]),
     transforms=[la.transforms.Exp()],
 )
@@ -119,22 +120,32 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, why are there so many parameters even for the such a simple linear regression?
+# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for the such a simple linear regression?
 #
-# Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. There are however many models that will provide a very good fit of the data equally. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well.
+# Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. 
 #
-# So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this in two ways:
+# It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations. 
 #
-# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities. There's simply no way that the model moves beyond these constraints.
-# - Soft priors are those that only push the latent variables towards more likely values. For example, we want to discourage extreme slopes that are far away from 0, unless the data really provides strong evidence for these extreme slopes
+# So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
-# The purpose of these parameters is to balance the wishes of the soft priors to the wishes of the observations. The parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, through $q$, we get some estimates of the uncertainty of our latent variables for free!
-
+# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
+# - Soft priors are those that push the latent variables towards more likely values. For example, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior.
+#
+# The purpose of these parameters is then to balance the wishes of the soft priors to the wishes of the observations:
+# * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 
+# * The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. 
+#
+# It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 # %% [markdown]
 # Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$.
 
 # %% [markdown]
-# To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into better values. These tasks are fullfilled by a loss function (`ELBO`), an optimizer (`Adam`), and an overarching training class (`SVI`):
+#  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
+#
+# These tasks are fullfilled by:
+# * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it. 
+# * an optimizer (`Adam`), tries to select the best values with regards to our priors/constrains
+# * an overarching training class (`SVI`):
 
 # %%
 inference = la.infer.svi.SVI(
@@ -150,10 +161,13 @@ trace = trainer.train(10000)
 trace.plot();
 
 # %% [markdown]
-# You can check that our values have changed:
+# You can check that our values have changed. For example, let's look at the 
+
+# %% [markdown] tags=["remove-output", "remove-input"]
+# Changed with the iterations? Maybe in the code would be good to see a "before"/beggining and after?
 
 # %%
-transcriptome.p.mu.a.q.loc.run_local()
+transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -177,6 +191,9 @@ transcriptome_observed.sample(5)
 
 # %% [markdown]
 # `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome (if they were provided in the `retain_samples` list). We can access each variable either by providing the variable itself:
+
+# %% [markdown] tags=["remove-input", "remove-output"]
+# either by ... or by...?
 
 # %%
 transcriptome_observed.samples[expression.a]
@@ -225,7 +242,7 @@ overexpression_causal.sample(10)
 overexpression_causal.samples[overexpression].mean("sample")
 
 # %% [markdown]
-# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ across all cells (in this case gene):
+# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ (in this case gene) across all cells:
 
 # %%
 overexpression_causal.plot_features();
@@ -305,13 +322,12 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
-# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same:
+# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
 #
-# - We model the counts as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
-# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell $\rho$, and its library size $\mathit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
-# - The $\rho$ itself is a linear combination of the average expression of each gene in the cell $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
-# - The log-fold change $\delta$ is a modular variable.
-# - When modelling cellular processes, we typically add things to the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
+# - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
+# - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
+# - The relative expression in a cell $\rho$ is itself a linear combination of the average expression of each gene in the cell, $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
+# - When modelling cellular processes, we typically adapt the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
 
 # %% [markdown]
 # :::{seealso}
@@ -323,6 +339,7 @@ transcriptome.plot()
 
 # %%
 foldchange = transcriptome.find("foldchange")
+foldchange
 
 # %% [markdown]
 # Let's add the overexpression to the fold change:
@@ -380,7 +397,7 @@ foldchange.overexpression = la.links.scalar.Spline(
 )
 
 # %%
-foldchange.plot()
+transcriptome.plot()
 
 # %%
 inference = la.infer.svi.SVI(

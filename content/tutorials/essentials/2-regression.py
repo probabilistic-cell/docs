@@ -18,6 +18,8 @@
 # # Regression
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
 import latenta as la
 import numpy as np
 
@@ -31,6 +33,7 @@ adata = la.data.load_myod1()
 adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 adata.var["label"] = adata.var["symbol"]
 adata.raw = adata
+
 
 # %% [markdown]
 #
@@ -47,10 +50,14 @@ adata.raw = adata
 genes = la.Dim(adata.var)
 cells = la.Dim(adata.obs)
 
+# %% [markdown]
+# We first define our overexpression:
+
 # %%
-overexpression = la.Fixed(
-    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
-)
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
+
+# %% [markdown]
+# We then define how this overexpression affects our gene expression on average across different cells. To keep things simple, we will first create a linear model that has both a baseline expression $b$ and a slope $a$ for each gene. Because gene expression is only defined for positive numbers, we also add an exponential transformation:
 
 # %%
 expression = la.links.scalar.Linear(
@@ -64,14 +71,17 @@ expression = la.links.scalar.Linear(
 )
 
 # %% [markdown]
-# Although the latent slope and baseline were created automatically for us by specifying `a = True, b = True`, it's important to remember that we could have easily created these variables ourselves:
+# Although the latent slope and baseline were created automatically for us by specifying `a = True, b = True`, it's important to remember that we could have easily created these variables ourselves, for example:
 #
 # ```python
 # slope = la.Latent(
 #     p = la.distributions.Normal(scale = la.Parameter(1., transforms = [la.transforms.Exp()])),
-#     definition = la.Definition([genes])
+#     definition = [genes]
 # )
 # ```
+
+# %% [markdown]
+# While the expression variable models our average expression, what we actually observe is a noisy sample of (UMI) counts. The prototypical way to model this is as a NegativeBinomial2. It has two components, a mean that needs to be positive (hence the exponential transformation from before) and a dispersion that also needs to be positive. This dispersion models the heterogeneity, and as this typically depends on the gene we will model it as a latent variable:
 
 # %%
 dispersion = la.Latent(
@@ -81,16 +91,28 @@ dispersion = la.Latent(
     definition=la.Definition([genes]),
 )
 
+# %% [markdown]
+# Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponention transform:
+
+# %%
+dispersion.q
+
+# %% [markdown]
+# We can now define the distribution that our data will follow:
+
 # %%
 transcriptome_p = la.distributions.NegativeBinomial2(
     mu=expression, dispersion=dispersion
 )
 
+# %% [markdown]
+# And then we can define our observation:
+
 # %%
 transcriptome = la.Observation(
     adata.X,
     transcriptome_p,
-    definition=la.Definition([cells, genes]),
+    definition=[cells, genes],
     label="transcriptome",
 )
 
@@ -98,7 +120,7 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the  number of parameters that form the leaves of our model. Why are there so many even for a simple case of linear regression?
+# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for the such a simple linear regression?
 #
 # Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. 
 #
@@ -106,25 +128,24 @@ transcriptome.plot()
 #
 # So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
-# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities.
-# - Soft priors are those that simply push the latent variables towards more likely values. For example, we want to discourage extreme slopes by specifying its distribution.
+# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
+# - Soft priors are those that push the latent variables towards more likely values. For example, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior.
 #
-# All these parameters thus serve two purposes: 
+# The purpose of these parameters is then to balance the wishes of the soft priors to the wishes of the observations:
 # * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 
 # * The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. 
 #
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
+# %% [markdown]
+# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$.
 
 # %% [markdown]
-# But how do we infer these parameters in practice? We have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
+#  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
 #
 # These tasks are fullfilled by:
 # * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it. 
 # * an optimizer (`Adam`), tries to select the best values with regards to our priors/constrains
 # * an overarching training class (`SVI`):
-
-# %% [markdown] tags=["remove-output", "remove-input"]
-# I put it in bullet points in case we would like to explain a bit more what each do, but it's maybe unecessary and a bit too much? Anyway my explanations might not be the best :P
 
 # %%
 inference = la.infer.svi.SVI(
@@ -133,11 +154,11 @@ inference = la.infer.svi.SVI(
 trainer = la.infer.trainer.Trainer(inference)
 
 # %% [markdown]
-# We can now train for a couple of iterations or until the loss function has reached a plateau (= converged):
+# We can now train for a couple of iterations or until the loss function has reached convergence:
 
 # %%
 trace = trainer.train(10000)
-trace.plot()
+trace.plot();
 
 # %% [markdown]
 # You can check that our values have changed. For example, let's look at the 
@@ -150,7 +171,9 @@ transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
-#
+# Our inference algorithm did not fullfill all 10000 iterations, but has permaturely stopped as it has detected _convergence_. Do note that this converge is not always perfect, and we will see later that there are some circumstances where further training may be advisable.
+
+# %% [markdown]
 # ## Interpreting a regression model
 #
 # For interpretation of the model, we can then use 3 main types of posteriors:
@@ -158,14 +181,16 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # %% [markdown]
 # ### Observed posteriors
 #
-# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we run the variational distribution of the slope $q$ the output will be different, which will affect any downstream function even if they are themselves deterministic. To interpret the results, we can thus sample multiple times from the model:
+# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` posterior:
 
 # %%
-transcriptome_observed = la.posterior.Observed(transcriptome, retain_samples = {expression.a})
+transcriptome_observed = la.posterior.Observed(
+    transcriptome, retain_samples={expression.a}
+)
 transcriptome_observed.sample(5)
 
 # %% [markdown]
-# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome. We can access each variable either by providing the variable itself:
+# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome (if they were provided in the `retain_samples` list). We can access each variable either by providing the variable itself:
 
 # %% [markdown] tags=["remove-input", "remove-output"]
 # either by ... or by...?
@@ -184,8 +209,20 @@ transcriptome_observed.samples[expression.a]
 # - {py:class}`xarray.DataArray` to construct a new DataArray
 # :::
 
+# %% [markdown]
+# For example, we can get and rank by mean slope as follows:
+
 # %%
-transcriptome_observed.samples[expression.a].mean("sample")
+mean_slopes = (
+    transcriptome_observed.samples[expression.a]
+    .mean("sample")
+    .to_pandas()
+    .sort_values()
+)
+
+scores = mean_slopes.rename("slope").to_frame()
+scores["symbol"] = adata.var["symbol"][scores.index]
+scores
 
 # %% [markdown]
 # ### Causal posteriors
@@ -199,25 +236,40 @@ overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
 overexpression_causal.sample(10)
 
 # %% [markdown]
-# This posterior also contains samples, but now for some pseudocells with each a distinct value for the `overexpression` variable.
+# This posterior also contains samples, but now for some _pseudocells_ with each a distinct value for the `overexpression` variable:
 
 # %%
-overexpression_causal.samples[overexpression].mean("sample").head()
+overexpression_causal.samples[overexpression].mean("sample")
 
 # %% [markdown]
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ (in this case gene) across all cells:
 
 # %%
-overexpression_causal.plot_features()
+overexpression_causal.plot_features();
 
 # %% [markdown]
-# The plot above shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the soft and hard priors of the model, where the actual average value of the gene expression will lie.
+# This plot shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
 #
 # ::::{margin}
 # :::{seealso}
 # https://en.wikipedia.org/wiki/Credible_interval
 # :::
 # ::::
+
+# %% tags=["remove-input", "remove-output"]
+from myst_nb import glue
+
+glue(
+    "conditional",
+    la.utils.latex.convert_mathtex_to_latex(
+        f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$"
+    ),
+)
+
+# %% [markdown]
+# Mathematically, this plot represents the conditional posterior:
+#
+# $$P(\mu|\text{overexpression} = ...)$$
 
 # %% [markdown]
 # A causal posterior can also provide a score dataframe that will rank each _feature_ (gene). In this case, this also includes columns for the maximal fold change (`fc`), absolute change (`ab`) and peak input value (`peak`).
@@ -243,14 +295,19 @@ overexpression_causal.sample_random()
 overexpression_causal.likelihood_ratio
 
 # %% [markdown]
-# These likelihood ratios were automatically added to our scores table:
+# Mathematically, these values represents the ratio between posteriors probabilities:
+#
+# $$\frac{P(\mu|\text{overexpression})}{P(\mu|\text{overexpression}_\text{shuffled})}$$
+
+# %% [markdown]
+# These likelihood ratios were also automatically added to our scores table:
 
 # %%
 overexpression_causal.scores.head()
 
 # %% [markdown]
 # :::{note}
-# These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a more accurate measure to quantify whether a variable significantly affects an outcome, and whether this is significant compare to other simpler or more complex models.
+# These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a better measure to quantify whether a variable **significantly** affects an outcome, by comparing it to other simpler or more complex models.
 # :::
 
 # %% [markdown]
@@ -285,13 +342,55 @@ foldchange = transcriptome.find("foldchange")
 foldchange
 
 # %% [markdown]
-# The fold change in this case is a {class}`~latenta.modular.Additive` variable, to which you can add as many variables as you want which will all be summed:
+# Let's add the overexpression to the fold change:
 
 # %%
 foldchange.overexpression = la.links.scalar.Linear(
+    overexpression, a=True, label="expression", definition=foldchange.value_definition
+)
+
+# %% [markdown]
+# Note that we do not transform this variable, nor do we add a baseline (or intercept) to this function as this is all handled downstream by the $\rho$ function:
+
+# %%
+transcriptome.plot()
+
+# %% [markdown]
+# ## Other regression problems
+
+
+# %% [markdown]
+# ### Non-linear
+#
+# To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
+
+# %% tags=["remove-input"]
+import pandas as pd
+import IPython.display
+
+links = [la.links.scalar.Logistic, la.links.scalar.Spline, la.links.scalar.Sigmoid]
+
+link_table = []
+for link in links:
+    link_table.append(
+        {
+            "name": link.__name__,
+            "reference": "`" + link.__module__ + "." + link.__name__ + "`",
+            "description": link.__doc__.strip().split("\n")[0],
+        }
+    )
+link_table = pd.DataFrame(link_table)
+IPython.display.HTML(link_table.to_html())
+
+# %% [markdown]
+# We'll illustrate {class}`latenta.links.scalar.spline.Spline`.
+
+# %%
+foldchange = transcriptome.find("foldchange")
+
+# %%
+foldchange.overexpression = la.links.scalar.Spline(
     overexpression,
-    a=True,
-    b=True,
     label="expression",
     definition=foldchange.value_definition,
     transforms=[la.transforms.Exp()],
@@ -300,32 +399,113 @@ foldchange.overexpression = la.links.scalar.Linear(
 # %%
 transcriptome.plot()
 
-# %% [markdown]
-# ## More complex regression problems
+# %%
+inference = la.infer.svi.SVI(
+    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+)
+trainer = la.infer.trainer.Trainer(inference)
+trace = trainer.train(10000)
+trace.plot();
 
+# %%
+overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+    overexpression, transcriptome
+)
+overexpression_causal.observed.sample()
+overexpression_causal.sample(30)
+overexpression_causal.sample_empirical()
 
-# %% [markdown]
-# ### Non-linear
-#
-# To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
-
-# %% tags=["remove-input", "remove-output"]
-from myst_nb import glue
-logistic = la.links.scalar.Logistic._repr_formula_latex_()
-glue("logistic", logistic, display=False)
-
-spline = la.links.scalar.Spline._repr_formula_latex_()
-glue("spline", logistic, display=False)
-
-sigmoid = la.links.scalar.Sigmoid._repr_formula_latex_()
-glue("sigmoid", logistic, display=False)
-
-# %% [markdown]
-# Name | Component | Formula | Description
-# --- | --- | --- | ----
-# Spline | {class}`~latenta.links.scalar.Spline` | {glue:math}`logistic` | A flexible non-linear function, defined by the value at a fixed set of knots
-# Sigmoid | {class}`~latenta.links.scalar.Sigmoid` | {glue:math}`sigmoid` | Sigmoid kinetics model
-# Switch | {class}`~latenta.links.scalar.Switch` | {glue:math}`switch` | A sudden jump
+# %%
+overexpression_causal.plot_features();
 
 # %% [markdown]
-# ### Multiple inputs
+# ### Discrete
+
+# %% [markdown]
+# To model discrete (or categorical) variables, we first have to convert it to a "one-hot" encoding, where each cells and categories are located in respectively rows and columns, and where a 1 indicates membership to the category. We can use the {class}`la.variables.DiscreteFixed` helper for this purpose. It expects a pandas categorical variable as input:
+
+# %%
+batch = la.variables.DiscreteFixed(adata.obs["batch"].astype("category"))
+
+# %%
+batch.prior_pd().head()
+
+# %% [markdown]
+# :::{seealso}
+# You can convert a pandas Series to categorical using `series = series.astype("category")`. The `series.cat` accessor contains many functions to access and change the categories, see https://pandas.pydata.org/docs/user_guide/categorical.html
+# :::
+
+# %%
+foldchange.batch = la.links.vector.Matmul(batch, output = foldchange.value_definition)
+
+# %% [markdown]
+# :::{note}
+# In constrast to the previous link functions we have seen, this time around our link function is included in the `la.links.vector` module. The reason for this is that we are processing the input by vector (i.e. the batch status of each cell). Other link functions in the `la.links.vector` module include things like scaling and centering data.
+# :::
+
+# %%
+foldchange.batch.plot()
+
+# %%
+# foldchange.batch.a = la.Latent(
+#     la.distributions.CenteredNormal(la.Parameter(0.), la.Parameter(1., transforms = [la.transforms.Exp()]), definition = foldchange.batch.a.value_definition)
+# )
+
+# %% [markdown]
+# ### Multiple regression
+
+# %% [markdown]
+# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression:
+
+# %%
+cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes("mm")
+sc.tl.score_genes_cell_cycle(
+    adata,
+    cellcycle_genes.query("phase == 'S'")["gene"],
+    cellcycle_genes.query("phase == 'G2/M'")["gene"],
+)
+
+# %%
+transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+foldchange = transcriptome.find("foldchange")
+
+# %%
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
+foldchange.overexpression = la.links.scalar.Linear(overexpression, a=True, definition=foldchange.value_definition)
+
+# %%
+S = la.Fixed(adata.obs["S_score"])
+foldchange.S = la.links.scalar.Linear(S, a=True, definition=foldchange.value_definition)
+
+G2M = la.Fixed(adata.obs["G2M_score"])
+foldchange.G2M = la.links.scalar.Linear(G2M, a=True, definition=foldchange.value_definition)
+
+# %%
+foldchange.plot()
+
+# %% [markdown]
+# :::{warning}
+# Given that the cell cycle is a circular process, this way of detecting modelling the cell cycle has some obvious flaws. This is merely included here for illustration purposes.
+# :::
+
+# %%
+with transcriptome.switch(la.config.device):
+    inference = la.infer.svi.SVI(
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot()
+
+# %%
+overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+    overexpression, transcriptome
+)
+overexpression_causal.observed.sample()
+overexpression_causal.sample(30)
+overexpression_causal.sample_empirical()
+
+# %%
+overexpression_causal.plot_features();
+
+# %%

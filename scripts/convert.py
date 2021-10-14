@@ -1,12 +1,26 @@
 # %%
+try:
+    from IPython import get_ipython
+
+    ip = get_ipython()
+    if ip is None:
+        pass
+    else:
+        print("running from IPython")
+        import os
+
+        os.chdir("../")
+except:
+    # We do not even have IPython installed
+    pass
+
 import os
 import jupytext
-# os.chdir("../")
 
 # %%
 from pathlib import Path
 
-for path in Path('content').rglob('./*.ipynb'):
+for path in Path("content").rglob("./*.ipynb"):
     if ".ipynb_checkpoints" in str(path):
         continue
     pypath = path.with_suffix(".py")
@@ -16,5 +30,3 @@ for path in Path('content').rglob('./*.ipynb'):
             path.touch()
             pypath.touch()
             os.system(f"jupytext --sync {path}")
-    
-# %%

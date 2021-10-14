@@ -8,7 +8,8 @@ logo: _static/main_logo.png
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: cache
+  execute_notebooks: 'off'
+  # execute_notebooks: cache
   timeout: 100
   exclude_patterns:
     - '*_tmp.ipynb'
@@ -29,12 +30,13 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
-  comments:
-    giscus:
-      repo: "probabilistic-cell/latenta"
-      repo-id: "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg="
-      category: "Documentation"
-      category-id: "DIC_kwDOEVlZHM4B-mVU"
+  google_analytics_id: G-3PHE6TL2WD
+  # comments:
+    # giscus:
+    #   repo: "probabilistic-cell/latenta"
+    #   repo-id: "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg="
+    #   category: "Documentation"
+    #   category-id: "DIC_kwDOEVlZHM4B-mVU"
 
 # Launcing notebooks
 launch_buttons:

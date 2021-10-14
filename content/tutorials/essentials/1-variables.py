@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -18,20 +18,14 @@
 # # Variables
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
 import latenta as la
 import scanpy as sc
 
 
 # %% [markdown]
-# Modeling typically consists of several steps:
-# 1. Creating known and unknown variables
-# 2. Connect these variables in a graph structure
-# 3. Infer the value of the unknown variables
-# 4. Interpret the model
-#
-# In thisIn this part of the tutorialtutorial, we give a brief overview of the first two steps. More details on using latenta to interpret specific types of datasets can be found in the [tutorials](/tutorials), and detailed explanations on specific problems (e.g. the cell cycle) can be found in the [user guide](/guide).
-#
-# We will use a simple single-cell transcriptomics dataset as a demonstration. However, we will primarily focus on the cores that are relevant to any modality, latent space, and experimental design.
+# In the essentials tutorials, we will primarily work with a small but nontheless interesting single-cell transcriptomics dataset:
 
 # %%
 adata = la.data.load_myod1()
@@ -73,7 +67,7 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 # The *genes*, for example, can be defined as follow:
 
 # %%
-genes = la.Dim(adata.var.index, id="gene")
+genes = la.Dim(adata.var.index, name="gene")
 genes
 
 # %% [markdown]
@@ -89,7 +83,7 @@ genes
 
 # %%
 adata.obs.index.name = "cell"
-cells = la.Dim(adata.obs.index, id="cell")
+cells = la.Dim(adata.obs.index, name="cell")
 cells
 
 # %% [markdown]
@@ -129,7 +123,7 @@ counts.value
 counts.value_pd.head()
 
 # %% [markdown]
-# Do note that we can also provide pandas and xarray objects to {class}`Fixed`, and the definition of a variable (its dimensional structure) will be inferred from the object's indices (if we gave them proper names).  
+# Do note that we can also provide pandas and xarray objects to {class}`latenta.variables.Fixed`, and the definition of a variable (its dimensional structure) will be inferred from the object's indices (if we gave them proper names).  
 #
 # Let's try with the level of overexpression in our data:
 
@@ -137,9 +131,7 @@ counts.value_pd.head()
 adata.obs["log_overexpression"]
 
 # %%
-overexpression = la.Fixed(
-    adata.obs["log_overexpression"], label="overexpression", symbol="overexpression"
-)
+overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
 overexpression
 
 # %% [markdown]
@@ -191,8 +183,8 @@ slope
 # --- | --- | --- | ----
 # All positive numbers | $R^+$ | `.Exp()` | $e^x$
 # Unit interval | $[0, 1]$ | `.Logistic()` | $\frac{1}{1+e^{-x}}$
-# Circular (i.e. an angle) | $[0, 2\pi[$ | `.Circular()` | $atan2(y, x)$
-# Simplex | $\in {0, 1} \wedge \sum = 1$ | `.Softmax()` | $\frac{e^{x_i}}{\sum_i e^{x_i}}$
+# Circular (i.e. an angle) | $[0, 2\pi[$ | `.Circular()` | $ atan2(y, x) $
+# Simplex | $\in [0, 1] \wedge \sum = 1$ | `.Softmax()` | $\frac{e^{x_i}}{\sum_i e^{x_i}}$
 
 # %% [markdown]
 # More concretely, we can define a parameter `baseline`, which is the baseline expression of the genes. As just mentioned, it would not make sense to have a negative baseline expression, so we specify to `la.Parameter` using the argument transforms that we want to apply an exponential transformation `la.transforms.Exp`:
@@ -202,7 +194,6 @@ baseline = la.Parameter(
     1.0,
     definition=la.Definition([genes]),
     label="baseline",
-    symbol="baseline",
     transforms=[la.transforms.Exp()],
 )
 baseline
@@ -302,6 +293,25 @@ expression.plot()
 # Skew, rate | `.skew`, `.rate` | $\gamma$ or $\lambda$ | Scales the input
 # Shift | `.shift` | $\zeta$ | Shifts the input
 #
+
+# %% [markdown]
+# ## Modular
+
+# %% [markdown]
+# Sometimes, a variable is affected by several other variables. For example, our gene expression as above may not only depend on a baseline value and the overexpression of a TF, but also a batch effect, a cell cycle, etc. In such cases, we can use modular variables that allow us to easily combine these different effects:
+
+# %%
+expression = la.modular.Additive(definition=[cells, genes], label="expression")
+
+# %%
+expression.baseline = baseline
+expression.overexpression = la.links.scalar.Linear(overexpression, a=lfc)
+
+# %%
+expression
+
+# %%
+expression.plot()
 
 # %% [markdown]
 # ## 4. Distributions
@@ -448,6 +458,7 @@ slope_p = la.distributions.Normal(
 latent_slope = la.Latent(p=slope_p, definition=la.Definition([genes]), label="slope")
 latent_slope.plot()
 
+
 # %% [markdown]
 # The prior distribution $p$, in this case, is a normal distribution with one free parameter: the scale $\sigma$. This parameter determines how far the slope _on average_ can be different from 0. We can estimate this as a parameter only because we are pooling information across many genes. This kind of {term}`multi-level modelling` is very powerful, as it includes multiple testing correction directly within the model {citel}`gelman_why_2009`.
 #
@@ -509,7 +520,10 @@ transcriptome.plot()
 #    - Parameters are free and have to be estimated from the data
 #    - Observations are fixed variables that follow a distribution
 # - Computed variables link different variables together in a deterministic way
-# - Distributions model uncertainty
-# - Latent variables are the variables we are most interested in, as they encompass both uncertainties inherent to the system and due to the lack of data
+# - Combining several effects is possible using modular variables
+# - Distributions model uncertainty, and often (but not always) have components that model the mean and variability
+# - Latent variables are the variables we are the most interested in, as they encompass both the uncertainty inherent to the system and the uncertainty due to the lack of data
 #
-# Once we have specified a model, the next question is finding optimal values for the free parameters.
+# Now that we know how variables work, let's look at how we can combine these different variables to model and find optimal values for the free parameters in the next tutorial
+
+# %%

@@ -1,5 +1,9 @@
+:::{warning}
+Latenta is currently still in beta. You can still expect drastic changes to the code base and API in the following months.
+:::
+
 <div class="container">
-<div class="row full-width">
+<div class="row">
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
@@ -9,16 +13,6 @@
                 <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;" >conda</a>
                 <a class="btn btn-outline-secondary disabled" role="button" href="#"style="z-index: 2;position: relative;">pip</a>
                 <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">github</a>
-                <br>
-                <div style="z-index: 1; position: relative;">
-                    <code id="copyinstall">
-                    git clone https://github.com/probabilistic-cell/lacell.git <br>
-                    pip install -e lacell
-                    </code>
-                    <button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#copyinstall">
-                        Copy
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -26,7 +20,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <h3>👩‍🔬 The essentials</h3>
-                An introduction at modelling with latenta, with a focus for (computation) biologists
+                An introduction to modelling with latenta
                 <a href="tutorials/essentials/0-modelling.html" class="stretched-link"></a>
             </div>
         </div>
@@ -38,23 +32,23 @@
                 Learning latenta by example
                 <!-- <a class="btn btn-outline-secondary" role="button"></a></a>
                 <a class="btn btn-outline-secondary" role="button" href="#"style="z-index: 2;position: relative;">pip</a> -->
-                <a href="tutorials/overview.html" class="stretched-link"></a>
+                <!-- <a href="tutorials/overview.html" class="stretched-link"></a> -->
             </div>
         </div>
     </div>
 </div>
 <br>
-<div class="row full-width">
+<div class="row">
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
                 <h3>👩‍🍳 User guide</h3>
                 How do I do «…»?
-                <a href="guide/overview.html" class="stretched-link"></a>
+                <!-- <a href="guide/overview.html" class="stretched-link"></a> -->
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-4 col-lg">
+    <!-- <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
                 <h3>🕵️‍♀️ Explanation</h3>
@@ -62,13 +56,21 @@
                 <a href="explanation/overview.html" class="stretched-link"></a>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="col-md-3 col-sm-4 col-lg">
         <div class="card h-100">
             <div class="card-body">
                 <h3>🦸 Reference</h3>
                 How does «…» work?
-                <a href="reference/overview.html" class="stretched-link"></a>
+                <a href="reference/latenta/index.html" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-4 col-lg">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3>⚙️ Source code</h3>
+                <a href="https://github.com/probabilistic-cell" class="stretched-link"></a>
             </div>
         </div>
     </div>
@@ -76,7 +78,7 @@
 </div>
 <br>
 
-<div class="full-width">
+<div class="">
 
 # Overview
 Latenta models the cell as a combination of different _cellular processes_ (cell types, cell cycle, zonation, genetic perturbations, time, unexplained variation, nuissance variables, ...). Each of these processes influence _observations_ (transcriptome, unspliced transcriptome, surface proteome, chromatin, phenotype, ...). The processes may also interact with each other, and can thus combinatorially affect observations in various ways. Latenta is modular by design, and this is particularly useful when working with multimodal data, data where cells have multiple co-variates (including nuissance variables), or when trying to find interpretable _mechanistic_ models. In this way, it allows you to answer questions such as:

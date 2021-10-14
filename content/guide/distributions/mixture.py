@@ -45,13 +45,15 @@ w = w / w.sum(1).values[:, None]
 w = la.Fixed(w)
 
 # %%
-mixture = la.distributions.Mixture(distributions = distributions_gs, weight=w, label="mixture")
+mixture = la.distributions.Mixture(
+    distributions=distributions_gs, weight=w, label="mixture"
+)
 
 # %%
 mixture.plot()
 
 # %%
-model_gs = la.Model(mixture)
+model_gs = la.Root(mixture)
 x_gs = x
 
 # %%
@@ -75,10 +77,10 @@ coefficients = la.links.scalar.Spline(
     x,
     output=w,
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension = distributions_dim)],
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
     output_distribution=la.distributions.Normal(),
 )
-dist = la.distributions.Mixture(weight=coefficients, distributions = distributions_gs)
+dist = la.distributions.Mixture(weight=coefficients, distributions=distributions_gs)
 observation = la.Observation(observation_value, dist, label="observation")
 observation.plot()
 
@@ -90,7 +92,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -100,7 +102,9 @@ assert posterior.likelihood / n_cells > -3
 sns.scatterplot(x=x_value, y=observation_value)
 sns.kdeplot(x=x_value, y=observation_value)
 
-modelled_value = posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = (
+    posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+)
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
 
@@ -109,14 +113,18 @@ sns.kdeplot(x=modelled_x, y=modelled_value)
 
 # %%
 kde_modelled = scipy.stats.gaussian_kde(np.vstack([modelled_x, modelled_value]))
-points = np.array(np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))).T.reshape(2, -1)
+points = np.array(
+    np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))
+).T.reshape(2, -1)
 
 evaluated_modelled = kde_modelled.evaluate(points)
 evaluated_groundtruth = kde_groundtruth.evaluate(points)
 
-kl_divergence = (evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))).sum()
+kl_divergence = (
+    evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))
+).sum()
 
-np.sqrt(((evaluated_modelled - evaluated_groundtruth)**2).sum()) < 0.1
+np.sqrt(((evaluated_modelled - evaluated_groundtruth) ** 2).sum()) < 0.1
 
 # %% [markdown]
 # Assess how x changes the observation
@@ -141,12 +149,12 @@ coefficients = la.links.scalar.Spline(
     x,
     output=w,
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension = distributions_dim)],
-    step_distribution = la.distributions.Normal()
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
+    step_distribution=la.distributions.Normal(),
 )
 
 # %%
-dist = la.distributions.Mixture(weight = coefficients, distributions = distributions_gs)
+dist = la.distributions.Mixture(weight=coefficients, distributions=distributions_gs)
 
 # %%
 observation = la.Observation(observation_value, dist, label="observation")
@@ -162,14 +170,16 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.Posterior(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
 assert posterior.likelihood / n_cells > -3
 
 # %%
-modelled_value = posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = (
+    posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+)
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
 
@@ -185,29 +195,35 @@ causal.plot_features();
 
 # %%
 x = x_gs.clone()
-distributions = {distribution_id:la.distributions.Normal(la.Parameter(0.), la.Parameter(1.)) for distribution_id in "abc"}
+distributions = {
+    distribution_id: la.distributions.Normal(la.Parameter(0.0), la.Parameter(1.0), transforms = [la.transforms.Affine(a = 5.)])
+    for distribution_id in "abc"
+}
 distributions_dim = la.Dim(distributions.keys(), "distribution")
 
 coefficients = la.links.scalar.Spline(
     x,
     output=la.Definition([cells, distributions_dim]),
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension = distributions_dim)],
-    step_distribution=la.distributions.Normal(),
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
+    step_distribution = la.distributions.Normal(scale = 2.)
 )
-dist = la.distributions.Mixture(weight=coefficients, distributions = distributions)
+dist = la.distributions.Mixture(weight=coefficients, distributions=distributions)
 observation = la.Observation(observation_value, dist, label="observation")
 observation.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    observation, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
+    observation, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.001)
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+{dist.loc.prior() for dist in distributions.values()}
+
+# %%
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -217,21 +233,30 @@ assert posterior.likelihood / n_cells > -3
 sns.scatterplot(x=x_value, y=observation_value)
 sns.kdeplot(x=x_value, y=observation_value)
 
-modelled_value = posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = (
+    posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+)
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
+
+# %%
+{dist.loc.prior() for dist in distributions.values()}
 
 # %% [markdown]
 # Quantitatively check whether the densities are modelled correctly
 
 # %%
 kde_modelled = scipy.stats.gaussian_kde(np.vstack([modelled_x, modelled_value]))
-points = np.array(np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))).T.reshape(2, -1)
+points = np.array(
+    np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))
+).T.reshape(2, -1)
 
 evaluated_modelled = kde_modelled.evaluate(points)
 evaluated_groundtruth = kde_groundtruth.evaluate(points)
 
-kl_divergence = (evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))).sum()
+kl_divergence = (
+    evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))
+).sum()
 
 assert (evaluated_modelled - evaluated_groundtruth).sum() > -0.5
 
@@ -250,23 +275,24 @@ causal.plot_features();
 
 # %%
 x = x_gs.clone()
-distribution_loc_p = la.distributions.Normal(scale = 5.)
-distribution_scale_p = la.distributions.LogNormal(scale = 2.)
+distribution_loc_p = la.distributions.Normal(scale=5.0)
+distribution_scale_p = la.distributions.LogNormal(scale=2.0)
 distributions = {
-    distribution_id:la.distributions.Normal(
-        la.Latent(distribution_loc_p),
-        la.Latent(distribution_scale_p)
-) for distribution_id in "abc"}
+    distribution_id: la.distributions.Normal(
+        la.Latent(distribution_loc_p), la.Latent(distribution_scale_p)
+    )
+    for distribution_id in "abc"
+}
 distributions_dim = la.Dim(distributions.keys(), "distribution")
 
 coefficients = la.links.scalar.Spline(
     x,
     output=la.Definition([cells, distributions_dim]),
     label="coefficients",
-    transforms=[la.transforms.Softmax(dimension = distributions_dim)],
+    transforms=[la.transforms.Softmax(dimension=distributions_dim)],
     output_distribution=la.distributions.Normal(),
 )
-dist = la.distributions.Mixture(weight=coefficients, distributions = distributions)
+dist = la.distributions.Mixture(weight=coefficients, distributions=distributions)
 observation = la.Observation(observation_value, dist, label="observation")
 observation.plot()
 
@@ -278,7 +304,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation)
+posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -288,23 +314,35 @@ assert posterior.likelihood / n_cells > -3
 sns.scatterplot(x=x_value, y=observation_value)
 sns.kdeplot(x=x_value, y=observation_value)
 
-modelled_value = posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+modelled_value = (
+    posterior.samples[observation.p].stack(cells=("sample", "cell")).to_pandas()
+)
 modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
+
+# %%
+{dist.loc.q.loc.prior() for dist in distributions.values()}
+
+# %%
+sns.histplot(observation_value)
 
 # %% [markdown]
 # Quantitatively check whether the densities are modelled correctly
 
 # %%
 kde_modelled = scipy.stats.gaussian_kde(np.vstack([modelled_x, modelled_value]))
-points = np.array(np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))).T.reshape(2, -1)
+points = np.array(
+    np.meshgrid(np.linspace(-1, 6, 20), np.linspace(-10, 15, 20))
+).T.reshape(2, -1)
 
 evaluated_modelled = kde_modelled.evaluate(points)
 evaluated_groundtruth = kde_groundtruth.evaluate(points)
 
-kl_divergence = (evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))).sum()
+kl_divergence = (
+    evaluated_groundtruth * (np.log(evaluated_groundtruth) - np.log(evaluated_modelled))
+).sum()
 
-assert (evaluated_modelled - evaluated_groundtruth).sum() > -0.5
+assert (evaluated_modelled - evaluated_groundtruth).sum() > -1.
 
 # %% [markdown]
 # Assess how x changes the observation

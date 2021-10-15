@@ -62,10 +62,12 @@ overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression
 # ### Model 1: Linear
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 foldchange = transcriptome.find("foldchange")
 
-foldchange.overexpression = la.links.scalar.Linear(overexpression, a = True, definition=foldchange.value_definition)
+foldchange.overexpression = la.links.scalar.Linear(
+    overexpression, a=True, definition=foldchange.value_definition
+)
 foldchange.plot()
 
 # %%
@@ -75,7 +77,7 @@ with transcriptome.switch(la.config.device):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot(show = True)
 
 # %%
 transcriptome_observed = la.posterior.vector.VectorObserved(transcriptome)
@@ -87,7 +89,10 @@ overexpression_observed.sample(5)
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-    overexpression, transcriptome, interpretable = transcriptome.p.mu.expression, observed = overexpression_observed
+    overexpression,
+    transcriptome,
+    interpretable=transcriptome.p.mu.expression,
+    observed=overexpression_observed,
 )
 overexpression_causal.sample(10)
 overexpression_causal.sample_random(10)
@@ -95,13 +100,13 @@ overexpression_causal.observed
 overexpression_causal.sample_empirical()
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %%
 models["linear"] = {
-    "root":transcriptome,
-    "overexpression_causal":overexpression_causal,
-    "transcriptome_observed":transcriptome_observed
+    "root": transcriptome,
+    "overexpression_causal": overexpression_causal,
+    "transcriptome_observed": transcriptome_observed,
 }
 
 # %% [markdown] tags=[]
@@ -111,10 +116,12 @@ models["linear"] = {
 overexpression = overexpression.reset().clone()
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 foldchange = transcriptome.find("foldchange")
 
-foldchange.overexpression = la.links.scalar.Spline(overexpression, definition=foldchange.value_definition)
+foldchange.overexpression = la.links.scalar.Spline(
+    overexpression, definition=foldchange.value_definition
+)
 foldchange.plot()
 
 # %%
@@ -124,7 +131,7 @@ with transcriptome.switch(la.config.device):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot(show = True)
 
 # %%
 transcriptome_observed = la.posterior.vector.VectorObserved(transcriptome)
@@ -136,7 +143,10 @@ overexpression_observed.sample(5)
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-    overexpression, transcriptome, interpretable = transcriptome.p.mu.expression, observed = overexpression_observed
+    overexpression,
+    transcriptome,
+    interpretable=transcriptome.p.mu.expression,
+    observed=overexpression_observed,
 )
 overexpression_causal.sample(10)
 overexpression_causal.sample_random(10)
@@ -144,13 +154,13 @@ overexpression_causal.observed
 overexpression_causal.sample_empirical()
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %%
 models["spline"] = {
-    "root":transcriptome,
-    "overexpression_causal":overexpression_causal,
-    "transcriptome_observed":transcriptome_observed
+    "root": transcriptome,
+    "overexpression_causal": overexpression_causal,
+    "transcriptome_observed": transcriptome_observed,
 }
 
 # %% [markdown] tags=[]
@@ -160,10 +170,12 @@ models["spline"] = {
 overexpression = overexpression.reset().clone()
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 foldchange = transcriptome.find("foldchange")
 
-foldchange.overexpression = la.links.scalar.Constant(overexpression,definition=foldchange.value_definition)
+foldchange.overexpression = la.links.scalar.Constant(
+    overexpression, definition=foldchange.value_definition
+)
 foldchange.plot()
 
 # %%
@@ -173,7 +185,7 @@ with transcriptome.switch(la.config.device):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot(show = True)
 
 # %%
 transcriptome_observed = la.posterior.vector.VectorObserved(transcriptome)
@@ -185,7 +197,10 @@ overexpression_observed.sample(5)
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-    overexpression, transcriptome, interpretable = transcriptome.p.mu.expression, observed = overexpression_observed
+    overexpression,
+    transcriptome,
+    interpretable=transcriptome.p.mu.expression,
+    observed=overexpression_observed,
 )
 overexpression_causal.sample(10)
 overexpression_causal.sample_random(10)
@@ -193,13 +208,13 @@ overexpression_causal.observed
 overexpression_causal.sample_empirical()
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %%
 models["constant"] = {
-    "root":transcriptome,
-    "overexpression_causal":overexpression_causal,
-    "transcriptome_observed":transcriptome_observed
+    "root": transcriptome,
+    "overexpression_causal": overexpression_causal,
+    "transcriptome_observed": transcriptome_observed,
 }
 
 # %% [markdown]
@@ -209,19 +224,30 @@ models["constant"] = {
 # ### The Bayes factor
 
 # %% [markdown]
-# How do we compare models? Because we are creating probabilistic models, it makes sense to also compare models themselves with probabilities. What we want to know is how much more likely one model is over the other. This is mostly driven by how much _evidence_ we have of this, because if we have barely any data, . On the other hand, having a lot of data opens up the possibility to move to ever more complex models with a lot of free parameters.
+# How do we compare models? Because we are creating probabilistic models, it makes sense to also compare models using with probabilities. But how to define such a measure?
 #
-# To calculate the _evidence_ for a model, we therefore have 
+# Let's again remind ourselves what we're trying to do. All we have is two things:
+# - The data, which we further denote as $\mathcal{D}$. This contains both the values that we observe, but also the values that we inferred for the latent variables
+# - One or more models, which we further denote as $\mathcal{M_i}$. This contains both the priors and structure ("hard" priors) of the model.
 #
-# It turns out that we actually already have all the information we need to answer this question. Namely, we added priors {citel}
+# To calculate the quality of a model $\mathcal{M_i}$, we have to calculate a probability of how well it explains the data $\mathcal{D}$ given the  model, which we call the evidence:
+#
+# $$
+# \mathit{evidence} = P(\mathcal{D} | \mathcal{M_i})
+# $$
+#
+# The values for the evidence only become meaningful once we start to compare them between models. We often do this by calculating a ratio of evidences between two competing models, also called the Bayes factor $BF$:
+#
+# $$
+# \mathit{BF} = \frac{P(\mathcal{D} | \mathcal{M_i})}{P(\mathcal{D} | \mathcal{M_j})}
+# $$
+#
+# Bayes factors are quite intuitive: they tell you how much more likely one model is over the other given the data. We often use some rule-of-thumbs to set our cutoffs, e.g. {citel}`kass_bayes_1995`:
 
 # %% [markdown]
-# {citel}`kass_bayes_1995`
-
-# %% [markdown]
 #
 #
-# |    $\textit{BF}$   	|        Strength of evidence        	| $\log_{10} $ 	|   $\log$  	|
+# |    $\textit{BF}$   	|        Strength of evidence        	| $\log_{10}$$BF$ 	|   $\log BF$  	|
 # |:---------:	|:----------------------------------:	|:------------:	|:------------:	|
 # |  1 to 3.2 	| Not worth more than a bare mention 	|   0 to 1/2   	|   0 to ~1.1  	|
 # | 3.2 to 10 	|             Substantial            	|   1/2 to 1   	| ~1.1 to ~2.3 	|
@@ -229,7 +255,17 @@ models["constant"] = {
 # |   > 100   	|              Decisive              	|      > 2     	|    > ~4.6    	|
 
 # %% [markdown]
-# $\log_{10} bf $
+# Although the goal of both p-values and Bayes factors may look similar, they do have a different interpretation. p-values quantify the evidence that we have to reject a null hypothesis, but does not provide any evidence in favor of an alternative hypothesis. In contrast, Bayes factors directly compare two models against each other, and include both the "null hypothesis model" and "alternative model" into the calculation.
+#
+# Furthermore, a Bayes factor considers the complete model _including prior distributions_. The further away the latent variable strays from the priors, the more it will be penalized. Moreover, the more latent variables we have, the more a model will be penalized as each of these latent variables has a prior distribution that needs to be satisfied. In other words, the more complex a model is, the higher the penality will be.
+#
+# Of course, this is all balanced out with the presence of observed data. If we have a lot of data, more complex models will be able to overcome this penality if they explain the data well. In other words:
+#
+# > Extraordinary claims require extraordinary evidence
+#
+# You may have noticed a pattern here: in the [regression tutorial](2-regression) tutorial we also talked about balancing the needs of the priors . This is no coincidence as both model inference and model comparison are highly linked mathematically. Indeed, to estimate Bayes factors we use exactly the same loss function as we typically use for inference: the evidence lower bound or ELBO. This is only an estimation of this measure, as calculating the exact Bayes factor is both mathematically impossible and computationally intractable even for moderately complex models.
+#
+# One final note: in the presence of very large data, almost every more complex model will be significant. You may have already seen this when doing differential expression in single-cell data, as a large number of genes are significant even though the differences between populations may be minor. This is not a problem of design per se (although some may disagree :citel:{squair_confronting_2021}). Rather, we also need to consider biological significance in our models, such as requiring at least a twofold difference.
 
 # %%
 import pandas as pd
@@ -238,8 +274,18 @@ import pandas as pd
 model_ids = list(models.keys())
 
 # %%
-elbo_genes = pd.DataFrame({model_id:model["transcriptome_observed"].elbo_features.to_pandas() for model_id, model in models.items()})
-likelihood_genes = pd.DataFrame({model_id:model["transcriptome_observed"].elbo_features.to_pandas() for model_id, model in models.items()})
+elbo_genes = pd.DataFrame(
+    {
+        model_id: model["transcriptome_observed"].elbo_features.to_pandas()
+        for model_id, model in models.items()
+    }
+)
+likelihood_genes = pd.DataFrame(
+    {
+        model_id: model["transcriptome_observed"].elbo_features.to_pandas()
+        for model_id, model in models.items()
+    }
+)
 
 # %%
 elbo_genes
@@ -251,23 +297,29 @@ elbo_genes
 # First, we can find generally differentially expressed genes by simply comparing the constant model with all other models:
 
 # %%
-bfs = (elbo_genes.drop(columns = "constant") - elbo_genes["constant"].values[:, None])
+bfs = elbo_genes.drop(columns="constant") - elbo_genes["constant"].values[:, None]
 scores = bfs.max(1).rename("bf").to_frame()
 
 # %%
-bfs.plot(kind = "kde")
+bfs.plot(kind="kde")
 
 # %%
 scores["symbol"] = adata.var["symbol"][scores.index]
-scores = scores.sort_values("bf", ascending = False)
+scores = scores.sort_values("bf", ascending=False)
 scores
 
 # %%
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = scores.index[:5]);
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=scores.index[:5]
+)
 plot.suptitle("Differential genes")
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = scores.query("bf > log(10)").index[-5:]);
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=scores.query("bf > log(10)").index[-5:]
+)
 plot.suptitle("Barely differential genes")
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = scores.index[-5:]);
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=scores.index[-5:]
+)
 plot.suptitle("Non-differential genes")
 
 # %% [markdown]
@@ -287,30 +339,45 @@ scores = scores.query("bf_constant > log(10)")
 
 # %%
 scores["symbol"] = adata.var["symbol"][scores.index]
-scores = scores.sort_values("bf", ascending = False)
+scores = scores.sort_values("bf", ascending=False)
 scores
 
 # %%
-nonlinear = scores.query("(bf > log(10))").sort_values("bf_constant", ascending = False)
-unclear = scores.query("(bf > log(10)) & (bf < log(30))").sort_values("bf_constant", ascending = False)
-linear = scores.query("(bf < log(10))").sort_values("bf_constant", ascending = False)
+nonlinear = scores.query("(bf > log(10))").sort_values("bf_constant", ascending=False)
+unclear = scores.query("(bf > log(10)) & (bf < log(30))").sort_values(
+    "bf_constant", ascending=False
+)
+linear = scores.query("(bf < log(10))").sort_values("bf_constant", ascending=False)
 
 # %%
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = nonlinear.index[:5]);
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=nonlinear.index[:5], show = True
+)
 plot.suptitle("Non-linear genes")
-plot = models["linear"]["overexpression_causal"].plot_features(feature_ids = nonlinear.index[:5]);
+plot = models["linear"]["overexpression_causal"].plot_features(
+    feature_ids=nonlinear.index[:5], show = True
+)
 plot.suptitle("Non-linear genes")
 
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = unclear.index[:5]);
-plot.suptitle("Unclear genes")
-plot = models["linear"]["overexpression_causal"].plot_features(feature_ids = unclear.index[:5]);
-plot.suptitle("Unclear genes")
-
-
-plot = models["spline"]["overexpression_causal"].plot_features(feature_ids = linear.index[:5]);
+# %%
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=linear.index[:5], show = True
+)
 plot.suptitle("Linear genes")
-plot = models["linear"]["overexpression_causal"].plot_features(feature_ids = linear.index[:5]);
+plot = models["linear"]["overexpression_causal"].plot_features(
+    feature_ids=linear.index[:5], show = True
+)
 plot.suptitle("Linear genes")
+
+# %%
+plot = models["spline"]["overexpression_causal"].plot_features(
+    feature_ids=unclear.index[:5], show = True
+)
+plot.suptitle("Unclear genes")
+plot = models["linear"]["overexpression_causal"].plot_features(
+    feature_ids=unclear.index[:5], show = True
+)
+plot.suptitle("Unclear genes")
 
 # %%
 

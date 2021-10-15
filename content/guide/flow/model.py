@@ -45,7 +45,7 @@ model.model_initial.plot()
 model
 
 # %%
-model.infer_model()
+model.infer()
 
 assert model.model_.available()
 

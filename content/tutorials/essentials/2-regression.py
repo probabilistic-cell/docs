@@ -54,10 +54,13 @@ cells = la.Dim(adata.obs)
 # We first define our overexpression:
 
 # %%
+adata.obs["log_overexpression"]
+
+# %%
 overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
 
 # %% [markdown]
-# We then define how this overexpression affects our gene expression on average across different cells. To keep things simple, we will first create a linear model that has both a baseline expression $b$ and a slope $a$ for each gene. Because gene expression is only defined for positive numbers, we also add an exponential transformation:
+# We then define how this overexpression affects our gene expression on average across different cells. To keep things simple, we will first create a linear model that has both a baseline expression $b$ and a slope $a$ for each gene as we did in the previous section on variables. Because gene expression is only defined for positive numbers, we also add an exponential transformation:
 
 # %%
 expression = la.links.scalar.Linear(
@@ -75,13 +78,13 @@ expression = la.links.scalar.Linear(
 #
 # ```python
 # slope = la.Latent(
-#     p = la.distributions.Normal(scale = la.Parameter(1., transforms = [la.transforms.Exp()])),
+#     p = la.distributions.Normal(loc = 0.0, scale = la.Parameter(1., transforms = [la.transforms.Exp()])),
 #     definition = [genes]
 # )
 # ```
 
 # %% [markdown]
-# While the expression variable models our average expression, what we actually observe is a noisy sample of (UMI) counts. The prototypical way to model this is as a NegativeBinomial2. It has two components, a mean that needs to be positive (hence the exponential transformation from before) and a dispersion that also needs to be positive. This dispersion models the heterogeneity, and as this typically depends on the gene we will model it as a latent variable:
+# While the `expression` variable models our average expression, what we actually observe is a noisy sample of (UMI) counts. The prototypical way to model this is using a NegativeBinomial2. It has two components, a mean that needs to be positive (hence the exponential transformation from before) and a dispersion that also needs to be positive. This dispersion models the heterogeneity, and as this typically depends on the gene we will model it as a latent variable:
 
 # %%
 dispersion = la.Latent(
@@ -91,6 +94,9 @@ dispersion = la.Latent(
     definition=la.Definition([genes]),
 )
 
+# %%
+dispersion.p
+
 # %% [markdown]
 # Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponention transform:
 
@@ -98,7 +104,7 @@ dispersion = la.Latent(
 dispersion.q
 
 # %% [markdown]
-# We can now define the distribution that our data will follow:
+# We can now define the distribution that our data will follow to model the noisiness:
 
 # %%
 transcriptome_p = la.distributions.NegativeBinomial2(
@@ -120,16 +126,16 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for the such a simple linear regression?
+# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
-# Let's remind ourselves what we're actually trying to accomplish. We're trying to create a good model of our observations. 
+# Let's remind ourselves what we're actually trying to accomplish: we are trying to create a good model of our observations. 
 #
 # It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations. 
 #
 # So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
-# - Hard priors are those that completely constrain the model. For example, by specifying a linear function we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
-# - Soft priors are those that push the latent variables towards more likely values. For example, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior.
+# - Hard priors are those that completely constrain the model. For example, by specifying a linear function to model our average expression for example, we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
+# - Soft priors are those that push the latent variables towards more likely values. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior distribution $p$.
 #
 # The purpose of these parameters is then to balance the wishes of the soft priors to the wishes of the observations:
 # * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 

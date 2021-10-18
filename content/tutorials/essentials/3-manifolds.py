@@ -79,7 +79,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # 2. We then model that which is likely (based on what we know) and to which we can include some prior knowledge, e.g. cell cycle, differentiation, ... You should see prior knowledge very broadly, as it not only contains your own knowledge but also information from your own control datasets, other databases, cell atlas projects, ...
 # 3. Model what is fairly hypothetical, e.g. new substates, different differentiation paths, interactions between processes, ...
 #
-# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework 
+# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework
 #
 # :::
 
@@ -108,7 +108,7 @@ sc.pl.umap(
 )
 
 # %% [markdown]
-# Just by looking at this 2D representation, it's immediately obvious that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle. On top of that, it seems that there is some heterogeneity in the control cells, although the magnitude of this is difficult to determine based on a 2D representation. 
+# Just by looking at this 2D representation, it's immediately obvious that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle. On top of that, it seems that there is some heterogeneity in the control cells, although the magnitude of this is difficult to determine based on a 2D representation.
 
 # %% [markdown]
 # Although in a typical use case we would model the cell cycle first, for illustrative purposes we will first look at the differentiation. We can "remove" (or reduce) the effect of the cell cycle by removing the cycling cells.
@@ -117,7 +117,7 @@ sc.pl.umap(
 adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %% [markdown]
 # We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
@@ -194,7 +194,7 @@ sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %%
 # gene_overexpressed = la.variables.DiscreteFixed(adata_oi.obs["gene_overexpressed"])
@@ -204,7 +204,7 @@ transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 
 # %% [markdown]
-# This nudging is performed by an appropriate prior distribution. We choose a beta distribution here because 
+# This nudging is performed by an appropriate prior distribution. We choose a beta distribution here because
 
 # %%
 import pandas as pd
@@ -316,12 +316,12 @@ differentiation_causal.plot_features()
 #
 # Don't we lose interpretability if we use this neural network?
 #
-# It's certainly true that a neural network, even of a small size, can be very difficult to interpret. At best, we may be able to rank some genes according to their importance in the model. However, in our case we don't really care about this interpretability, because amortization is just a trick to make inference easier. It's important to understand that the actual interpretability always lies downstream from the variational distribution, in how the cellular latent space is related to the transcriptome. The amortization function just helps us to estimate the variational distribution, but doesn't help us with explaining the transcriptome. For a variational distribution, we therefore only want accuracy and ease of inference, which neural networks can provide, but not interpretability. In fact, in an ideal world, the optimal solution for a model with and without amortization would be the same. 
+# It's certainly true that a neural network, even of a small size, can be very difficult to interpret. At best, we may be able to rank some genes according to their importance in the model. However, in our case we don't really care about this interpretability, because amortization is just a trick to make inference easier. It's important to understand that the actual interpretability always lies downstream from the variational distribution, in how the cellular latent space is related to the transcriptome. The amortization function just helps us to estimate the variational distribution, but doesn't help us with explaining the transcriptome. For a variational distribution, we therefore only want accuracy and ease of inference, which neural networks can provide, but not interpretability. In fact, in an ideal world, the optimal solution for a model with and without amortization would be the same.
 #
 # :::
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata_oi)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %%
 differentiation = la.Latent(

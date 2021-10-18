@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -68,7 +68,7 @@ expression = la.links.scalar.Linear(
     a=True,
     b=True,
     label="expression",
-    symbol = r"\mu",
+    symbol=r"\mu",
     definition=la.Definition([cells, genes]),
     transforms=[la.transforms.Exp()],
 )
@@ -128,9 +128,10 @@ transcriptome.plot()
 # %% [markdown]
 # Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
-# Let's remind ourselves what we're actually trying to accomplish: we are trying to create a good model of our observations. 
+# Let's remind ourselves what we are actually trying to accomplish: we are trying to create a good model of our observations. 
+
 #
-# It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations. 
+# It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations.
 #
 # So we don't just want a model. We want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
@@ -138,18 +139,18 @@ transcriptome.plot()
 # - Soft priors are those that push the latent variables towards more likely values. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior distribution $p$.
 #
 # The purpose of these parameters is then to balance the wishes of the soft priors to the wishes of the observations:
-# * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$. 
-# * The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes. 
+# * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$.
+# * The parameters of $p$ on the other hand will try to accomodate the parameters of $q$ as well as possible, but it cannot do this perfectly as these parameters are shared across all genes.
 #
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 # %% [markdown]
 # Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$. 
 
 # %% [markdown]
-#  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
+#  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better.
 #
 # These tasks are fullfilled by:
-# * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it. 
+# * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it.
 # * an optimizer (`Adam`), tries to select the best values with regards to our priors/constrains
 # * an overarching training class (`SVI`):
 
@@ -164,7 +165,7 @@ trainer = la.infer.trainer.Trainer(inference)
 
 # %%
 trace = trainer.train(10000)
-trace.plot();
+trace.plot()
 
 # %% [markdown]
 # We can see that the values have changed. 
@@ -253,7 +254,7 @@ overexpression_causal.samples[overexpression].mean("sample")
 # Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ (in this case gene) across all cells:
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %% [markdown]
 # This plot shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
@@ -326,7 +327,7 @@ overexpression_causal.scores.head()
 # %%
 import lacell as lac
 
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
@@ -372,7 +373,7 @@ transcriptome.plot()
 # :::
 
 # %% [markdown]
-# You can check out the default device that is used on your system using (which may be different from the one noted here):
+# You can check out the default device that is used on your system using:
 
 # %%
 la.config.device
@@ -405,7 +406,7 @@ with transcriptome.switch(la.config.device):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot()
 
 # %% [markdown]
 # ## Other regression problems
@@ -458,7 +459,7 @@ with transcriptome.switch(la.config.device):
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
-    trace.plot();
+    trace.plot()
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -469,7 +470,7 @@ overexpression_causal.sample(30)
 overexpression_causal.sample_empirical()
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %% [markdown]
 # ### Discrete
@@ -518,7 +519,7 @@ sc.tl.score_genes_cell_cycle(
 )
 
 # %%
-transcriptome = lac.transcriptome.Transcriptome.from_adata(adata)
+transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 foldchange = transcriptome.find("foldchange")
 
 # %%
@@ -563,31 +564,27 @@ overexpression_causal.sample_empirical()
 overexpression_causal.sample_random()
 
 # %%
-overexpression_causal.plot_features();
+overexpression_causal.plot_features()
 
 # %%
-G2M_causal = la.posterior.scalar.ScalarVectorCausal(
-    G2M, transcriptome
-)
+G2M_causal = la.posterior.scalar.ScalarVectorCausal(G2M, transcriptome)
 G2M_causal.observed.sample()
 G2M_causal.sample(30)
 G2M_causal.sample_empirical()
 G2M_causal.sample_random()
 
 # %%
-G2M_causal.plot_features();
+G2M_causal.plot_features()
 
 # %%
-S_causal = la.posterior.scalar.ScalarVectorCausal(
-    S, transcriptome
-)
+S_causal = la.posterior.scalar.ScalarVectorCausal(S, transcriptome)
 S_causal.observed.sample()
 S_causal.sample(30)
 S_causal.sample_empirical()
 S_causal.sample_random()
 
 # %%
-S_causal.plot_features();
+S_causal.plot_features()
 
 # %% [markdown]
 # ## Main points

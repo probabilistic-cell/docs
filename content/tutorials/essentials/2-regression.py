@@ -126,7 +126,7 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the many free parameters that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
+# Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
 # Let's remind ourselves what we're actually trying to accomplish: we are trying to create a good model of our observations. 
 #
@@ -143,7 +143,7 @@ transcriptome.plot()
 #
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 # %% [markdown]
-# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$.
+# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$. 
 
 # %% [markdown]
 #  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better. 
@@ -167,9 +167,11 @@ trace = trainer.train(10000)
 trace.plot();
 
 # %% [markdown]
-# You can check that our values have changed. For example, let's look at the 
+# We can see that the values have changed. 
+#
+# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). 
 
-# %% [markdown] tags=["remove-output", "remove-input"]
+# %% [raw] tags=["remove-output", "remove-input"]
 # Changed with the iterations? Maybe in the code would be good to see a "before"/beggining and after?
 
 # %%

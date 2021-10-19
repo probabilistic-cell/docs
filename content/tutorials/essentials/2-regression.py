@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.11.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -129,7 +129,7 @@ transcriptome.plot()
 # Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
 # Let's remind ourselves what we are actually trying to accomplish: we are trying to create a good model of our observations. 
-
+#
 #
 # It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations.
 #
@@ -170,13 +170,13 @@ trace.plot()
 # %% [markdown]
 # We can see that the values have changed. 
 #
-# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). 
+# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). It can seem a bit convoluted but the graph structure 
 
 # %% [raw] tags=["remove-output", "remove-input"]
 # Changed with the iterations? Maybe in the code would be good to see a "before"/beggining and after?
 
 # %%
-transcriptome.p.mu.a.q.loc.run()
+transcriptome.p.mu.a.q.loc.run() #will sample a value from the distribution
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -186,11 +186,14 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # ## Interpreting a regression model
 #
 # For interpretation of the model, we can then use 3 main types of posteriors:
+# * Observed posterios
+# * Causal posteriors 
+# * Perturbed posteriors
 
 # %% [markdown]
 # ### Observed posteriors
 #
-# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` posterior:
+# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~la.posterior.Observed` followed by the function `.sample()` which samples n posterior observations.
 
 # %%
 transcriptome_observed = la.posterior.Observed(
@@ -198,11 +201,14 @@ transcriptome_observed = la.posterior.Observed(
 )
 transcriptome_observed.sample(5)
 
+# %%
+expression.a
+
 # %% [markdown]
-# `.samples` is a dictionary containing the samples of each variable that was upstream of the transcriptome (if they were provided in the `retain_samples` list). We can access each variable either by providing the variable itself:
+# Tha sampled values are stored in the dictionary `.samples` containing the samples of each variables, which were provided to the `retain_samples` argument, that are upstream of the transcriptome. We can access each variable either by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
 
 # %% [markdown] tags=["remove-input", "remove-output"]
-# either by ... or by...?
+# ### either by ... or by...?
 
 # %%
 transcriptome_observed.samples[expression.a]
@@ -219,14 +225,14 @@ transcriptome_observed.samples[expression.a]
 # :::
 
 # %% [markdown]
-# For example, we can get and rank by mean slope as follows:
+# For example, we might be interested by the genes that are the most affected (the most "differentially expressed") by the overexpression of *Myod1*. We can then get and rank the slopes by their mean value ( mean of the sampled values):
 
 # %%
 mean_slopes = (
     transcriptome_observed.samples[expression.a]
     .mean("sample")
     .to_pandas()
-    .sort_values()
+    .sort_values(ascending=False)
 )
 
 scores = mean_slopes.rename("slope").to_frame()
@@ -236,7 +242,7 @@ scores
 # %% [markdown]
 # ### Causal posteriors
 #
-# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell) impacts a **vector** (gene expression for each cell):
+# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell, i.e. the overexpression of *Myod1*) impacts a **vector** (gene expression for each cell):
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -251,29 +257,22 @@ overexpression_causal.sample(10)
 overexpression_causal.samples[overexpression].mean("sample")
 
 # %% [markdown]
-# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_ (in this case gene) across all cells:
+# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_, in this case genes, across all cells:
 
 # %%
 overexpression_causal.plot_features()
 
 # %% [markdown]
-# This plot shows both the _median_ value of each gene across different doses of a transcription factors, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
+# Note that if you don't specify any features to plot to `plot_features()` it will by default display the 10 features with the highest likelihood. 
+
+# %% [markdown]
+# This plot shows both the _median_ value of each gene across different doses of the transcription factor, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
 #
 # ::::{margin}
 # :::{seealso}
 # https://en.wikipedia.org/wiki/Credible_interval
 # :::
 # ::::
-
-# %% tags=["remove-input", "remove-output"]
-from myst_nb import glue
-
-glue(
-    "conditional",
-    la.utils.latex.convert_mathtex_to_latex(
-        f"$P({transcriptome.p.mu.symbol}|{overexpression.symbol} = ...)$"
-    ),
-)
 
 # %% [markdown]
 # Mathematically, this plot represents the conditional posterior:
@@ -320,6 +319,12 @@ overexpression_causal.scores.head()
 # :::
 
 # %% [markdown]
+# ### Using lacell to make model creation easier¶
+
+# %% [markdown]
+# Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the <span style="color:red">lacell</span> package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
+
+# %% [markdown]
 # ## Using _lacell_ to make model creation easier
 #
 # Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the `lacell` package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
@@ -331,12 +336,12 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
-# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene with a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
+# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene within a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
 #
 # - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
 # - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
 # - The relative expression in a cell $\rho$ is itself a linear combination of the average expression of each gene in the cell, $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
-# - When modelling cellular processes, we typically adapt the log-fold change $\delta$. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
+# - When modelling cellular processes, we typically adapt the log-fold change $\delta$, that is why it is for now empty. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
 
 # %% [markdown]
 # :::{seealso}
@@ -344,7 +349,13 @@ transcriptome.plot()
 # :::
 
 # %% [markdown]
+# Once models reach a certain complexity, it becomes easier to get a variable using the `find()` function, which will recursively look for an object with the given label or symbol:
+
+# %% [markdown]
 # Once models reach a certain complexity, it becomes easier to get a variable using the {meth}`~latenta.variables.Composed.find` function, which will recursively look for an object with the given label or symbol:
+
+# %% [markdown]
+# Let’s now adapt this model by adding the overexpression to the fold change:
 
 # %%
 foldchange = transcriptome.find("foldchange")
@@ -352,6 +363,9 @@ foldchange
 
 # %% [markdown]
 # Let's add the overexpression to the fold change:
+
+# %% [markdown]
+# Note that this modification was also done in transcriptome automatically.
 
 # %%
 foldchange.overexpression = la.links.scalar.Linear(
@@ -591,8 +605,8 @@ S_causal.plot_features()
 
 # %% [markdown]
 # - Inferring a model means finding the optimal values for the free parameters
-# - The optimal value of parameters is defined by the loss function. In our case, this loss function tries to find a good balance between the wishes of
-#    - The observations, that want to be have the highest likelihood possible
+# - The optimal value of parameters is defined by the loss function. In our case, this loss function tries to find a good balance between:
+#    - The wishes of the observations, that want to be have the highest likelihood possible
 #    - The wishes of the latent variables, which want the variational distribution $q$ to resemble the prior distribution $p$ as best as possible
 # - To find optimal values, we typically perform gradient descent
 # - To interpret a model, we sample from the posterior and track intermediate values and/or probabilities:
@@ -601,5 +615,3 @@ S_causal.plot_features()
 #    - A perturbed posterior is used to quantify the effect that one variable has on the likelihood of another, such as how a latent variable affects an observation
 # - _lacell_ contains many modules that make the creation of models for single-cell omics easier
 # - With latenta we can also do non-linear regression, use multiple variables as input, and/or discrete variables as input
-
-# %%

@@ -53,7 +53,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # ![](_static/previous.svg)
 
 # %% [markdown]
-# We have a transcriptome that we want to explain using some model, and this model contains latent variables that are specific to genes, and known variables that are specific to the cells.
+# We have a transcriptome that we want to explain using some model, and this model contains latent variables that are specific to genes (for example the fold change), and known variables that are specific to the cells (for example the overexpression of *Myod1*).
 
 # %% [markdown]
 # But what if our cellular variables are also unknown, i.e. latent?
@@ -75,11 +75,11 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 #
 # To disentangle cellular processes in a dataset, we typically go through 3 phases:
 #
-# 1. We first model what we already know, e.g. batch effects, overexpression, ...
-# 2. We then model that which is likely (based on what we know) and to which we can include some prior knowledge, e.g. cell cycle, differentiation, ... You should see prior knowledge very broadly, as it not only contains your own knowledge but also information from your own control datasets, other databases, cell atlas projects, ...
-# 3. Model what is fairly hypothetical, e.g. new substates, different differentiation paths, interactions between processes, ...
+# 1. We first model what we already know is present in the data, e.g. batch effects, overexpression, ...
+# 2. We then model what we think is likely (based on what we know) and to which we can include some prior knowledge, e.g. cell cycle, differentiation ... You should see prior knowledge very broadly, as it not only contains your own knowledge but also information from your own control datasets, other databases, cell atlas projects ...
+# 3. Finally, we try to model what is fairly hypothetical, e.g. new substates, different differentiation paths, interactions between processes ...
 #
-# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework
+# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework.
 #
 # :::
 
@@ -108,7 +108,7 @@ sc.pl.umap(
 )
 
 # %% [markdown]
-# Just by looking at this 2D representation, it's immediately obvious that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle. On top of that, it seems that there is some heterogeneity in the control cells, although the magnitude of this is difficult to determine based on a 2D representation.
+# Just by looking at this 2D representation, it's immediately obvious that there are two dominant processes going on in the cell: differentiation (in this case to myocytes) and the cell cycle. On top of that, it seems that there is some heterogeneity in the control cells (*mCherry* cells), although the magnitude of this is difficult to determine based on a 2D representation.
 
 # %% [markdown]
 # Although in a typical use case we would model the cell cycle first, for illustrative purposes we will first look at the differentiation. We can "remove" (or reduce) the effect of the cell cycle by removing the cycling cells.
@@ -122,7 +122,7 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # %% [markdown]
 # We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
 #
-# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
+# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific nowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
 # %%
 differentiation = la.Latent(
@@ -130,6 +130,7 @@ differentiation = la.Latent(
     definition=[transcriptome["cell"]],
     label="differentiation",
 )
+differentiation
 
 # %% [markdown]
 # Now that we have defined the cellular latent space, we still have to define how this space affects the transcriptome. Given that we (can) assume that _most_ genes will change smoothly but non-linearly during differentiation, we choose a spline function for this:
@@ -139,6 +140,7 @@ foldchange = transcriptome.find("foldchange")
 foldchange.differentiation = la.links.scalar.Spline(
     differentiation, definition=foldchange.value_definition
 )
+foldchange.plot()
 
 # %% [markdown]
 # :::{note}
@@ -150,7 +152,7 @@ foldchange.differentiation = la.links.scalar.Spline(
 # :::
 
 # %% [markdown]
-# As before, we also want to correct for the batch effect:
+# As before, we also want to correct for the batch effect (again remember that the foldchange is an additive modular variable, so we can add any components we want and the foldchange will be a linear combination of them):
 
 # %%
 batch = la.variables.discrete.DiscreteFixed(adata_oi.obs["batch"])
@@ -193,6 +195,9 @@ sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 # %% [markdown]
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
+# %% [markdown]
+# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.  
+
 # %%
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
@@ -204,19 +209,22 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 
 # %% [markdown]
-# This nudging is performed by an appropriate prior distribution. We choose a beta distribution here because
+# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell. 
+
+# %% [markdown]
+# Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0. 
 
 # %%
 import pandas as pd
 
 differentiation_p = la.distributions.Beta(
-    beta=la.Fixed(
+    alpha=la.Fixed(
         pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,
         definition=[transcriptome["cell"]],
     ),
-    alpha=la.Fixed(
+    beta=la.Fixed(
         pd.Series([1.0, 1.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,

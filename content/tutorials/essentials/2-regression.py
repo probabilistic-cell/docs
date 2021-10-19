@@ -170,14 +170,14 @@ trace.plot()
 # %% [markdown]
 # We can see that the values have changed. 
 #
-# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). It can seem a bit convoluted but the graph structure 
-
-# %% [raw] tags=["remove-output", "remove-input"]
-# Changed with the iterations? Maybe in the code would be good to see a "before"/beggining and after?
+# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). It can seem a bit convoluted but the graph structure helps a lot! 
 
 # %%
-transcriptome.p.mu.a.q.loc.run() #will sample a value from the distribution
+transcriptome.p.mu.a.q.loc.run() 
 transcriptome.p.mu.a.q.loc.value_pd.head()
+
+# %% [markdown]
+# Note that you need to `.run()` before being able to access the values.
 
 # %% [markdown]
 # Our inference algorithm did not fullfill all 10000 iterations, but has permaturely stopped as it has detected _convergence_. Do note that this converge is not always perfect, and we will see later that there are some circumstances where further training may be advisable.
@@ -200,9 +200,6 @@ transcriptome_observed = la.posterior.Observed(
     transcriptome, retain_samples={expression.a}
 )
 transcriptome_observed.sample(5)
-
-# %%
-expression.a
 
 # %% [markdown]
 # Tha sampled values are stored in the dictionary `.samples` containing the samples of each variables, which were provided to the `retain_samples` argument, that are upstream of the transcriptome. We can access each variable either by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
@@ -319,12 +316,6 @@ overexpression_causal.scores.head()
 # :::
 
 # %% [markdown]
-# ### Using lacell to make model creation easier¶
-
-# %% [markdown]
-# Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the <span style="color:red">lacell</span> package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
-
-# %% [markdown]
 # ## Using _lacell_ to make model creation easier
 #
 # Specific modalities in single-cell data typically require a similar way of normalization and statistical modelling, and we have collected such prototypical models into the `lacell` package. For example, we can directly construct a model for transcriptomics from an AnnData object as follows:
@@ -427,11 +418,16 @@ with transcriptome.switch(la.config.device):
 
 
 # %% [markdown]
+# Linear regression is the simplest way to model the relationship between variables, however this relationship can often be non linear. For example, in our example we for now only modeled the relationship between the overexpression of *Myod1* and the genes expressions as a linear model but we can definitely imagine that it could rather be exponential, transient, ect ... 
+
+# %% [markdown]
 # ### Non-linear
 #
 # To consider non-linear relationships, we can use any of the non-linear link functions implemented in latenta:
 
 # %% tags=["remove-input"]
+
+# %%
 import pandas as pd
 import IPython.display
 
@@ -450,10 +446,7 @@ link_table = pd.DataFrame(link_table)
 IPython.display.HTML(link_table.to_html())
 
 # %% [markdown]
-# We'll illustrate {class}`latenta.links.scalar.spline.Spline`.
-
-# %%
-foldchange = transcriptome.find("foldchange")
+# We'll now illustrate {class}`latenta.links.scalar.spline.Spline`.
 
 # %%
 foldchange.overexpression = la.links.scalar.Spline(
@@ -476,12 +469,18 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %%
+foldchange.plot()
+
+# %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
     overexpression, transcriptome
 )
 overexpression_causal.observed.sample()
 overexpression_causal.sample(30)
 overexpression_causal.sample_empirical()
+
+# %% [markdown]
+# We can now do the inference as previously: 
 
 # %%
 overexpression_causal.plot_features()
@@ -504,7 +503,7 @@ batch.prior_pd().head()
 # :::
 
 # %% [markdown]
-# To calculate the batch effect, we want to multiply this one-hot encoding with another matrix in which each combination of batch and gene has a value that represents the fold difference in a particular batch. This is a perfect case for a matrix multiplication:
+# To calculate the batch effect, we want to multiply this one-hot encoding with another matrix in which each combination of batch and gene has a value that represents the fold difference in a particular batch. This is a perfect case for a matrix multiplication `latenta.links.vector.Matmul()`:
 
 # %%
 foldchange.batch = la.links.vector.Matmul(batch, definition=foldchange.value_definition)
@@ -522,19 +521,34 @@ foldchange.batch.plot()
 # ### Multiple regression
 
 # %% [markdown]
-# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression:
+# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression. These scores are based on the expression of specific genes known to be linked to S or G2M phase (REFERENCE). 
 
 # %%
-cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes("mm")
+cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes(organism="mm")
 sc.tl.score_genes_cell_cycle(
     adata,
     cellcycle_genes.query("phase == 'S'")["gene"],
     cellcycle_genes.query("phase == 'G2/M'")["gene"],
 )
 
+# %% [markdown]
+# The results are stored in `.obs`:
+
+# %%
+adata.obs["S_score"].head()
+
+# %% [markdown]
+# Let's now adapt the foldchange from the transcriptome model already pre-constructed from `lacell`:
+
 # %%
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 foldchange = transcriptome.find("foldchange")
+
+# %%
+foldchange
+
+# %% [markdown]
+# Note that the foldchange is here an additive modular variable, which means that every components we add to foldchange will be automatically combined in a linear model.
 
 # %%
 overexpression = la.Fixed(adata.obs["log_overexpression"], label="overexpression")
@@ -559,6 +573,9 @@ foldchange.plot()
 # Given that the cell cycle is a circular process, this way of modelling the cell cycle has a lot of flaws. This is merely included here for illustration purposes.
 # :::
 
+# %% [markdown]
+# Let's once again perform the inference:
+
 # %%
 with transcriptome.switch(la.config.device):
     inference = la.infer.svi.SVI(
@@ -567,6 +584,9 @@ with transcriptome.switch(la.config.device):
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
     trace.plot()
+
+# %% [markdown]
+# We can now observed the posterior for the overexpression:
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -579,6 +599,9 @@ overexpression_causal.sample_random()
 
 # %%
 overexpression_causal.plot_features()
+
+# %% [markdown]
+# But also for the different cycle phases: 
 
 # %%
 G2M_causal = la.posterior.scalar.ScalarVectorCausal(G2M, transcriptome)
@@ -606,7 +629,7 @@ S_causal.plot_features()
 # %% [markdown]
 # - Inferring a model means finding the optimal values for the free parameters
 # - The optimal value of parameters is defined by the loss function. In our case, this loss function tries to find a good balance between:
-#    - The wishes of the observations, that want to be have the highest likelihood possible
+#    - The wishes of the observations, i.e. to have the highest likelihood possible
 #    - The wishes of the latent variables, which want the variational distribution $q$ to resemble the prior distribution $p$ as best as possible
 # - To find optimal values, we typically perform gradient descent
 # - To interpret a model, we sample from the posterior and track intermediate values and/or probabilities:
@@ -615,3 +638,5 @@ S_causal.plot_features()
 #    - A perturbed posterior is used to quantify the effect that one variable has on the likelihood of another, such as how a latent variable affects an observation
 # - _lacell_ contains many modules that make the creation of models for single-cell omics easier
 # - With latenta we can also do non-linear regression, use multiple variables as input, and/or discrete variables as input
+
+# %%

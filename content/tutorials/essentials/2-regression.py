@@ -128,7 +128,7 @@ transcriptome.plot()
 # %% [markdown]
 # Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
-# Let's remind ourselves what we are actually trying to accomplish: we are trying to create a good model of our observations. 
+# Let's remind ourselves what we are actually trying to accomplish: we are trying to create a good model of our observations.
 #
 #
 # It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it might overfit and it would not help us to understand/learn from our observations.
@@ -144,7 +144,7 @@ transcriptome.plot()
 #
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 # %% [markdown]
-# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$. 
+# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$.
 
 # %% [markdown]
 #  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better.
@@ -168,12 +168,12 @@ trace = trainer.train(10000)
 trace.plot()
 
 # %% [markdown]
-# We can see that the values have changed. 
+# We can see that the values have changed.
 #
-# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). It can seem a bit convoluted but the graph structure helps a lot! 
+# Several different parameters had to be estimated, remember the ones, in grey, at the roots of our graph structure. Let's for example look at the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`). It can seem a bit convoluted but the graph structure helps a lot!
 
 # %%
-transcriptome.p.mu.a.q.loc.run() 
+transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -187,7 +187,7 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 #
 # For interpretation of the model, we can then use 3 main types of posteriors:
 # * Observed posterios
-# * Causal posteriors 
+# * Causal posteriors
 # * Perturbed posteriors
 
 # %% [markdown]
@@ -202,10 +202,7 @@ transcriptome_observed = la.posterior.Observed(
 transcriptome_observed.sample(5)
 
 # %% [markdown]
-# Tha sampled values are stored in the dictionary `.samples` containing the samples of each variables, which were provided to the `retain_samples` argument, that are upstream of the transcriptome. We can access each variable either by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
-
-# %% [markdown] tags=["remove-input", "remove-output"]
-# ### either by ... or by...?
+# Tha sampled values are stored in the dictionary `.samples` containing the samples of each variables, which were provided to the `retain_samples` argument, that are upstream of the transcriptome. We can access each variable by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
 
 # %%
 transcriptome_observed.samples[expression.a]
@@ -260,7 +257,7 @@ overexpression_causal.samples[overexpression].mean("sample")
 overexpression_causal.plot_features()
 
 # %% [markdown]
-# Note that if you don't specify any features to plot to `plot_features()` it will by default display the 10 features with the highest likelihood. 
+# Note that if you don't specify any features to plot to `plot_features()` it will by default display the 10 features with the highest likelihood ratio.
 
 # %% [markdown]
 # This plot shows both the _median_ value of each gene across different doses of the transcription factor, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
@@ -332,7 +329,7 @@ transcriptome.plot()
 # - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
 # - The mean $\mu$ is modelled as a linear combination of the relative expression in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
 # - The relative expression in a cell $\rho$ is itself a linear combination of the average expression of each gene in the cell, $\nu$, modelled as a latent variable, and the log-fold change $\delta$.
-# - When modelling cellular processes, we typically adapt the log-fold change $\delta$, that is why it is for now empty. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
+# - When modelling cellular processes, we typically adapt the log-fold change $\delta$ (which is now still empty). However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
 
 # %% [markdown]
 # :::{seealso}
@@ -341,9 +338,6 @@ transcriptome.plot()
 
 # %% [markdown]
 # Once models reach a certain complexity, it becomes easier to get a variable using the `find()` function, which will recursively look for an object with the given label or symbol:
-
-# %% [markdown]
-# Once models reach a certain complexity, it becomes easier to get a variable using the {meth}`~latenta.variables.Composed.find` function, which will recursively look for an object with the given label or symbol:
 
 # %% [markdown]
 # Let’s now adapt this model by adding the overexpression to the fold change:
@@ -418,7 +412,7 @@ with transcriptome.switch(la.config.device):
 
 
 # %% [markdown]
-# Linear regression is the simplest way to model the relationship between variables, however this relationship can often be non linear. For example, in our example we for now only modeled the relationship between the overexpression of *Myod1* and the genes expressions as a linear model but we can definitely imagine that it could rather be exponential, transient, ect ... 
+# Linear regression is the simplest way to model the relationship between variables, however this relationship can often be non linear. For example, in our example we for now only modeled the relationship between the overexpression of *Myod1* and the genes expressions as a linear model but we can definitely imagine that it could rather be exponential, transient, ect ...
 
 # %% [markdown]
 # ### Non-linear
@@ -480,7 +474,7 @@ overexpression_causal.sample(30)
 overexpression_causal.sample_empirical()
 
 # %% [markdown]
-# We can now do the inference as previously: 
+# We can now do the inference as previously:
 
 # %%
 overexpression_causal.plot_features()
@@ -521,7 +515,7 @@ foldchange.batch.plot()
 # ### Multiple regression
 
 # %% [markdown]
-# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression. These scores are based on the expression of specific genes known to be linked to S or G2M phase (REFERENCE). 
+# Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression. These scores are based on the expression of specific genes known to be linked to S or G2M phase (REFERENCE).
 
 # %%
 cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes(organism="mm")
@@ -601,7 +595,7 @@ overexpression_causal.sample_random()
 overexpression_causal.plot_features()
 
 # %% [markdown]
-# But also for the different cycle phases: 
+# But also for the different cycle phases:
 
 # %%
 G2M_causal = la.posterior.scalar.ScalarVectorCausal(G2M, transcriptome)

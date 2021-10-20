@@ -218,13 +218,13 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 import pandas as pd
 
 differentiation_p = la.distributions.Beta(
-    alpha=la.Fixed(
+    beta=la.Fixed(
         pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,
         definition=[transcriptome["cell"]],
     ),
-    beta=la.Fixed(
+    alpha=la.Fixed(
         pd.Series([1.0, 1.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,

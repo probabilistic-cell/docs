@@ -75,7 +75,7 @@ project_root.mkdir()
 laf.set_project_root(project_root)  # sets the default project root
 
 # %% [markdown]
-# We can then create a {class}`~laflow.Flow` object as follows. Because we set the default root for this python session, we don't have to provide this explicitely. All we need to provide is a name for the flow, and optionally a base flow if this is not the root:
+# We can then create a {class}`~laflow.Flow` object as follows. Because we have set the default root for this python session, we don't have to provide this explicitely. All we need to provide is a name for the flow:
 
 # %%
 dataset = laf.Flow("dataset")
@@ -120,6 +120,9 @@ dataset.basic_umap = sc.pl.umap(dataset.adata, return_fig=True)
 # %%
 dataset
 
+
+# %%
+# !ls -lh {dataset.path}
 
 # %% [markdown]
 # ## Connecting flows

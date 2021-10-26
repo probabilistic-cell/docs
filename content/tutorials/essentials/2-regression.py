@@ -354,8 +354,6 @@ foldchange.overexpression = la.links.scalar.Linear(
 )
 
 # %% [markdown]
-# This modification is also done in automatically transcriptome.
-#
 # Note that we do not transform this variable, nor do we add a baseline (or intercept) to this function as this is all handled downstream by the $\rho$ function
 
 # %%

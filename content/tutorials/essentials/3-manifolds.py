@@ -218,14 +218,14 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 import pandas as pd
 
 differentiation_p = la.distributions.Beta(
-    beta=la.Fixed(
-        pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
+        alpha=la.Fixed(
+        pd.Series([1.0, 1.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,
         definition=[transcriptome["cell"]],
     ),
-    alpha=la.Fixed(
-        pd.Series([1.0, 1.0], index=["Myod1", "mCherry"])[
+    beta=la.Fixed(
+        pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,
         definition=[transcriptome["cell"]],
@@ -259,16 +259,9 @@ foldchange.batch = la.links.vector.Matmul(batch, definition=foldchange.value_def
 foldchange.plot()
 
 # %%
-with transcriptome.switch("cuda"):
+with transcriptome.switch(la.config.device):
     inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
-    )
-    trainer = la.infer.trainer.Trainer(inference)
-    trace = trainer.train(10000)
-    trace.plot()
-
-    inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
@@ -313,16 +306,16 @@ differentiation_causal.plot_features()
 # ## Differentiation: increasing scalability and robustness through amortization
 
 # %% [markdown]
-# Because the model has to infer both cell- and gene-specific latent variables at the same time, finding a robust solution for this model be tricky. One reason for this is that that during optimization, both groups of latent variables have to follow eachother, and they can easily get stuck together in suboptimal solutions. Indeed, if you would run the above model a couple of times, you might notice that sometimes the inferred differentiation values are completely different from the "expected" situation.
+# Because the model has to infer both cell- and gene-specific latent variables at the same time, finding a robust solution for this model can be tricky. One reason for this is that during optimization, both groups of latent variables have to follow each other, and they can easily get stuck together in suboptimal solutions. Indeed, if you would run the above model a couple of times, you might notice that sometimes the inferred differentiation values are completely different from the "expected" situation.
 #
-# One main way to make inference of a latent space more robust is to not directly infer the latent variables for each cell individually, but instead train a _amortization function_ that provides this latent space for us. This function will typically use our observation, in this case the transcriptome's count matrix, and predict the components of the variational distribution, i.e. $\mu$ and $\sigma$. We of course still have to train some parameters, namely the parameters of this amortization function, but this makes training much easier as information is shared between all cells.
+# One main way to make inference of a latent space more robust is to not directly infer the latent variables for each cell individually, but instead train a _amortization function_ that provides this latent space for us. This function will typically use our observation, in this case the transcriptome's count matrix, and predict the components of the variational distribution, i.e. $\mu$ and $\sigma$. We, of course, still have to train some parameters, namely the parameters of this amortization function, but this makes training much easier as the information is shared between all cells.
 #
-# The main challenge with amortization is that we need to choose a function that is extremely flexible, as it needs to combine information coming from all genes into a probably highly non-linear model. We therefore typically choose a neural network. The number of layers of this function depends on the complexity of the data. More specifically, how all features in the observation are related. A transcriptomics count matrix has fairly simple "co-expression" structure and therefore typically on requires two layers. The pixels and channels in imaging data on the other hand have a more intracate and hierarchical structure that is best captured by many layers (i.e. deep learning).
+# The main challenge with amortization is that we need to choose a function that is extremely flexible, as it needs to combine information coming from all genes into a probably highly non-linear model. We therefore typically choose a neural network. The number of layers of this function depends on the complexity of the data, or more specifically, how all features in the observation are related. A transcriptomics count matrix has fairly simple "co-expression" structure and therefore typically on requires two layers. The pixels and channels in imaging data on the other hand have a more intracate and hierarchical structure that is best captured by many layers (i.e. deep learning).
 
 # %% [markdown]
 # :::{note}
 #
-# Don't we lose interpretability if we use this neural network?
+# Don't we lose interpretability if we use a neural network?
 #
 # It's certainly true that a neural network, even of a small size, can be very difficult to interpret. At best, we may be able to rank some genes according to their importance in the model. However, in our case we don't really care about this interpretability, because amortization is just a trick to make inference easier. It's important to understand that the actual interpretability always lies downstream from the variational distribution, in how the cellular latent space is related to the transcriptome. The amortization function just helps us to estimate the variational distribution, but doesn't help us with explaining the transcriptome. For a variational distribution, we therefore only want accuracy and ease of inference, which neural networks can provide, but not interpretability. In fact, in an ideal world, the optimal solution for a model with and without amortization would be the same.
 #
@@ -363,16 +356,9 @@ foldchange.batch = la.links.vector.Matmul(batch, definition=foldchange.value_def
 foldchange.plot()
 
 # %%
-with transcriptome.switch("cuda"):
+with transcriptome.switch(la.config.device):
     inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-3)
-    )
-    trainer = la.infer.trainer.Trainer(inference)
-    trace = trainer.train(10000)
-    trace.plot()
-
-    inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=1e-2)
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)

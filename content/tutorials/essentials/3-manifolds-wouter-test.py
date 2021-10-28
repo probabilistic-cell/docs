@@ -390,7 +390,7 @@ differentiation_causal.plot_features()
 
 # %% [markdown]
 # Apart from a more robust training, amortization also has a couple of additional advantages:
-# - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred parameters of the neural network.
+# - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred hundred parameters of the neural network.
 # - We get a function that can predict the latent space even on unseen cells "for free". Note however, that this does not necessarily mean that our function is generalizable, as this may depend on the assumptions, hyperparameters and structure of the neural network.
 
 # %% [markdown]

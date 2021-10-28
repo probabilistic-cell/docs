@@ -88,19 +88,10 @@ genes = la.Dim(pd.Series(range(100), name="gene").astype(str))
 
 # %%
 dist = la.distributions.RandomWalk(
-    100, la.distributions.Normal(scale = 1., definition=la.Definition([genes]))
+    100, la.distributions.Normal(definition=la.Definition([genes]))
 )
 dist.run()
 value = dist.value.cpu().numpy()
-for i in range(value.shape[0]):
-    sns.lineplot(x=np.arange(value.shape[1]), y=value[i], alpha=0.3)
-
-# %%
-latent = la.Latent(dist)
-
-# %%
-latent.q.run()
-value = latent.q.value.detach().cpu().numpy()
 for i in range(value.shape[0]):
     sns.lineplot(x=np.arange(value.shape[1]), y=value[i], alpha=0.3)
 
@@ -185,7 +176,7 @@ s = la.Parameter(
 )
 
 z = la.links.scalar.Spline(
-    x, b=intercept, knot=model_gs.find("knot"), output=model_gs.dist.value_definition
+    x, b=intercept, knot=model_gs.find("knot"), output=y.value_definition
 )
 
 dist = la.distributions.Normal(loc=z, scale=s)
@@ -228,8 +219,6 @@ sns.heatmap(modelled_value.loc[cell_order], ax=ax1)
 # %%
 x_causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
 x_causal.sample(10)
-x_causal.observed.sample()
-x_causal.sample_empirical()
 
 # %%
 x_causal.plot_features()

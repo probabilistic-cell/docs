@@ -90,7 +90,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # Let's explore what heterogeneity might be present in our cells. Let's first extract the cell cycle phases using the (current) canonical approach:
 
 # %%
-cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes()
+cellcycle_genes = lac.transcriptome.effects.cellcycle.get_cellcycle_genes()
 sc.tl.score_genes_cell_cycle(
     adata,
     s_genes=cellcycle_genes.query("phase == 'S'")["gene"].tolist(),
@@ -196,7 +196,7 @@ sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
 # %% [markdown]
-# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.  
+# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.
 
 # %%
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
@@ -209,10 +209,10 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 
 # %% [markdown]
-# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell. 
+# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell.
 
 # %% [markdown]
-# Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0. 
+# Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0.
 
 # %%
 import pandas as pd

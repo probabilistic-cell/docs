@@ -522,7 +522,7 @@ transcriptome.plot()
 # Let's say we wanted to find out how both the overexpression and the cell cycle affect the transcriptome. A naive way of doing that would be to use the canonical S and G2M scores as input for a linear regression. These scores are based on the expression of specific genes known to be linked to S or G2M phase (REFERENCE).
 
 # %%
-cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes(organism="mm")
+cellcycle_genes = lac.transcriptome.effects.cellcycle.get_cellcycle_genes(organism="mm")
 sc.tl.score_genes_cell_cycle(
     adata,
     cellcycle_genes.query("phase == 'S'")["gene"],

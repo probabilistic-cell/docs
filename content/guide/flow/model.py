@@ -24,22 +24,49 @@ if get_ipython():
 import latenta as la
 import laflow as laf
 
+import numpy as np
+
 # %%
 import tempfile
 
 tmpdir = tempfile.TemporaryDirectory().name
 
-model = laf.Model(project_root=tmpdir)
+model = laf.Model("model", project_root=tmpdir)
 
 # %%
-model.model_initial = la.Latent(
+cells = la.Dim(3, "cell")
+genes = la.Dim(4, "gene")
+
+dataset = laf.Dataset("dataset", project_root=tmpdir)
+dataset.add_modality(
+    laf.dataset.MatrixModality(
+        "transcriptome",
+        dataset,
+        X=np.random.random(size=(cells.size, genes.size)),
+        obs=cells.index.to_frame().set_index("cell"),
+        var=genes.index.to_frame().set_index("gene"),
+        reset=True,
+    )
+)
+
+# %%
+model = laf.Model(dataset=dataset, name="", project_root=tmpdir)
+
+# %%
+model.root_initial = la.Latent(
     p=la.distributions.Normal(la.Parameter(1.0)),
-    q=la.distributions.Normal(-1.0, definition=[la.Dim(500, "dim")]),
+    q=la.distributions.Normal(-1.0, definition=[cells, genes]),
     label="latent",
 )
 
 # %%
-model.model_initial.plot()
+model.root_initial.plot()
+
+# %%
+dataset.test = model.root_
+
+# %%
+dataset.test_
 
 # %%
 model
@@ -47,23 +74,18 @@ model
 # %%
 model.infer()
 
-assert model.model_.available()
-
-# %%
-model
-
 # %%
 model.trace.plot()
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(model.model.q)
+posterior = la.posterior.scalar.ScalarObserved(model.root.q)
 posterior.sample(1)
 
 # %% [markdown]
 # As explained in [], {class}`laflow.Latenta`, you can provide a `db` which will avoid that any components stored in the posterior (in this case the model.model_) will be saved multiple times.
 
 # %%
-model.posterior = laf.Latenta(db={model.model_})
+model.posterior = laf.Latenta(db={model.root_})
 model.posterior = posterior
 
 # %%
@@ -71,15 +93,9 @@ model.posterior = posterior
 
 # %%
 ax = model.posterior.plot()
-
-# %%
 model.q_distribution = ax
 
 # %%
 model
-
-# %%
-
-# %%
 
 # %%

@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -528,6 +528,12 @@ expression.plot()
 
 # %%
 transcriptome.plot()
+
+# %% [markdown]
+# ## 8. Root
+
+# %% [markdown]
+# We sometimes want to combine several unrelated variables in a model.
 
 # %% [markdown]
 # ## Main points

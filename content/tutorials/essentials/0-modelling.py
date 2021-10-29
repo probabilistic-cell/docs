@@ -90,6 +90,4 @@
 # If you're relatively new to modeling, it's often easier to start working with the highest level functions and slowly learn to work with lower (but more flexible) modeling techniques. Nonetheless, in these tutorials we will give an overview on each level starting from the bottom so that you're familiar with the underlying statistical and machine learning concepts.
 
 # %% [markdown]
-# Any model is a mathematical representation of reality, and building models does therefore require some mathematical intuition. Although latenta may make this easier, it would be unwise to abstract away every mathematical concept completely. Some probability, statistics, and machine learning concepts are too central for modeling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.
-
-# %%
+# Any model is a mathematical representation of reality, and building models does therefore require some mathematical intuition. Although latenta may make this easier, it would be unwise to abstract away every mathematical concept completely. Some probability, statistics, and machine learning concepts are too central for modeling (and, in fact, biology!) to be hidden. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a *see also* sign) where you can improve your understanding of some of these concepts.

@@ -38,9 +38,6 @@ x = la.Fixed(pd.Series(np.random.uniform(0, 20, n_cells), index=cells.index), la
 
 
 # %%
-np.abs(np.random.normal(3.0, 1.0, (2)))[:, None] * np.ones((2, n_genes))
-
-# %%
 # MONOTONIC GS
 n_knots = 10
 
@@ -74,27 +71,6 @@ intercept = la.Fixed(
 )
 y = la.links.scalar.Spline(x=x, a=a, b=intercept)
 
-
-# %%
-# LINEAR GS
-# n_genes = 100
-# genes = la.Dim([str(i) for i in range(n_genes)], name="gene")
-
-# a_value = (
-#     np.random.choice([-1, 1], (n_genes))
-#     * (np.random.random((n_genes)) > 0.5)
-# )
-# a = la.Fixed(pd.Series(a_value, index=genes.index), label="a")
-# intercept = la.Fixed(
-#     pd.Series(
-#         np.random.choice([-1, 1], n_genes)
-#         * np.random.normal(1., 1.0, n_genes)
-#         * (np.random.random(n_genes) > 0.5),
-#         index=genes.index,
-#     ),
-#     label="intercept",
-# )
-# y = la.links.scalar.Linear(x=x, a=a, b=intercept)
 
 # %%
 scale = la.Fixed(

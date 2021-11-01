@@ -400,11 +400,6 @@ s = la.Parameter(
 z = la.links.scalar.MonotonicSpline(
     x, b=True, knot=model_gs.find("knot"), output=y.value_definition
 )
-z.a.q.loc = la.links.vector.Monotonic(z.a.q.loc)
-# z.a.p.sign.probs = la.Fixed(0.5)
-# z.a.p.step.scale = la.Fixed(1.)
-# z.b.p.loc = la.Fixed(0.)
-# z.b.p.scale = la.Fixed(3.)
 
 dist = la.distributions.Normal(loc=z, scale=s)
 
@@ -421,9 +416,6 @@ s = la.Parameter(
 z = la.links.scalar.Spline(
     x, b=True, knot=model_gs.find("knot"), output=y.value_definition
 )
-# z.a.p.step.scale = la.Fixed(1.)
-# z.b.p.loc = la.Fixed(0.)
-# z.b.p.scale = la.Fixed(3.)
 
 dist = la.distributions.Normal(loc=z, scale=s)
 
@@ -438,9 +430,6 @@ s = la.Parameter(
 )
 
 z = la.links.scalar.Linear(x, a=True, b=True, output=y.value_definition)
-# z.a.p.scale = la.Fixed(1.)
-# z.b.p.loc = la.Fixed(0.)
-# z.b.p.scale = la.Fixed(3.)
 
 dist = la.distributions.Normal(loc=z, scale=s)
 

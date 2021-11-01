@@ -140,7 +140,7 @@ dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
 # %%
-model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist=dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -172,7 +172,7 @@ for gene_id, ax in zip(gene_ids, axes):
 
 # %%
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
 z = la.links.scalar.Spline(
@@ -184,7 +184,7 @@ dist = la.distributions.Normal(loc=z, scale=s)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation = observation)
+model = la.Root(observation=observation)
 model.plot()
 
 

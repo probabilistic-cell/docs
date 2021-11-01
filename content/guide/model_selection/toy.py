@@ -298,7 +298,7 @@ mu = la.modular.Additive(
 s = la.Parameter(
     1.0,
     definition=la.Definition([genes]),
-    transforms=la.distributions.Exponential().biject_to(),
+    transforms=la.distributions.Exponential().transform_to(),
 )
 
 

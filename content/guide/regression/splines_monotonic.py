@@ -22,61 +22,82 @@ import collections
 import latenta as la
 
 # %%
-cells = la.Dim(pd.Series(range(100), name="cell").astype(str))
-genes = la.Dim(pd.Series(range(4), name="gene").astype(str))
-knots = la.Dim(range(3), "knot")
-
-# %% [markdown]
-# ## Monotonic transforms
+cells = la.Dim(pd.Series(range(600), name="cell").astype(str))
+genes = la.Dim(pd.Series(range(5), name="gene").astype(str))
+knots = la.Dim(range(5), "knot")
 
 # %%
-a = la.Fixed(pd.Series([2.] + [0.] * (len(knots)-1), knots.index))
+x_value = (
+    pd.Series(
+        np.random.choice((0, 1, 2, 3, 4), len(cells)), index=cells.index, name="knot"
+    )
+    .astype(float)
+    .astype("category")
+)
+x = la.variables.discrete.DiscreteFixed(x_value)
+a_gs = la.Fixed(pd.Series([0.5, 0, 1, 2, 1.5], index=knots.index).astype(float))
+y = la.links.vector.Matmul(x=x, a=a_gs)
+obs = la.distributions.Normal(y)
 
 # %%
-b = la.links.vector.Monotonic(a)
+obs_value = obs.prior_pd()
 
 # %%
-b.prior().shape
+a = la.Parameter(0.0, definition=[knots])
+y = la.links.vector.Matmul(x=x, a=a)
 
 # %%
-b.run()
+dist = la.distributions.Normal(y)
+obs = la.Observation(obs_value, dist)
 
 # %%
-a.value.shape
+inference = la.infer.svi.SVI(obs, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01))
+trainer = la.infer.trainer.Trainer(inference)
+trace = trainer.train(10000)
+trace.plot()
 
 # %%
-b.value.shape
+a.prior_pd().plot()
 
 # %%
-b.value
+sns.scatterplot(
+    a.prior_pd(), a_gs.prior_pd(), hue=a.prior_pd().index.astype("category")
+)
 
 # %%
-b.invert(b.value)
+a_unconstrained = la.Parameter(0.0, definition=[knots])
+a = la.links.vector.Monotonic(a_unconstrained)
+y = la.links.vector.Matmul(x=x, a=a)
 
 # %%
-a = la.distributions.Normal(0., 1., definition = [knots], transforms = [la.transforms.Monotonic()])
+dist = la.distributions.Normal(y)
+obs = la.Observation(obs_value, dist)
 
 # %%
-a.reset()
-a.run()
-a.value
+inference = la.infer.svi.SVI(obs, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01))
+trainer = la.infer.trainer.Trainer(inference)
+trace = trainer.train(10000)
+trace.plot()
 
 # %%
-a
+torch.minimum(torch.tensor(0.1), torch.tensor([1.0, 2.0, 3.0]))
 
 # %%
-n_knots = len(knots)
+a.prior_pd().plot()
 
 # %%
-val = torch.arange(n_knots+1)[1:] / n_knots
-a.log_prob(val)
+sns.scatterplot(
+    a.prior_pd(), a_gs.prior_pd(), hue=a.prior_pd().index.astype("category")
+)
 
 # %% [markdown]
 # ## Random walks
 
 # %%
-sign = la.distributions.Bernouilli(0.5, transforms = [la.transforms.Sign()])
-dist = la.distributions.MonotonicRandomWalk(10, la.distributions.HalfNormal(), sign = sign)
+sign = la.distributions.Bernouilli(0.5, transforms=[la.transforms.Sign()])
+dist = la.distributions.MonotonicRandomWalk(
+    11, la.distributions.HalfNormal(), sign=sign
+)
 knots = dist[0]
 
 # %%
@@ -85,7 +106,7 @@ sign.run()
 sign.likelihood
 
 # %%
-dist2 = la.distributions.RandomWalk(10, la.distributions.Normal())
+dist2 = la.distributions.RandomWalk(len(knots), la.distributions.Normal())
 
 # %%
 dist.reset()
@@ -97,7 +118,11 @@ print("log_prob: " + str(dist._log_prob(dist.value)))
 ""
 
 # %%
+dist.value
+
+# %%
 import math
+
 dist.reset()
 dist.run()
 dist2.run()
@@ -105,20 +130,22 @@ print(dist2.log_prob(dist.value))
 print(dist.log_prob(dist.value))
 print(dist.likelihood)
 
-fold_difference = (dist.likelihood - dist2.log_prob(dist.value))/math.log(2.)
+fold_difference = (dist.likelihood - dist2.log_prob(dist.value)) / math.log(2.0)
 print(fold_difference)
-assert torch.isclose(fold_difference, torch.tensor(len(knots)).float()-2), "A monotonic spline with HalfNormal should have double the likelihood per step as a regular spline with Normal"
+assert torch.isclose(
+    fold_difference, torch.tensor(len(knots)).float() - 1, atol=1e-1, rtol=1e-1
+), "A monotonic spline with HalfNormal should have double the likelihood per step as a regular spline with Normal"
 ""
 
 # %%
-steps = torch.cat([torch.tensor([0.]), torch.ones(len(knots)-1)])
+steps = torch.cat([torch.tensor([0.0]), torch.ones(len(knots) - 1)])
 
 value = torch.cumsum(steps, 0)
 lik = dist.log_prob(value)
 print(lik)
 
 #
-steps = -torch.cat([torch.tensor([0.]), torch.ones(len(knots)-1)])
+steps = -torch.cat([torch.tensor([0.0]), torch.ones(len(knots) - 1)])
 
 value = torch.cumsum(steps, 0)
 lik = dist.log_prob(value)
@@ -126,16 +153,16 @@ print(lik)
 
 # %%
 #
-steps = torch.cat([torch.tensor([0.]), torch.ones(len(knots)-1)])
-steps[:int(len(steps)/2)] *= -1
+steps = torch.cat([torch.tensor([0.0]), torch.ones(len(knots) - 1)])
+steps[: int(len(steps) / 2) + 1] *= -1
 print(steps)
 
 value = torch.cumsum(steps, 0)
 lik = dist.log_prob(value)
 print(lik)
 
-# %%
-dist.sign.likelihood
+# %% [markdown]
+# ----
 
 # %%
 latent = la.Latent(dist)
@@ -150,10 +177,13 @@ print(latent.likelihood)
 print(latent.posterior)
 
 # %%
-val.shape
+latent.q.prior()
 
 # %%
-latent.q.prior()
+latent.q.loc = la.links.vector.Monotonic(latent.q.loc)
+
+# %%
+latent.plot()
 
 # %%
 # latent.q.loc.loader.value.data[0] = 3.
@@ -169,13 +199,12 @@ torch.cat(liks).mean()
 for i in range(50):
     latent.reset()
     latent.run()
-    
+
     value = latent.p.value.cpu().numpy()
-    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color = "red")
-    
+    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color="red")
+
     value = latent.q.value.detach().cpu().numpy()
-    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color = "blue")
-    print(value[-1])
+    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color="blue")
 
 # %%
 inference = la.infer.svi.SVI(
@@ -187,15 +216,18 @@ trace.plot()
 
 
 # %%
+latent.q.loc.x.prior_pd().plot()
+
+# %%
 for i in range(50):
     latent.reset()
     latent.run()
-    
+
     value = latent.p.value.cpu().numpy()
-    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color = "red")
-    
+    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color="red")
+
     value = latent.q.value.detach().cpu().numpy()
-    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color = "blue")
+    sns.lineplot(x=np.arange(value.shape[0]), y=value, alpha=0.1, color="blue")
 
 # %%
 knots = dist[0]
@@ -259,7 +291,9 @@ genes = la.Dim(pd.Series(range(1), name="gene").astype(str))
 
 # %%
 dist = la.distributions.MonotonicRandomWalk(
-    n_knots = len(knots), step = la.distributions.HalfNormal(definition=la.Definition([genes])), sign = la.distributions.Bernouilli(0.5, transforms = [la.transforms.Sign()])
+    n_knots=len(knots),
+    step=la.distributions.HalfNormal(definition=la.Definition([genes])),
+    sign=la.distributions.Bernouilli(0.5, transforms=[la.transforms.Sign()]),
 )
 dist.run()
 value = dist.value.cpu().numpy()
@@ -278,18 +312,24 @@ x = la.Fixed(pd.Series(np.random.uniform(0, 20, n_cells), index=cells.index), la
 
 
 # %%
-n_genes = 100
 n_knots = 10
-genes = la.Dim([str(i) for i in range(n_genes)], name="gene")
+
 knots = la.Dim(range(n_knots), name="knot")
 
-steps = (
-    np.random.choice([-1, 1], (n_genes))[:, None]
-    * np.abs(np.random.normal(3.0, 1.0, (n_genes, n_knots)))
-    * (np.random.random((n_genes, n_knots)) > 0.5)
+steps = np.vstack(
+    [
+        np.zeros(n_knots),
+        1 * np.ones(n_knots),
+        np.random.choice([-1, 1])
+        * np.abs(np.random.normal(3.0, 1.0, n_knots))
+        * (np.arange(n_knots) > (n_knots / 2)),
+    ]
 )
+n_genes = steps.shape[0]
+genes = la.Dim([str(i) for i in range(n_genes)], name="gene")
+
 a_value = steps.cumsum(1)
-a_value = a_value - a_value.mean(1, keepdims=True)
+# a_value = a_value - a_value.mean(1, keepdims=True)
 a = la.Fixed(pd.DataFrame(a_value, columns=knots.index, index=genes.index), label="a")
 intercept = la.Fixed(
     pd.Series(
@@ -306,12 +346,12 @@ scale = la.Fixed(
 
 
 # %%
-y = la.links.scalar.MonotonicSpline(x=x, a=a, b=intercept)
+y = la.links.scalar.Spline(x=x, a=a, b=intercept)
 dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
 # %%
-model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist=dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -320,11 +360,17 @@ posterior.sample(1)
 
 
 # %%
+a_value
+
+# %%
 loc_value = posterior.samples[dist.loc].sel(sample=0).to_pandas()
 observation_value = posterior.samples[dist].sel(sample=0).to_pandas()
 fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 5))
 cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax=ax0)
+
+# %%
+a_value
 
 # %%
 observation_value = posterior.samples[dist].sel(sample=0).to_pandas()
@@ -348,89 +394,158 @@ y.reset()
 
 # %%
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
 z = la.links.scalar.MonotonicSpline(
     x, b=True, knot=model_gs.find("knot"), output=y.value_definition
 )
-# z.a.q.scale.loader.value.data[..., 1:] = torch.log(torch.tensor(0.1))
-# z.a.q = la.distributions.Delta(z.a.q.loc, transforms = z.a.q.transforms, dependent_dims = z.a.q.dependent_dims)
-# z.a = z.a.q
+z.a.q.loc = la.links.vector.Monotonic(z.a.q.loc)
+# z.a.p.sign.probs = la.Fixed(0.5)
+# z.a.p.step.scale = la.Fixed(1.)
+# z.b.p.loc = la.Fixed(0.)
+# z.b.p.scale = la.Fixed(3.)
 
 dist = la.distributions.Normal(loc=z, scale=s)
 
 observation = la.Observation(observation_value, dist, label="observation")
 
-# %%
-# z.a.q.loc.loader.value.data[:, 0] = 10.
+model_mspline = la.Root(observation=observation)
+model_mspline.plot()
 
 # %%
-z.a.p.sign.probs = la.Fixed(0.5)
-z.a.p.step.scale = la.Fixed(1.)
-
-# %%
-model = la.Root(observation = observation)
-model.plot()
-
-
-# %%
-inference = la.infer.svi.SVI(
-    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
-)
-trainer = la.infer.trainer.Trainer(inference)
-trace = trainer.train(10000)
-trace.plot()
-
-
-# %%
-observed = la.posterior.Posterior(
-    observation, retain_samples=model.components_upstream().values()
-)
-observed.sample(1, subsample_n=1)
-
-# %%
-observed.likelihood
-
-# %%
-observed.elbo
-
-# %%
-observed.elbo
-
-# %%
-fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 5))
-cell_order = model_gs.find("x").prior_pd().sort_values().index
-sns.heatmap(observation_value.loc[cell_order], ax=ax0)
-modelled_value = observed.samples[observation.p].sel(sample=0).to_pandas()
-sns.heatmap(modelled_value.loc[cell_order], ax=ax1)
-
-
-# %%
-x_causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
-x_causal.observed.sample()
-x_causal.sample(10)
-x_causal.sample_empirical()
-
-# %%
-x_causal.plot_features()
-
-# %%
-parameter_values = la.qa.cookbooks.check_parameters(
-    la.qa.cookbooks.gather_parameters(["a", "intercept"], model_gs, observed)
+s = la.Parameter(
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
-# %%
-dim = la.Dim([1, 2, 3, 4], "h")
+z = la.links.scalar.Spline(
+    x, b=True, knot=model_gs.find("knot"), output=y.value_definition
+)
+# z.a.p.step.scale = la.Fixed(1.)
+# z.b.p.loc = la.Fixed(0.)
+# z.b.p.scale = la.Fixed(3.)
+
+dist = la.distributions.Normal(loc=z, scale=s)
+
+observation = la.Observation(observation_value, dist, label="observation")
+
+model_spline = la.Root(observation=observation)
+model_spline.plot()
 
 # %%
-x_value = pd.Series([1.0, 2.0, 3.0, 0.0], index=dim.index, name="x")
-x = la.Fixed(x_value)
+s = la.Parameter(
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
+)
 
-y = la.links.scalar.Spline(x)
+z = la.links.scalar.Linear(x, a=True, b=True, output=y.value_definition)
+# z.a.p.scale = la.Fixed(1.)
+# z.b.p.loc = la.Fixed(0.)
+# z.b.p.scale = la.Fixed(3.)
 
-assert y.value_definition[0] == x[0]
-assert y.ndim == 1
+dist = la.distributions.Normal(loc=z, scale=s)
+
+observation = la.Observation(observation_value, dist, label="observation")
+
+model_linear = la.Root(observation=observation)
+model_linear.observation.p.loc.a.label = "a"
+model_linear.observation.p.loc.b.label = "b"
+model_linear.plot()
+
+# %%
+models = {"linear": model_linear, "mspline": model_mspline, "spline": model_spline}
+
+# %%
+for model_id, model in models.items():
+    inference = la.infer.svi.SVI(
+        model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
+    )
+    trainer = la.infer.trainer.Trainer(inference)
+    trace = trainer.train(10000)
+    trace.plot()
+
+# %%
+for model_id, model in models.items():
+    observed = la.posterior.vector.VectorObserved(
+        model.observation, retain_samples=model.components_upstream().values()
+    )
+    observed.sample(30, subsample_n=1)
+    model["observed"] = observed
+
+    causal = la.posterior.scalar.ScalarVectorCausal(x, model.observation)
+    causal.observed.sample()
+    causal.sample(10)
+    causal.sample_empirical()
+    model["causal"] = causal
+
+# %%
+pd.Series(
+    {model_id: model["observed"].elbo.item() for model_id, model in models.items()}
+)
+
+# %%
+for model_id, model in models.items():
+    print(model_id)
+    model.reset()
+    a = model.find("a")
+    a.run()
+    a.likelihood
+    #     print(a.likelihood)
+    #     print(a.posterior)
+    print(a.likelihood - a.posterior)
+#     print(a.q.scale.value)
+#     print("--")
+#     print(a.q.scale.value)
+
+# %%
+likelihood_features = pd.DataFrame(
+    {
+        model_id: model["observed"].likelihood_features.to_pandas()
+        for model_id, model in models.items()
+    }
+).T
+likelihood_features.style.bar(axis=0)
+
+# %%
+elbo_features = pd.DataFrame(
+    {
+        model_id: model["observed"].elbo_features.to_pandas()
+        for model_id, model in models.items()
+    }
+).T
+elbo_features.style.bar(axis=0)
+
+# %%
+(likelihood_features - elbo_features).style.bar(axis=0)
+
+# %%
+kl_a = pd.DataFrame(
+    {
+        model_id: model["observed"]
+        .samples[model.find("a").uuid + "_kl"]
+        .mean("sample")
+        .to_pandas()
+        .sum()
+        for model_id, model in models.items()
+    }
+).T
+kl_a.style.bar(axis=0)
+
+# %%
+kl_b = pd.DataFrame(
+    {
+        model_id: model["observed"]
+        .samples[model.find("b").uuid + "_kl"]
+        .mean("sample")
+        .to_pandas()
+        for model_id, model in models.items()
+    }
+).T
+kl_b.style.bar(axis=0)
+
+# %%
+for model_id, model in models.items():
+    causal = model["causal"]
+    fig = causal.plot_features(show=True)
 
 # %%
 

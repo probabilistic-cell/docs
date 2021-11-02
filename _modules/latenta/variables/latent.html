@@ -46,6 +46,8 @@
     <script kind="bootstrap" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -126,11 +128,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../tutorials/essentials/5-workflows.html">
      Workflows
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/6-scalability.html">
-     Scalability
     </a>
    </li>
   </ul>
@@ -220,10 +217,22 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../guide/transcriptomics/index.html">
    Transcriptomics
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../guide/transcriptomics/transcriptome_model.html">
+     Transcriptome models
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 <p class="caption">
@@ -236,8 +245,8 @@
   <a class="reference internal" href="../../../reference/latenta/index.html">
    latenta
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -246,8 +255,8 @@
     <a class="reference internal" href="../../../reference/latenta/links.html">
      .links
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-    <label for="toctree-checkbox-7">
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -273,8 +282,8 @@
     <a class="reference internal" href="../../../reference/latenta/posterior.html">
      .posterior
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -299,8 +308,8 @@
   <a class="reference internal" href="../../../development/variables/index.html">
    Variables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -387,7 +396,7 @@
                 
   <h1>Source code for latenta.variables.latent</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">latenta.utils</span> <span class="kn">import</span> <span class="n">isinstance2</span>
 <span class="kn">from</span> <span class="nn">.random</span> <span class="kn">import</span> <span class="n">RandomMixin</span><span class="p">,</span> <span class="n">VariationalMixin</span>
@@ -475,6 +484,7 @@
             <span class="n">quantile</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">quantile</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">prior_invert_transform</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
         <span class="n">variances</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">y</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">erfinv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">quantile</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">variances</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">scale</span>
@@ -514,94 +524,106 @@
 
         <span class="c1"># create q</span>
         <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">distributions</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_transform_to</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">latenta</span> <span class="kn">import</span> <span class="n">distributions</span>
 
-            <span class="c1"># get initial from p&#39;s mean</span>
-            <span class="k">if</span> <span class="n">initial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_mean</span><span class="p">:</span>
-                    <span class="n">loc_value</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">prior_mean</span>
-                <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">has_median</span><span class="p">:</span>
-                    <span class="n">loc_value</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">median</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="s2">&quot;Cannot initialize from a distribution without a mean or median, provide initial manually&quot;</span>
-                    <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">loc_value</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
-                    <span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">broadcast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-                <span class="p">)</span>
-
-            <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)),</span> <span class="s2">&quot;Initial value contains NaNs&quot;</span>
-
-            <span class="k">assert</span> <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span>
-                <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-            <span class="p">)</span>
-
-            <span class="c1"># get transforms to go from the prior&#39;s support to real</span>
-            <span class="n">transforms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">biject_to</span><span class="p">()</span>
-
-            <span class="c1"># invert the transforms to get the actual loc and definition</span>
-            <span class="n">unconstrained_definition</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">clean</span><span class="o">.</span><span class="n">unlabel</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="c1"># invert the definition</span>
-                <span class="n">inverted_definition</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">invert_definition</span><span class="p">(</span>
-                    <span class="n">unconstrained_definition</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-                <span class="p">)</span>
-
-                <span class="c1"># initialize the transformation</span>
-                <span class="n">transform</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">inverted_definition</span><span class="p">,</span> <span class="n">unconstrained_definition</span><span class="p">)</span>
-
-                <span class="c1"># invert the initial</span>
-                <span class="n">loc_value</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">prior_invert_transform</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)</span>
-                <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)),</span> <span class="p">(</span><span class="n">loc_value</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-
-                <span class="n">unconstrained_definition</span> <span class="o">=</span> <span class="n">inverted_definition</span>
-
-            <span class="n">loc</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">loc_value</span><span class="p">,</span> <span class="n">unconstrained_definition</span><span class="p">)</span>
-
-            <span class="c1"># get the scale for the variational distribution:</span>
-            <span class="c1"># - if initial_quantiles is given use that</span>
-            <span class="c1"># - if initial_quantiles is not given, can only generate initial_quantiles if initial is not given</span>
-            <span class="c1">#   - if distribution has icdf, we can directly get quantiles</span>
-            <span class="c1">#   - if distribution has no icdf, we take samples and then get an icdf from that</span>
-            <span class="c1"># - if intial_quantiles is available: invert the quantiles towards the normal distribution</span>
-            <span class="c1"># - if no initial_quantiles available: simply choose scale = 0.1 🤷‍♂️.</span>
-            <span class="c1">#     this is often not a horrible choice, given that a lot of distributions include scaling factors in their biject_to transforms</span>
-            <span class="n">initial_quantile_mapping</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">]]</span>
-            <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># get initial from p&#39;s mean</span>
                 <span class="k">if</span> <span class="n">initial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_icdf</span><span class="p">:</span>
-                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_icdf</span><span class="p">(</span>
-                            <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
-                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_mean</span><span class="p">:</span>
+                        <span class="n">loc_value</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">prior_mean</span>
+                    <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">has_median</span><span class="p">:</span>
+                        <span class="n">loc_value</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">median</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_sampling</span><span class="p">(</span>
-                            <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;Cannot initialize from a distribution without a mean or median, provide initial manually&quot;</span>
                         <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">loc_value</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
+                        <span class="n">definition</span><span class="o">.</span><span class="n">to_xr</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">broadcast</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+                    <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_quantiles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                <span class="n">scale_value</span> <span class="o">=</span> <span class="n">invert_quantiles_normal</span><span class="p">(</span>
-                    <span class="n">initial_quantiles</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc_value</span>
+                <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">torch</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)),</span> <span class="s2">&quot;Initial value contains NaNs&quot;</span>
+
+                <span class="k">assert</span> <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span>
+                    <span class="n">loc_value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="n">definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">scale_value</span> <span class="o">=</span> <span class="mf">0.1</span>
 
-            <span class="n">scale</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
-                <span class="n">scale_value</span><span class="p">,</span>
-                <span class="n">unconstrained_definition</span><span class="p">,</span>
-                <span class="n">transforms</span><span class="o">=</span><span class="n">distributions</span><span class="o">.</span><span class="n">Exponential</span><span class="p">()</span><span class="o">.</span><span class="n">biject_to</span><span class="p">(),</span>
-            <span class="p">)</span>
+                <span class="c1"># get transforms to go from the prior&#39;s support to real</span>
+                <span class="n">transforms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transform_to</span><span class="p">()</span>
+                <span class="n">loc_transforms</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transform_loc_to</span><span class="p">()</span>
 
-            <span class="c1"># create q</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
-                <span class="n">loc</span><span class="p">,</span>
-                <span class="n">scale</span><span class="p">,</span>
-                <span class="n">definition</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">clean</span><span class="p">,</span>
-                <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
-                <span class="n">dependent_dims</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">event_dims</span><span class="p">,</span>
-            <span class="p">)</span>
+                <span class="c1"># invert the transforms to get the actual loc and definition</span>
+                <span class="n">unconstrained_definition</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">clean</span><span class="o">.</span><span class="n">unlabel</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">transforms</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="c1"># invert the definition</span>
+                    <span class="n">inverted_definition</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">invert_definition</span><span class="p">(</span>
+                        <span class="n">unconstrained_definition</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># initialize the transformation</span>
+                    <span class="n">transform</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">inverted_definition</span><span class="p">,</span> <span class="n">unconstrained_definition</span><span class="p">)</span>
+
+                    <span class="c1"># invert the initial</span>
+                    <span class="n">loc_value</span> <span class="o">=</span> <span class="n">transform</span><span class="o">.</span><span class="n">prior_invert_transform</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">loc_value</span><span class="p">)),</span> <span class="p">(</span><span class="n">loc_value</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+
+                    <span class="n">unconstrained_definition</span> <span class="o">=</span> <span class="n">inverted_definition</span>
+
+                <span class="n">loc</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+                    <span class="n">loc_value</span><span class="p">,</span> <span class="n">unconstrained_definition</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">loc_transforms</span>
+                <span class="p">)</span>
+
+                <span class="c1"># get the scale for the variational distribution:</span>
+                <span class="c1"># - if initial_quantiles is given use that</span>
+                <span class="c1"># - if initial_quantiles is not given, can only generate initial_quantiles if initial is not given</span>
+                <span class="c1">#   - if distribution has icdf, we can directly get quantiles</span>
+                <span class="c1">#   - if distribution has no icdf, we take samples and then get an icdf from that</span>
+                <span class="c1"># - if intial_quantiles is available: invert the quantiles towards the normal distribution</span>
+                <span class="c1"># - if no initial_quantiles available: simply choose scale = 0.1 🤷‍♂️.</span>
+                <span class="c1">#     this is often not a horrible choice, given that a lot of distributions include scaling factors in their transform_to transforms</span>
+                <span class="n">initial_quantile_mapping</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">initial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">has_icdf</span><span class="p">:</span>
+                            <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_icdf</span><span class="p">(</span>
+                                <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">initial_quantiles</span> <span class="o">=</span> <span class="n">get_initial_quantiles_sampling</span><span class="p">(</span>
+                                <span class="n">p</span><span class="p">,</span> <span class="n">initial_quantile_mapping</span><span class="o">=</span><span class="n">initial_quantile_mapping</span>
+                            <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">initial_quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_quantiles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="n">scale_value</span> <span class="o">=</span> <span class="n">invert_quantiles_normal</span><span class="p">(</span>
+                        <span class="n">initial_quantiles</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc_value</span>
+                    <span class="p">)</span>
+                    <span class="n">scale_value</span><span class="p">[</span><span class="n">scale_value</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">scale_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">scale_value</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not all scale values are positive&quot;</span><span class="p">)</span>
+
+                <span class="kn">from</span> <span class="nn">latenta.transforms</span> <span class="kn">import</span> <span class="n">Exp</span>
+
+                <span class="n">scale</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span>
+                    <span class="n">scale_value</span><span class="p">,</span> <span class="n">unconstrained_definition</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="p">[</span><span class="n">Exp</span><span class="p">()]</span>
+                <span class="p">)</span>
+
+                <span class="c1"># create q</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
+                    <span class="n">loc</span><span class="p">,</span>
+                    <span class="n">scale</span><span class="p">,</span>
+                    <span class="n">definition</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">clean</span><span class="p">,</span>
+                    <span class="n">transforms</span><span class="o">=</span><span class="n">transforms</span><span class="p">,</span>
+                    <span class="n">dependent_dims</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">event_dims</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">has_create_variational</span><span class="p">:</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">create_variational</span><span class="p">(</span>
+                    <span class="n">initial</span><span class="o">=</span><span class="n">initial</span><span class="p">,</span> <span class="n">initial_quantiles</span><span class="o">=</span><span class="n">initial_quantiles</span>
+                <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_posterior</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">is_distribution</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="s2">&quot;q needs to be a distribution&quot;</span>
@@ -636,22 +658,30 @@
                     <span class="p">}</span>
                 <span class="p">)</span>
 
-                <span class="c1">#! TODO: check actual coords for equality!!</span>
-                <span class="k">if</span> <span class="n">desired_value_definition</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_definition</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
-                    <span class="n">value_set</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;# TODO 😶&quot;</span><span class="p">)</span>
+                <span class="c1"># TODO: check actual coords for equality!!</span>
+                <span class="c1"># if desired_value_definition.shape != self.value_definition.shape:</span>
+                <span class="n">value_set</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;# TODO 😶&quot;</span><span class="p">)</span>
 
-                    <span class="c1"># take the prior, broadcast to the latent&#39;s dimensions and expand to match the shape</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcasters</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">)</span>
-                    <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">size</span>
-                        <span class="k">if</span> <span class="n">dim_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conditional_dimensions</span>
-                        <span class="k">else</span> <span class="n">conditional_dimensions</span><span class="p">[</span><span class="n">dim_id</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
-                        <span class="k">for</span> <span class="n">size</span><span class="p">,</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
-                    <span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">value_definition</span> <span class="o">=</span> <span class="n">desired_value_definition</span>
+                <span class="c1"># take the prior, broadcast to the latent&#39;s dimensions and expand to match the shape</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_broadcasters</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">)</span>
+                <span class="n">to_mean</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">dim_ix</span>
+                    <span class="k">for</span> <span class="n">dim_ix</span><span class="p">,</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="n">conditional_dimensions</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_mean</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">to_mean</span><span class="p">)</span>
+
+                <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">size</span>
+                    <span class="k">if</span> <span class="n">dim_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conditional_dimensions</span>
+                    <span class="k">else</span> <span class="n">conditional_dimensions</span><span class="p">[</span><span class="n">dim_id</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+                    <span class="k">for</span> <span class="n">size</span><span class="p">,</span> <span class="n">dim_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_definition</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value_definition</span> <span class="o">=</span> <span class="n">desired_value_definition</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value_set</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_conditional</span><span class="p">(</span>
                 <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>

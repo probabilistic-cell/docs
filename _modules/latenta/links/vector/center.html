@@ -130,11 +130,6 @@
      Workflows
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../../tutorials/essentials/6-scalability.html">
-     Scalability
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -401,10 +396,10 @@
                 
   <h1>Source code for latenta.links.vector.center</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="kn">from</span> <span class="nn">.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
 <span class="kn">from</span> <span class="nn">latenta.domains</span> <span class="kn">import</span> <span class="n">real_centered</span>
 <span class="kn">from</span> <span class="nn">latenta.variables.variable</span> <span class="kn">import</span> <span class="n">VariablePromise</span>
+
+<span class="kn">from</span> <span class="nn">.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
 
 
 <span class="k">class</span> <span class="nc">Centering</span><span class="p">(</span><span class="n">Vector</span><span class="p">):</span>
@@ -433,10 +428,11 @@
     <span class="k">def</span> <span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">x</span>
 
-    <span class="k">def</span> <span class="nf">log_abs_det_jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_ix</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_log_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">log_prob</span></div>
+        <span class="c1"># return log_prob - torch.log(</span>
+        <span class="c1">#     torch.tensor(1 - 1 / x.shape[self.dim_ix], device=x.device).expand(x.shape)</span>
+        <span class="c1"># )</span>
 
 
 <div class="viewcode-block" id="LogCenter"><a class="viewcode-back" href="../../../../reference/latenta/links/vector.html#latenta.links.vector.LogCenter">[docs]</a><span class="k">class</span> <span class="nc">LogCenter</span><span class="p">(</span><span class="n">Centering</span><span class="p">):</span>
@@ -568,6 +564,102 @@
     <span class="k">def</span> <span class="nf">_log_prob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">log_prob</span></div>
         <span class="c1"># return log_prob - torch.abs(x.sum(self.dim_ix, keepdims=True)).log()</span>
+
+
+<span class="k">class</span> <span class="nc">MonotonicFunction</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function f(x) = x, but which will push the gradients of f(x) to monotonicity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="n">save_for_backward</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">return</span> <span class="n">output</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,)</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">saved_tensors</span>
+
+        <span class="c1"># specify dimension in which we want monotonicity</span>
+        <span class="n">knot_dim_ix</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># calculate steps between x</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">knot_dim_ix</span><span class="p">)</span>
+
+        <span class="c1"># calculate the dominant sign of the steps</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">steps</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">knot_dim_ix</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1"># specify the shift in which we will push towards monotonicity</span>
+        <span class="c1"># 0. will push towards absolute monotonicity, while e.g. 0.1 still allows some non-monotonic trends within as high as around 0.1</span>
+        <span class="n">penalty_shift</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="n">penalty_scale</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+        <span class="c1"># annealing = (</span>
+        <span class="c1">#     torch.maximum(</span>
+        <span class="c1">#         torch.tensor(1.0), grad_output.abs().sum(knot_dim_ix, keepdim=True)</span>
+        <span class="c1">#     )</span>
+        <span class="c1">#     / 2</span>
+        <span class="c1"># )</span>
+        <span class="n">annealing</span> <span class="o">=</span> <span class="n">grad_output</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">knot_dim_ix</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">penalty_increasing</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">((</span><span class="n">steps</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">-</span> <span class="n">penalty_shift</span><span class="p">)</span> <span class="o">/</span> <span class="n">penalty_scale</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">sign</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">steps</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">penalty_decreasing</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">((</span><span class="n">steps</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">-</span> <span class="n">penalty_shift</span><span class="p">)</span> <span class="o">/</span> <span class="n">penalty_scale</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sign</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">steps</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">grad_input</span> <span class="o">=</span> <span class="n">grad_output</span>
+
+        <span class="n">penalty</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                <span class="n">penalty_increasing</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span>
+            <span class="p">)</span>
+            <span class="o">/</span> <span class="mi">2</span>
+            <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                <span class="n">penalty_increasing</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span>
+            <span class="p">)</span>
+            <span class="o">/</span> <span class="mi">2</span>
+            <span class="o">-</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                <span class="n">penalty_decreasing</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span>
+            <span class="p">)</span>
+            <span class="o">/</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span>
+                <span class="n">penalty_decreasing</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span>
+            <span class="p">)</span>
+            <span class="o">/</span> <span class="mi">2</span>
+        <span class="p">)</span>
+
+        <span class="n">grad_input</span> <span class="o">=</span> <span class="n">grad_input</span> <span class="o">+</span> <span class="n">penalty</span> <span class="o">*</span> <span class="n">annealing</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">grad_input</span><span class="p">,)</span>
+
+
+<span class="k">class</span> <span class="nc">Monotonic</span><span class="p">(</span><span class="n">Centering</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Monotonic link: will push a vector towards monotonicity</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">invertible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bijective</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">_formula</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;abs(x)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_ix</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;Monotonicity is for now only supported in the last dimension, see https://github.com/probabilistic-cell/latenta/issues/108&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">MonotonicFunction</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">y</span>
 </pre></div>
 
               </div>

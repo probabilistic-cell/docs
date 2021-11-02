@@ -139,11 +139,6 @@
      Workflows
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../tutorials/essentials/6-scalability.html">
-     Scalability
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -456,7 +451,7 @@
 </div>
 </div>
 </div>
-<p>lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we’re working with transcriptomics data, we will often inherit from <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeDataset</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeModel</span></code>. These already contain the core elements for storing and inferring transcriptomics models.</p>
+<p>lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we’re working with transcriptomics data, we will often inherit from <code class="xref py py-class docutils literal notranslate"><span class="pre">TranscriptomeDataset</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>. These already contain the core elements for storing and inferring transcriptomics models.</p>
 <p>We’ll will showcase this with the same dataset as from the <span class="xref myst">essentials tutorial</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -512,7 +507,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script31417" onload="loaded31417"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script10875" onload="loaded10875"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -535,7 +530,7 @@
 </style>
 
 <script>
-function loaded31417() {
+function loaded10875() {
     require.config({
     paths: {
         'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
@@ -554,13 +549,16 @@ function loaded31417() {
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">from_adata</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">adata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>▶️ | dataset/transcriptome/from_adata                                                                    
 ✅ | dataset/transcriptome/from_adata                                                                    
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;laflow.step.OutputContainer at 0x7f0a3714c700&gt;
 </pre></div>
 </div>
 </div>
@@ -572,7 +570,7 @@ function loaded31417() {
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script6361" onload="loaded6361"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script11644" onload="loaded11644"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -595,7 +593,7 @@ function loaded31417() {
 </style>
 
 <script>
-function loaded6361() {
+function loaded11644() {
     require.config({
     paths: {
         'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
@@ -619,7 +617,7 @@ function loaded6361() {
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script21580" onload="loaded21580"></script>
+<div class="output text_html"><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js" integrity="sha512-vRqhAr2wsn+/cSsyz80psBbCcqzz2GTuhGk3bq3dAyytz4J/8XwFqMjiAGFBj+WM95lHBJ9cDf87T3P8yMrY7A==" crossorigin="anonymous" referrerpolicy="no-referrer" id="script34845" onload="loaded34845"></script>
 <style>
 .la-flow ul {
     margin-top:0;
@@ -642,7 +640,7 @@ function loaded6361() {
 </style>
 
 <script>
-function loaded21580() {
+function loaded34845() {
     require.config({
     paths: {
         'fontawesome': 'https://kit.fontawesome.com/77f7a120e4.js'
@@ -661,21 +659,19 @@ function loaded21580() {
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstantModel</span><span class="p">(</span><span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstantModel</span><span class="p">(</span><span class="n">laf</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;constant&quot;</span>
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">FlowObj</span><span class="p">()</span>
 
-    <span class="c1"># because we are overwriting the create_model from the parent classes</span>
+    <span class="c1"># because we are overwriting the create from the parent classes</span>
     <span class="c1"># we do not need to specify @laf.Step here</span>
-    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
-        
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+
         <span class="n">transcriptome</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
-        
+
         <span class="c1"># define the model as before</span>
-        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span>
-            <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span>
-        <span class="p">)</span>
+        <span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;log_overexpression&quot;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
         <span class="n">foldchange</span> <span class="o">=</span> <span class="n">transcriptome</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
 
         <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span>
@@ -683,14 +679,13 @@ function loaded21580() {
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">output</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">lac</span><span class="o">.</span><span class="n">transcriptome</span><span class="o">.</span><span class="n">TranscriptomeModel</span><span class="o">.</span><span class="n">model</span>
-    
-    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
-    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="n">model</span><span class="p">})</span>
-    
+    <span class="n">model</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">model</span>
+
+    <span class="n">overexpression_observed</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="p">{</span><span class="n">model</span><span class="p">})</span>
+    <span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">laf</span><span class="o">.</span><span class="n">LatentaObj</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="p">{</span><span class="n">model</span><span class="p">})</span>
+
     <span class="nd">@laf</span><span class="o">.</span><span class="n">Step</span><span class="p">(</span>
-        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span>
-        <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
+        <span class="n">laf</span><span class="o">.</span><span class="n">Inputs</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">laf</span><span class="o">.</span><span class="n">Outputs</span><span class="p">(</span><span class="n">overexpression_observed</span><span class="p">,</span> <span class="n">overexpression_causal</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="k">def</span> <span class="nf">interpret_overexpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
@@ -709,20 +704,21 @@ function loaded21580() {
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
         <span class="n">overexpression_causal</span><span class="o">.</span><span class="n">sample_empirical</span><span class="p">()</span>
         <span class="n">output</span><span class="o">.</span><span class="n">overexpression_causal</span> <span class="o">=</span> <span class="n">overexpression_causal</span>
-        
+
         <span class="k">return</span> <span class="n">output</span>
-    
+
+
 <span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
     <span class="c1"># we change the default name, as to make sure this model is put in a different folder</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>
 
-    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
         <span class="c1"># we can access the inherited function by adding a &quot;_&quot; at the end</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
-        
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+
         <span class="c1"># extract the model_initial from the output</span>
         <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
-        
+
         <span class="c1"># now we can further adapt the model to our wish</span>
         <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
         <span class="n">overexpression</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;overexpression&quot;</span><span class="p">)</span>
@@ -730,7 +726,7 @@ function loaded21580() {
         <span class="n">foldchange</span><span class="o">.</span><span class="n">overexpression</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">scalar</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span>
             <span class="n">overexpression</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">foldchange</span><span class="o">.</span><span class="n">value_definition</span>
         <span class="p">)</span>
-        
+
         <span class="c1"># again return the output</span>
         <span class="c1"># because we only adapted the model inplace, we do not need to update the output</span>
         <span class="k">return</span> <span class="n">output</span>
@@ -739,9 +735,9 @@ function loaded21580() {
 <span class="k">class</span> <span class="nc">SplineModel</span><span class="p">(</span><span class="n">ConstantModel</span><span class="p">):</span>
     <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;spline&quot;</span>
 
-    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_model_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
-        
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+
         <span class="n">model_initial</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">model_initial</span>
 
         <span class="n">foldchange</span> <span class="o">=</span> <span class="n">model_initial</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;foldchange&quot;</span><span class="p">)</span>
@@ -759,8 +755,8 @@ function loaded21580() {
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
-<span class="n">model</span><span class="o">.</span><span class="n">infer_model</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">infer</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">interpret_transcriptome</span><span class="p">()</span>
 </pre></div>
 </div>

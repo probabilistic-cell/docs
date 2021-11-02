@@ -130,11 +130,6 @@
      Workflows
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../tutorials/essentials/6-scalability.html">
-     Scalability
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -673,10 +668,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span> <span class="o">=</span> <span class="p">[</span><span class="n">dim</span><span class="o">.</span><span class="n">broadcast</span><span class="p">()</span> <span class="k">if</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">else</span> <span class="n">dim</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dims</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="nf">autobroadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">definitions</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">autobroadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">definitions</span><span class="p">,</span> <span class="n">protected_dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">protected_dimensions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">protected_dimensions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">dims</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">definitions</span><span class="p">:</span>
-            <span class="n">dims</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dim</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">dim</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">definition</span> <span class="k">if</span> <span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">})</span>
+            <span class="n">dims</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="n">dim</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">dim</span>
+                    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">definition</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dim</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">protected_dimensions</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="o">*</span><span class="n">dims</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

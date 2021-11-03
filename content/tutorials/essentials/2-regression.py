@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.10.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -193,7 +193,7 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # %% [markdown]
 # ### 1. Observed posteriors
 #
-# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model, using a {class}`~latenta.posterior.Observed` followed by the function `.sample()` which samples n posterior observations.
+# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model. We can do this using {class}`~latenta.posterior.Observed` followed by the function `.sample()` which takes n samples.
 
 # %%
 transcriptome_observed = la.posterior.Observed(
@@ -202,7 +202,7 @@ transcriptome_observed = la.posterior.Observed(
 transcriptome_observed.sample(5)
 
 # %% [markdown]
-# Tha sampled values are stored in the dictionary `.samples` containing the samples of each variables, which were provided to the `retain_samples` argument, that are upstream of the transcriptome. We can access each variable by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
+# The sampled values are stored in the dictionary `.samples` containing the samples of each variables if they were mentioned in the `retain_samples` argument. We can access each variable by providing the variable itself. In this example we are interested by `expression.a` which we defined earlier:
 
 # %%
 transcriptome_observed.samples[expression.a]
@@ -236,7 +236,7 @@ scores
 # %% [markdown]
 # ### 2. Causal posteriors
 #
-# To know how one variable influences another, we use a causal posterior. In essense, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell, i.e. the overexpression of *Myod1*) impacts a **vector** (gene expression for each cell):
+# To know how one variable influences another, we use a causal posterior. In essence, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell, i.e. the overexpression of *Myod1*) impacts a **vector** (gene expression for each cell):
 
 # %%
 overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
@@ -313,6 +313,24 @@ overexpression_causal.scores.head()
 # :::{note}
 # These likelihood ratios are mainly useful to understand the impact of a variable on an outcome *within a model*. In the model selection tutorial, we will introduce a better measure to quantify whether a variable **significantly** affects an outcome, by comparing it to other simpler or more complex models.
 # :::
+
+# %% [markdown]
+# ### Empirical posteriors
+
+# %% [markdown]
+# Instead of moving down from our model, starting from latent variables towards observation, we can also to some extent move up the tree starting from the observations. For example, for transcriptomics data, we can move up from the observations through the NegativeBinomial2 distribution, towards the expression. To calculate  
+
+# %%
+overexpression_causal.observed.sample()
+
+# %%
+overexpression_causal.sample_empirical()
+
+# %% [markdown]
+# An empirical posterior can be used to visualize the "empirical" values for a causal posterior:
+
+# %%
+overexpression_causal.plot_features()
 
 # %% [markdown]
 # ## Using _lacell_ to make model creation easier
@@ -397,13 +415,6 @@ la.config.device
 # We will illustrate this for inference, in this case using latenta's default device:
 
 # %%
-with transcriptome.switch(la.config.device):
-    inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
-    )
-    trainer = la.infer.trainer.Trainer(inference)
-    trace = trainer.train(10000)
-    trace.plot()
 with transcriptome.switch(la.config.device):
     inference = la.infer.svi.SVI(
         transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)

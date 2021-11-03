@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.13.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -71,17 +71,14 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # While many manifold models are relatively easy to implement, the main difficulty lies in the interpretability. Especially when different **cellular processes** are happening at the same time in a cell, a single latent variable will typically try to explain all of them. What is therefore often required is the inclusion of prior knowledge that can help with disentangling different cellular processes.
 
 # %% [markdown]
-# :::{panels}
-#
 # To disentangle cellular processes in a dataset, we typically go through 3 phases:
 #
 # 1. We first model what we already know is present in the data, e.g. batch effects, overexpression, ...
 # 2. We then model what we think is likely (based on what we know) and to which we can include some prior knowledge, e.g. cell cycle, differentiation ... You should see prior knowledge very broadly, as it not only contains your own knowledge but also information from your own control datasets, other databases, cell atlas projects ...
 # 3. Finally, we try to model what is fairly hypothetical, e.g. new substates, different differentiation paths, interactions between processes ...
 #
-# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework.
+# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put the model within a computational probabilistic framework, instead of just our head.
 #
-# :::
 
 # %% [markdown]
 # ## Differentiation: Inferring a dominant scalar latent variable
@@ -120,7 +117,7 @@ adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %% [markdown]
-# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
+# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing its uncertainty.
 #
 # Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific nowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
@@ -171,7 +168,7 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %% [markdown]
-# We can extract the inferred values using a `~latenta.posterior.scalar.ScalarObserved` posterior:
+# We can extract the inferred values using a {class}`~latenta.posterior.scalar.ScalarObserved` posterior:
 
 # %%
 differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)

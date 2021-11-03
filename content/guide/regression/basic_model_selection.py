@@ -209,25 +209,5 @@ for model_id, model in models.items():
     fig = causal.plot_features(show = True)
 
 # %%
-data = pd.DataFrame({"linear":observed_linear.elbo_features.to_pandas(), "spline":observed_spline.elbo_features.to_pandas(), "mspline": observed_mspline.elbo_features.to_pandas()})
-a = "linear";b = "spline"
-# a = "spline";b = "mspline"
-# a = "mspline";b = "spline"
-
-data["diff"] = data[b] - data[a]
-sns.scatterplot(x = a, y = b, hue = "diff", data = data)
-
-# %%
-data["diff"].sort_values().plot()
-
-# %%
-gene_ids = [data["diff"].idxmax(), data["diff"].idxmin()]
-
-x_causal_linear.plot_features(feature_ids = gene_ids, show = True)
-x_causal_spline.plot_features(feature_ids = gene_ids, show = True)
-x_causal_mspline.plot_features(feature_ids = gene_ids, show = True)
-;
-
-# %%
 
 # %%

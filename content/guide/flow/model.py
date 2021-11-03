@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.13.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -82,7 +82,7 @@ posterior = la.posterior.scalar.ScalarObserved(model.root.q)
 posterior.sample(1)
 
 # %% [markdown]
-# As explained in [], {class}`laflow.Latenta`, you can provide a `db` which will avoid that any components stored in the posterior (in this case the model.model_) will be saved multiple times.
+# As explained in [], {class}`laflow.Latenta`, you can provide a `db` which will avoid that any components stored in the posterior (in this case the model.root_) will be saved multiple times.
 
 # %%
 model.posterior = laf.Latenta(db={model.root_})

@@ -44,7 +44,7 @@ adata.raw = adata
 # - You either specify them at initialization: `la.Observation(p = ...)`
 # - Or connect them afterwards: `observation.p = ...`
 #
-# We can now use these concepts to build a basic model of a transcriptome:
+# Now that we know these concepts, let's again build a basic model of a transcriptome:
 
 # %%
 genes = la.Dim(adata.var)
@@ -98,7 +98,7 @@ dispersion = la.Latent(
 dispersion.p
 
 # %% [markdown]
-# Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponention transform:
+# Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponential transform:
 
 # %%
 dispersion.q
@@ -126,17 +126,17 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
+# Our model is ready! Note the many free parameters, in grey, that form the leaves of our model. These will have to be estimated by the model. But first, we can ask ourselves why are there so many parameters even for such a simple linear regression?
 #
 # Let's remind ourselves what we are actually trying to accomplish: create a good model of our observations.
 #
 #
 # It's true that there are many models that will provide a very good fit of the data equally, even simple ones. For example, we could just give the actual count matrix as input to the negative binomial and this trivial model would fit extremely well. However it would not help us to understand/learn anything from our observations.
 #
-# So we don't just want a model, we want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
+# So we don't just want a model, we want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of constrains:
 #
-# - "Hard" priors are those that completely constrain the model. For example, by specifying a linear function to model our average expression for example, we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
-# - "Soft" priors are those that push the latent variables towards more likely values. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior distribution $p$.
+# - "Hard" constrains are those that completely constrain the model. For example, by specifying a linear function to model our average expression for example, we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
+# - "Soft" constrains are those that push the latent variables towards more likely values. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We do so by specifying a distribution of likely slope values using the prior distribution $p$.
 #
 # The free parameters will then be estimated so that they balance the wishes of the soft priors to the wishes of the observations:
 # * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$.
@@ -144,14 +144,14 @@ transcriptome.plot()
 #
 # It's this pushing and pulling between priors and variational distributions that prevent overfitting and underfitting of the model. At the same time, we get some estimates of the uncertainty of our latent variables for free!
 # %% [markdown]
-# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$.
+# Mathematically speaking, the "wishes of the observations" is called the **likelihood** and noted by $P(x|z)$ the probability of observing $x$ given $z$, where $x$ are the observations and $z$ the latent variables. The "wishes of the prior" on the other hand is called the **prior probability** and noted by $P(z)$, or $p$ in latenta. Using these two entities we can infer the posterior/variational distribution $P(z|x)$, or $q$ in latenta, which is an updated version of our prior probability now that we have observed data. We can think about it as a distribution saying how probable are the latent variables $z$ given the observation $x$. We have the following proportionality: $P(z|x) \propto P(x|z)P(z)$
 
 # %% [markdown]
-#  To infer an optimal value for these parameters, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better.
+#  To infer an optimal value for the parameters at the root of our graphical model, we have to find a solution that best balances the needs of the prior distribution with those of the observations. And one of the fastest ways to do that is to use gradient descent, which starts from an initial value and then tries to move these initial values slowly but surely into values fitting the model better.
 #
 # These tasks are fullfilled by:
-# * a loss function (`ELBO`), represents the "cost" of our observation. An optimization problem seeks to minimize it.
-# * an optimizer (`Adam`), tries to select the best values with regards to our priors/constrains
+# * a loss function (`ELBO`), represents the "cost" of our observation, it is a numerical value that will tell us how far or close we are from the optimal values. An optimization problem seeks to minimize it.
+# * an optimizer (`Adam`), tries to select the best values to minimize the loss function
 # * an overarching training class (`SVI`):
 
 # %%
@@ -175,6 +175,10 @@ trace.plot()
 # %%
 transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
+
+# %%
+transcriptome.p.run()
+transcriptome.likelihood
 
 # %% [markdown]
 # Note that you need to `.run()` before being able to access the values.

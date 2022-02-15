@@ -61,8 +61,8 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 
 # %% [markdown]
 # With this data set we can think of many interesting questions, here are three rather simple ones that we will adress in this tutorial:
-# * Does the overexpression of *Myod1* impact the expression of other genes? Of which genes? and what is the relationship between the gene expression of overexpression?
-# * Can we use this data to learn more about myogenesis? 
+# * Does the overexpression of *Myod1* impact the expression of other genes? Of which genes? What is the relationship between the overexpression and the expression of the impacted genes?
+# * Can we use this data to learn more about myogenesis?
 # * Are some cells cycling? Is there any interaction with the differentiation process? 
 #
 # Along this tutorial we will learn how to build more or less complex model to answer these questions, we will also learn how to correct for technical biais such as the batch, how to get  some interpretation about the models, and compare them. 
@@ -71,12 +71,12 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 # ## General definition of a variable
 
 # %% [markdown]
-# Variables represent quantities/information that vary in the system we are interested in. They can be known (in our case, for example, we know the transcriptome, the overexpression, etc.) or need to be inferred from the data (the fold change of expression of a gene, the position of a cell along myogenesis, etc.). Variables represent the different units of the models we will construct. Indeed a statistical model is a mathematical relationship between variables. We emit a hypothesis on how the variables might interact and we use the data to validate it and/or to learn about some unknown variables.
+# Variables represent quantities/information that vary in the system we are interested in. They can be known (in our case, for example, we know the transcriptome, the overexpression, etc.) or need to be inferred from the data (the fold change of expression of a gene, the position of a cell along myogenesis, etc.). Variables represent the different units of the models we will construct. Indeed a statistical model is a mathematical relationship between variables. We emit an hypothesis on how the variables might interact and we use the data to validate it and/or to learn about some unknown variables.
 
 # %% [markdown]
 # In latenta, variables are represented as a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix), or more dimensions that contain some type of information about our data. Each dimension of a variable has coordinates (`.coords`) and an identifier (`.id`). Furthermore, a dimension can also be annotated with a label, symbol, and/or description.
 #
-# Let's start with the prototypical variable in single-cell, a count matrix, which contains the raw genes expressions in all the cells.
+# Let's start with the prototypical variable in single-cell RNA-seq, a count matrix, which contains the raw genes expressions in all the cells.
 #
 # To define its structure, we first need to define its two dimensions: *genes* and *cells*.
 # The *genes*, for example, can be defined as follow:
@@ -123,7 +123,7 @@ counts_definition
 counts = la.Fixed(adata.X, definition=counts_definition)
 
 # %% [markdown]
-# You can _run_ a variable by calling the function `.run()`. In the case of a fixed variable, it will set its value in `.value`.
+# You can _run_ a variable by calling the function `.run()`. In the case of a fixed variable, it will set its value in `.value`. 
 
 # %%
 counts.value
@@ -235,7 +235,7 @@ baseline
 # ## 3. Computed variables
 
 # %% [markdown]
-# The leaf variables are used to compute unknown information about our data or to be able to generalize certain results to any future cells. In this case, we create a variable that will depend on these other variables, which we then call components. This is done most of the time, thanks to a regression model and its corresponding link function to modify the input data (see part 2. of the tutorial).
+# The leaf variables are used to compute unknown information about our data or to be able to generalize certain results to any future cells. In this case, we create a variable that will depend on these other variables, which we then call components. This is done most of the time thanks to a regression model and its corresponding link function to modify the input data (see part 2. of the tutorial).
 #
 # Let's take the example of the gene expression which we want to model. In our data for example, we hypothetise and are interested in how the overexpression of *Myod1* (`overexpression`) affect the gene expression. The gene expression will be modified by a certain factor (`slope`) that will be specific to each gene.
 
@@ -357,9 +357,9 @@ expression.plot()
 # We are often uncertain about the exact value of some variables. For example, for a certain cell and gene we might found that the `expression` value is 4, but we also know that data are noisy and we can therefore not be completly sure that the expression value is exaclty 4, we rather think that it can be somewhere around 4. To model this uncertainty we would use a distribution.
 
 # %% [markdown]
-# There are two ways to initialize a distribution:
-# - We can take a random sample. For example, let's imagine a simple (non-biological) example, we have a die, we roll it, and get 3.
-# - We have some information, and we can calculate the probability of a particular sample, also known as the likelihood. For example, for a fair die, the probability of observing a 3 is 1/6.
+# There are two ways to initialize a distribution variable:
+# - We can take a random sample: Let's imagine a simple (non-biological) example, we have a die, we roll it, and get 3.
+# - We have some information, and we can calculate the probability of a particular sample, also known as the likelihood: For a fair die, the probability of observing a 3 is 1/6.
 
 # %% [markdown] tags=["remove-output", "hide-input"]
 # It can be important to keep in mind that depending on what we want to model as a distribution, individual elements of a sample can be dependent. Furthermore, this dependence can be specific to particular dimensions. For example, if we sample from an OneHotCategorical distribution, there can only be one 1 in every row.
@@ -386,7 +386,7 @@ transcriptome_p.run()
 transcriptome_p.value_pd.head()
 
 # %% [markdown]
-# Because we model an observation as a distribution, we can calculate how likely the exact values we just picked are according to the distribution. The goal of any modeling is to maximize this likelihood while remaining within the constraints imposed by the model.
+# Because we model this variable as a distribution, we can calculate how likely the exact values we just picked are according to the distribution. The goal of any modeling is to maximize this likelihood while remaining within the constraints imposed by the model.
 
 # %%
 transcriptome_p.likelihood
@@ -436,9 +436,15 @@ transcriptome.likelihood
 # %% [markdown]
 # Last but not least: latent variables are, by definition, variables we believe exist but are not directly observable through experimentation. They are, therefore, unknown variables that the model needs to estimate, exactly like parameters. However contrary to parameters which have one fixed value, latent variables follow a distribution, and who says distribution says modelisation of uncertainty! 
 #
-# As commonly done, Latenta uses Bayesian statistics to infer latent variables. Don't worry if you are not familiar with Bayesian statistics, you do not need to and we will explain the principal intuition of it later. 
+# As commonly done, Latenta uses Bayesian statistics to infer latent variables. Don't worry if you are not familiar with Bayesian statistics, you do not need to. Here are the main ideas behind it (if you are interested to know more we suggest to have a look at THIS).  
 #
-# This approach is really powerful as it permits to put some constrains on the model and to get some statistics to repport how certain we can be about the results. The model is designed to not only maintain uncertainty over its parameters but also to model the noise in the data.  
+# The main principle behind Bayesian modelling is to model parameters as a distribution. For that we first need to define what is called the prior, what we think the variable will look like before looking at the data. For example, I believe that most of my genes will not be affected by the overexpression, i.e the distribution of fold change will be centered in 0. Then this prior knowledge is updated by what we observe in the data (i.e for gene A indeed the foldchange is very low, but for gene B it seems to be very high). This will give us what is called the posterior distribution. This represent the distribution of the variable now that we observed the data. 
+#
+# This Bayesian modelling approach adds a crucial statistical layer as it permits to: 
+# * put some constrains on the model (mainly with the prior) 
+# * assess statistical significance, and repport how certain we are of our results (Bayesian statistics)
+#     This is true at the parameter level but also to compare entire models between each others
+# * maintain uncertainty, we can model the uncertainty over the parameters and also to model the noise in the data (since we now use distributions).  
 #
 # Latent variables are central to probabilistic modelling, because they encompass two types of uncertainty:
 #
@@ -487,7 +493,7 @@ transcriptome.likelihood
 # %% [markdown]
 # ### Constructing a latent variable
 #
-# Latent variables combine both types of uncertainty:
+# Latent variables combine both types of uncertainty. 
 
 # %% [markdown]
 # Name | Component | Symbol | Description

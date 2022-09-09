@@ -21,3 +21,5 @@ serve:
 
 install_fonts:
 	wget https://github.com/ipython/xkcd-font/blob/master/xkcd-script/font/xkcd-script.ttf -P /tmp/
+	cp /tmp/xkcd-script.ttf ~/.fonts
+

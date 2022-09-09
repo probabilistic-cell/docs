@@ -69,6 +69,9 @@ dist = la.distributions.Normal(loc=y, scale=scale, label="distribution")
 
 
 # %%
+dist.compile()
+
+# %%
 model_gs = la.Root(dist=dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
@@ -104,7 +107,8 @@ model.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05),
+    subsampler = la.infer.subsampling.Subsampler(model.observation[0])
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
@@ -115,7 +119,7 @@ trace.plot()
 observed = la.posterior.Posterior(
     observation, retain_samples={observation.p, a, b, s, x}
 )
-observed.sample(10, subsample_n=1)
+observed.sample(10, subsample_n=10)
 
 
 # %%
@@ -168,7 +172,10 @@ model.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    model,
+    [la.infer.loss.ELBO()],
+    la.infer.optim.Adam(lr=0.05),
+    subsampler = la.infer.subsampling.Subsampler(model.observation[0], size = 500)
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
@@ -179,7 +186,7 @@ trace.plot()
 observed = la.posterior.Posterior(
     observation, retain_samples={observation.p, a, b, s, x}
 )
-observed.sample(10, subsample_n=3)
+observed.sample(10)
 
 
 # %%
@@ -249,11 +256,11 @@ parameter_values = la.qa.cookbooks.check_parameters(
 )
 
 # %%
-z.empirical = xr.DataArray(observation_value)
 x.distribution = la.distributions.Uniform(0.0, 3.0)
 causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
 causal.sample(10)
 causal.sample_random(10)
+causal.sample_empirical()
 causal.plot_features(observation.p.loc)
 
 # %% [markdown]
@@ -271,7 +278,7 @@ model.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    model, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.01)
 )
 trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
@@ -298,6 +305,9 @@ modelled_value = observed.samples[observation.p].sel(sample=0).to_pandas()
 sns.heatmap(modelled_value.loc[cell_order], ax=ax1)
 
 # %%
+causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
+
+# %%
 z.empirical = xr.DataArray(observation_value)
 x.distribution = la.distributions.Uniform(0.0, 3.0)
 causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
@@ -305,6 +315,8 @@ causal.sample(10)
 causal.sample_random(10)
 causal.sample_empirical()
 causal.plot_features()
+
+# %%
 
 # %%
 

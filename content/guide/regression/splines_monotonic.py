@@ -510,7 +510,7 @@ elbo_features.style.bar(axis=0)
 kl_a = pd.DataFrame(
     {
         model_id: model["observed"]
-        .samples[model.find("a").uuid + "_kl"]
+        .samples[model.find("a").uuid, "kl"]
         .mean("sample")
         .to_pandas()
         .sum()
@@ -523,7 +523,7 @@ kl_a.style.bar(axis=0)
 kl_b = pd.DataFrame(
     {
         model_id: model["observed"]
-        .samples[model.find("b").uuid + "_kl"]
+        .samples[model.find("b").uuid, "kl"]
         .mean("sample")
         .to_pandas()
         for model_id, model in models.items()

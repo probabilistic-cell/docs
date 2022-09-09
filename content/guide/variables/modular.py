@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.13.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -137,7 +137,41 @@ cell_order = model_gs.find("x").prior_pd().sort_values().index
 sns.heatmap(observation_value.loc[cell_order], ax=ax0)
 
 # %% [markdown]
+# ## Dynamic definition
+
+# %% [markdown]
+# Currently, modular variables are one of the few variables with a "dynamic" definition, in the sense that they can get new dimensions for free.
+
+# %%
+n_cells = 50
+cell_ids = [str(i) for i in range(n_cells)]
+cells = la.Dim(pd.Series(range(n_cells), name="cell").astype(str))
+
+n_genes = 100
+genes = la.Dim(pd.Series(range(n_genes), name="gene").astype(str))
+
+# %%
+x = la.Fixed(1., definition = [cells])
+y = la.Fixed(1., definition = [genes])
+
+# %%
+z = la.modular.Additive(definition = [cells])
+z.x = x
+
+# %%
+z.y = y
+
+# %%
+z
+
+# %%
+z.prior()
+
+# %% [markdown]
 # ## Types of modular variables
+
+# %% [markdown]
+# ### Multiplicative
 
 # %%
 y = la.modular.Multiplicative(

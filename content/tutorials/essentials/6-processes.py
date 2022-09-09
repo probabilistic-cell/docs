@@ -339,7 +339,7 @@ class DifferentiationEffect(lac.transcriptome.effects.gradient.GradientEffect):
 
         # add effect to foldchange
         effect = la.links.scalar.Switch(
-            gradient, a=True, switch=True, definition=foldchange.value_definition
+            gradient, a=True, shift=True, definition=foldchange.value_definition
         )
         setattr(foldchange, self.label, effect)
 

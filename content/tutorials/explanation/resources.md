@@ -1,17 +1,14 @@
 # Resources
 
-## Variational inference
 
-- https://www.youtube.com/watch?v=Moo4-KR5qNg
-- https://www.youtube.com/watch?v=HxQ94L8n0vU
+## Transcriptional bursting
 
-## Black-box variational inference
+- [https://doi.org/10.1016/j.tig.2020.01.003]: Review on transcriptional bursting, including some models that (fail) to explain bursting
+- [https://biocircuits.github.io/chapters/16_bursty.html]: Biorcicuits book discussion on bursting, with possible Master equations
 
-- https://www.youtube.com/watch?v=-H2N4tVDK7I
+## Statistics/machine learning
 
-## Bayesian model selection
 
-- https://arxiv.org/pdf/1902.05539.pdf
+### Why Bayesian
 
-## Variational autoencoders and reparameterization
-
+- [https://www.youtube.com/watch?v=cUqoHQDinCM]: On how shrinkage works, and the bias-variance tradeoff

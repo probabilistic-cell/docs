@@ -1,0 +1,75 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: ""
+author: the latenta team
+logo: _static/main_logo.png
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: 'off'
+  # execute_notebooks: cache
+  timeout: 100
+  exclude_patterns:
+    - '*_tmp.ipynb'
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: latenta.tex
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/probabilistic-cell/docs  # Online location of your book
+  path_to_book: .  # Optional path to your book, relative to the repository root
+  branch: main  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+  google_analytics_id: G-3PHE6TL2WD
+  # comments:
+    # giscus:
+    #   repo: "probabilistic-cell/latenta"
+    #   repo-id: "MDEwOlJlcG9zaXRvcnkyOTEwNjgxODg="
+    #   category: "Documentation"
+    #   category-id: "DIC_kwDOEVlZHM4B-mVU"
+
+# Launcing notebooks
+launch_buttons:
+  notebook_interface: "jupyterlab"  # or "classic"
+
+# Sphinx
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    intersphinx_mapping:
+      python:
+        - "https://docs.python.org/3/"
+        - null
+      pandas:
+        - "https://pandas.pydata.org/pandas-docs/stable"
+        - null
+      torch:
+        - "https://pytorch.org/docs/stable/"
+        - null
+      xarray:
+        - "https://xarray.pydata.org/en/stable/"
+        - null
+  nb_custom_formats:
+    .py:
+      - jupytext.reads
+      - fmt: py
+
+  extra_extensions:
+    # - html_admonition
+   - sphinx_citel
+   - 'sphinx.ext.autodoc'
+   - 'sphinx.ext.viewcode'
+   - 'sphinx.ext.autosummary'
+   - 'sphinx.ext.mathjax'
+   - 'sphinx_math_dollar'
+

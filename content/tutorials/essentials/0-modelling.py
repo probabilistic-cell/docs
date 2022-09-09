@@ -87,7 +87,7 @@
 # - At a lower level, we provide ways to create individual variables and connect them with eachother. We also provide various standard interpretation functions.
 # - At the lowest level, we provide ways to create custom sets of variables, posteriors, etc
 #
-# If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) modelling techniques. Nontheless, in these essentials tutorials we will give an overview on each level starting from the bottom, so that you're familiar with the underlying statistical and machine learning concepts.
+# If you're relatively new to modelling, it's often easier to start working with the highest level functions, and slowly learn to work with lower (but more flexible) modelling techniques. Nonetheless, in these essentials tutorials we will give an overview on each level starting from the bottom, so that you're familiar with the underlying statistical and machine learning concepts.
 
 # %% [markdown]
 # Any model is a mathematical representation of reality, and building models does therefore require some mathematical intuition. Although latenta may make this easier, it would be unwise to completely abstract away every mathematical concept. Some probability, statistics and machine learning concepts are simply too central for modelling (and, in fact, biology!) to hide. In these tutorials, we often refer you to relevant "explanation" resources (denoted by a see also sign) where you can improve your understanding of some of these concepts.

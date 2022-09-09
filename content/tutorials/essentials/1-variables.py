@@ -25,7 +25,7 @@ import scanpy as sc
 
 
 # %% [markdown]
-# In the essentials tutorials, we will primarily work with a small but nontheless interesting single-cell transcriptomics dataset:
+# In the essentials tutorials, we will primarily work with a small but nonetheless interesting single-cell transcriptomics dataset:
 
 # %%
 adata = la.data.load_myod1()

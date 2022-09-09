@@ -3,3 +3,5 @@ matplotlib
 numpy
 latenta
 ghp-import
+sphinx_math_dollar
+sphinx-citel

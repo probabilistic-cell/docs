@@ -53,6 +53,10 @@ It's highly adviseable, if not necessary, to copy your ssh keys to github. Other
 
 Once I gave you access to the probabilistic-cell github organization, you should be able to access e.g. github.com/probabilistic-cell/latenta
 
+## Conda
+
+We use conda to manage our environments. You should install it in your account by following the instructions: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+
 # Specifics to the project
 
 ## The folders

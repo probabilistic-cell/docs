@@ -89,7 +89,6 @@ conda install pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c cond
 pip install -e ./latenta[full]
 pip install -e ./laflow
 pip install -e ./lacell
-pip install -e ./hca_spatial
 
 conda install jupyterlab
 ```

@@ -355,7 +355,7 @@ expression.plot()
 # It can be important to keep in mind that depending on what we want to model as a distribution, individual elements of a sample can be dependent. Furthermore, this dependence can be specific to particular dimensions. For example, if we sample from an OneHotCategorical distribution, there can only be one 1 in every row.
 
 # %% [markdown]
-# Let's continue with the example of gene expression. We previously defined the computed variable `expression`, however as we just mentionned, we cannot be certain that the expression will be these exact values, but it will rather range around this value. A distribution we typically use for gene expression is a negative binomial, and more specifically, the `NegativeBinomial2` variant that has two input parameters: the average count (`.mu`) and the dispersion (`.dispersion`). (Note that we denote the fact that it is a distribution variable with _p)
+# Let's continue on the gene expression example. We previously defined the computed variable `expression`, however as we just mentioned we cannot be certain that the expression will be these exact values, but it will rather range around this value. A distribution we typically use for gene expression is a negative binomial, and more specifically the `NegativeBinomial2` variant that has two input parameters: the average count (`.mu`) and the dispersion (`.dispersion`). (Note that we denote the fact that it is a distribution variable with _p)
 
 # %% [markdown]
 # ```{margin}

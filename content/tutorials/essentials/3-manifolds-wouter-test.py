@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.1
+#       jupytext_version: 1.11.4
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -71,14 +71,17 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # While many manifold models are relatively easy to implement, the main difficulty lies in the interpretability. Especially when different **cellular processes** are happening at the same time in a cell, a single latent variable will typically try to explain all of them. What is therefore often required is the inclusion of prior knowledge that can help with disentangling different cellular processes.
 
 # %% [markdown]
+# :::{panels}
+#
 # To disentangle cellular processes in a dataset, we typically go through 3 phases:
 #
 # 1. We first model what we already know is present in the data, e.g. batch effects, overexpression, ...
 # 2. We then model what we think is likely (based on what we know) and to which we can include some prior knowledge, e.g. cell cycle, differentiation ... You should see prior knowledge very broadly, as it not only contains your own knowledge but also information from your own control datasets, other databases, cell atlas projects ...
 # 3. Finally, we try to model what is fairly hypothetical, e.g. new substates, different differentiation paths, interactions between processes ...
 #
-# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put the model within a computational probabilistic framework, instead of just our head.
+# It's important to understand that this way of working is no different than classical biological research (or any research for that matter). The only difference is that we're working with large datasets and/or complex designs, which require us to put this within a fully computational probabilistic framework.
 #
+# :::
 
 # %% [markdown]
 # ## Differentiation: Inferring a dominant scalar latent variable
@@ -87,7 +90,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # Let's explore what heterogeneity might be present in our cells. Let's first extract the cell cycle phases using the (current) canonical approach:
 
 # %%
-cellcycle_genes = lac.transcriptome.effects.cellcycle.get_cellcycle_genes()
+cellcycle_genes = lac.cell.cellcycle.get_cellcycle_genes()
 sc.tl.score_genes_cell_cycle(
     adata,
     s_genes=cellcycle_genes.query("phase == 'S'")["gene"].tolist(),
@@ -117,7 +120,7 @@ adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %% [markdown]
-# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing its uncertainty.
+# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
 #
 # Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific nowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
@@ -168,7 +171,7 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %% [markdown]
-# We can extract the inferred values using a {class}`~latenta.posterior.scalar.ScalarObserved` posterior:
+# We can extract the inferred values using a `~latenta.posterior.scalar.ScalarObserved` posterior:
 
 # %%
 differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
@@ -193,7 +196,7 @@ sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
 # %% [markdown]
-# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.
+# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.  
 
 # %%
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
@@ -206,10 +209,10 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 
 # %% [markdown]
-# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell.
+# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell. 
 
 # %% [markdown]
-# Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0.
+# Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0. 
 
 # %%
 import pandas as pd
@@ -387,7 +390,7 @@ differentiation_causal.plot_features()
 
 # %% [markdown]
 # Apart from a more robust training, amortization also has a couple of additional advantages:
-# - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred parameters of the neural network.
+# - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred hundred parameters of the neural network.
 # - We get a function that can predict the latent space even on unseen cells "for free". Note however, that this does not necessarily mean that our function is generalizable, as this may depend on the assumptions, hyperparameters and structure of the neural network.
 
 # %% [markdown]

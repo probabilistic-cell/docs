@@ -517,7 +517,7 @@ expression.a = latent_slope
 expression.plot()
 
 # %% [markdown]
-# Note that many link functions will create a latent variable automatically if you specify `True` for the coresponding argument, although you have to provide the correct definition if some dimensions cannot be inferred from other components. For example for the `expression` we could have directly done:
+# Note that many link functions will create a latent variable automatically if you specify `True` for the corresponding argument, although you have to provide the correct definition if some dimensions cannot be inferred from other components. For example for the `expression` we could have directly done:
 
 # %%
 expression = la.links.scalar.Linear(

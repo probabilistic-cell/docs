@@ -95,7 +95,7 @@ Latenta models the cell as a combination of different _cellular processes_ (cell
 
 Key concepts are:
 
-- **Modular**: Although each biological dataset and question is unique, different processes come up again and again and can thus be reused across models. Latent contains different standard modules to different cellular processes, such as a clustering, a batch effect, a transcriptome, a linear trajectory, ... and these can be combined in ways to suit a particular dataset.
+- **Modular**: Although each biological dataset and question is unique, different processes come up again and again and can thus be reused across models. Latenta contains different standard modules to different cellular processes, such as a clustering, a batch effect, a transcriptome, a linear trajectory, ... and these can be combined in ways to suit a particular dataset.
 - **Flexible**: Technology and biology is still evolving, and we cannot predict what kind of models will be necessary to model these new data types. Moreover, most technical parameters, such as a transcriptome's library size, can also have a biological meaning. Latenta provides the flexibility to adapt a model to a particular use case, and to extend 
 - **Scalable**: Single-cell omics datasets are relatively large, both in number of cells and in number of features. Moreover, a user will likely require several modelling steps and iterations ideally done in an interactive fashion.
 - **Probabilistic**: Despite large cell numbers, the actual number of biological replicates (tissues, patients, ...), is relatively low. Latenta therefore contains tools to model uncertainty (and statistical significance) of your findings.

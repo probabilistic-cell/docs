@@ -557,7 +557,7 @@ expression.b = latent_baseline
 expression.plot()
 
 # %% [markdown] tags=["remove-output", "hide-input"]
-# Should we specify that it doesn't automatically update the other variables that depends on them?
+# Should we specify that it doesn't automatically update the other variables that depend on them?
 
 # %%
 transcriptome.plot()

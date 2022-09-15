@@ -46,7 +46,7 @@ if skip:
         cache[str(notebook)] = os.path.getmtime(notebook)
 
 # %%
-dry = False
+dry = True
 for notebook in notebooks:
     if str(notebook) not in cache:
         cache[str(notebook)] = None

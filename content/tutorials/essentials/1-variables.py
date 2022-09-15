@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.11.4
+#       jupytext_version: 1.13.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -123,16 +123,7 @@ counts_definition
 counts = la.Fixed(adata.X, definition=counts_definition)
 
 # %% [markdown]
-# You can _run_ a variable by calling the function `.run()`. In the case of a fixed variable, it will set its value in `.value`. 
-
-# %%
-counts.value
-
-# %%
-counts.run()
-
-# %% [markdown]
-# The value can now be accessed, and because we're working with torch, this value is a `torch.tensor`:
+# The value can be accessed as follows, and because we're working with torch, this value is a `torch.tensor`:
 
 # %%
 counts.value
@@ -185,7 +176,6 @@ overexpressed
 
 
 # %%
-overexpressed.run()
 overexpressed.value_pd.head()
 
 # %% [markdown]
@@ -382,7 +372,6 @@ transcriptome_p = la.distributions.NegativeBinomial2(mu=expression)
 # Running a distribution will pick a certain value from the distribution:
 
 # %%
-transcriptome_p.run()
 transcriptome_p.value_pd.head()
 
 # %% [markdown]
@@ -417,18 +406,19 @@ transcriptome = la.Observation(
 transcriptome.plot()
 
 # %% [markdown]
-# Running an observation does the same thing as running a fixed variable, meaning it sets its values to the values we provided (i.e. `value = counts.value`)
+# The value of an observation is the same as a fixed variable, meaning it sets its values to the values we provided (i.e. `value = counts.value`)
 
 # %%
-transcriptome.run()
+transcriptome.value_pd
 
 # %% [markdown]
-# Again, because we model an observation as a distribution, we can calculate how likely this precise  observation is according to its distribution. 
-#
-# The goal of modelling is to maximize this likelihood, while remaining within the constraints imposed by the model. All along the modelisation process the parameters of the distribution of the transcriptome `transcriptome_p` will be modified/optimized to find the most likely set of parameters given our input, i.e the `counts.value`. 
+# The difference to a fixed variable however is that an observation has a likelihood according to its distribution. 
 
 # %%
 transcriptome.likelihood
+
+# %% [markdown]
+# The goal of modelling is to maximize this likelihood, while remaining within the constraints imposed by the model. All along the modelisation process the parameters of the distribution of the transcriptome `transcriptome_p` will be modified/optimized to find the most likely set of parameters given our input, i.e the `counts.value`. 
 
 # %% [markdown]
 # ## 7. Latent variables
@@ -571,6 +561,12 @@ expression.plot()
 
 # %%
 transcriptome.plot()
+
+# %% [markdown]
+# ## 8. Root
+
+# %% [markdown]
+# We sometimes want to combine several unrelated variables in a model.
 
 # %% [markdown]
 # ## Main points

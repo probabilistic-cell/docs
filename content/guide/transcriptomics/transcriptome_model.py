@@ -75,107 +75,105 @@ dataset.transcriptome
 # %%
 dataset
 
+# %%
+# class ConstantModel(laf.Model):
+#     default_name = "constant"
+#     dataset = laf.FlowObj()
+
+#     # because we are overwriting the create from the parent classes
+#     # we do not need to specify @laf.Step here
+#     def create(self, output, X, obs, var):
+#         output = super().create_(output, X, obs, var)
+
+#         transcriptome = output.model_initial
+
+#         # define the model as before
+#         overexpression = la.Fixed(obs["log_overexpression"], label="overexpression")
+#         foldchange = transcriptome.find("foldchange")
+
+#         foldchange.overexpression = la.links.scalar.Constant(
+#             overexpression, definition=foldchange.value_definition
+#         )
+#         return output
+
+#     root = laf.Model.root
+
+#     overexpression_observed = laf.LatentaObj(db={root})
+#     overexpression_causal = laf.LatentaObj(db={root})
+
+#     @laf.Step(
+#         laf.Inputs(root), laf.Outputs(overexpression_observed, overexpression_causal)
+#     )
+#     def interpret_overexpression(self, output, root):
+#         overexpression = root.find("overexpression")
+
+#         overexpression_observed = la.posterior.scalar.ScalarObserved(overexpression)
+#         overexpression_observed.sample(5)
+#         output.overexpression_observed = overexpression_observed
+
+#         overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+#             overexpression,
+#             model,
+#             interpretable=model.p.mu.expression,
+#             observed=overexpression_observed,
+#         )
+#         overexpression_causal.sample(10)
+#         overexpression_causal.sample_random(10)
+#         overexpression_causal.sample_empirical()
+#         output.overexpression_causal = overexpression_causal
+
+#         return output
+
+
+# class LinearModel(ConstantModel):
+#     # we change the default name, as to make sure this model is put in a different folder
+#     default_name = "linear"
+
+#     def create(self, output, X, obs, var):
+#         # we can access the inherited function by adding a "_" at the end
+#         output = super().create_(output, X, obs, var)
+
+#         # extract the model_initial from the output
+#         model_initial = output.model_initial
+
+#         # now we can further adapt the model to our wish
+#         foldchange = model_initial.find("foldchange")
+#         overexpression = model_initial.find("overexpression")
+
+#         foldchange.overexpression = la.links.scalar.Linear(
+#             overexpression, a=True, definition=foldchange.value_definition
+#         )
+
+#         # again return the output
+#         # because we only adapted the model inplace, we do not need to update the output
+#         return output
+
+
+# class SplineModel(ConstantModel):
+#     default_name = "spline"
+
+#     def create(self, output, X, obs, var):
+#         output = super().create_(output, X, obs, var)
+
+#         model_initial = output.model_initial
+
+#         foldchange = model_initial.find("foldchange")
+#         overexpression = model_initial.find("overexpression")
+
+#         foldchange.overexpression = la.links.scalar.Spline(
+#             overexpression, definition=foldchange.value_definition
+#         )
+
+#         return output
 
 # %%
-class ConstantModel(laf.Model):
-    default_name = "constant"
-    dataset = laf.FlowObj()
-
-    # because we are overwriting the create from the parent classes
-    # we do not need to specify @laf.Step here
-    def create(self, output, X, obs, var):
-        output = super().create_(output, X, obs, var)
-
-        transcriptome = output.model_initial
-
-        # define the model as before
-        overexpression = la.Fixed(obs["log_overexpression"], label="overexpression")
-        foldchange = transcriptome.find("foldchange")
-
-        foldchange.overexpression = la.links.scalar.Constant(
-            overexpression, definition=foldchange.value_definition
-        )
-        return output
-
-    model = laf.Model.model
-
-    overexpression_observed = laf.LatentaObj(db={model})
-    overexpression_causal = laf.LatentaObj(db={model})
-
-    @laf.Step(
-        laf.Inputs(model), laf.Outputs(overexpression_observed, overexpression_causal)
-    )
-    def interpret_overexpression(self, output, model):
-        overexpression = model.find("overexpression")
-
-        overexpression_observed = la.posterior.scalar.ScalarObserved(overexpression)
-        overexpression_observed.sample(5)
-        output.overexpression_observed = overexpression_observed
-
-        overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-            overexpression,
-            model,
-            interpretable=model.p.mu.expression,
-            observed=overexpression_observed,
-        )
-        overexpression_causal.sample(10)
-        overexpression_causal.sample_random(10)
-        overexpression_causal.sample_empirical()
-        output.overexpression_causal = overexpression_causal
-
-        return output
-
-
-class LinearModel(ConstantModel):
-    # we change the default name, as to make sure this model is put in a different folder
-    default_name = "linear"
-
-    def create(self, output, X, obs, var):
-        # we can access the inherited function by adding a "_" at the end
-        output = super().create_(output, X, obs, var)
-
-        # extract the model_initial from the output
-        model_initial = output.model_initial
-
-        # now we can further adapt the model to our wish
-        foldchange = model_initial.find("foldchange")
-        overexpression = model_initial.find("overexpression")
-
-        foldchange.overexpression = la.links.scalar.Linear(
-            overexpression, a=True, definition=foldchange.value_definition
-        )
-
-        # again return the output
-        # because we only adapted the model inplace, we do not need to update the output
-        return output
-
-
-class SplineModel(ConstantModel):
-    default_name = "spline"
-
-    def create(self, output, X, obs, var):
-        output = super().create_(output, X, obs, var)
-
-        model_initial = output.model_initial
-
-        foldchange = model_initial.find("foldchange")
-        overexpression = model_initial.find("overexpression")
-
-        foldchange.overexpression = la.links.scalar.Spline(
-            overexpression, definition=foldchange.value_definition
-        )
-
-        return output
-
+# model = LinearModel(dataset=dataset)
+# model.create()
+# model.infer()
+# model.interpret_transcriptome()
 
 # %%
-model = LinearModel(dataset=dataset)
-model.create()
-model.infer()
-model.interpret_transcriptome()
-
-# %%
-model.interpret_overexpression()
+# model.interpret_overexpression()
 
 # %%
 model

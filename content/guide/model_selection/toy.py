@@ -298,7 +298,7 @@ mu = la.modular.Additive(
 s = la.Parameter(
     1.0,
     definition=la.Definition([genes]),
-    transforms=la.distributions.Exponential().biject_to(),
+    transforms=la.distributions.Exponential().transform_to(),
 )
 
 
@@ -364,8 +364,8 @@ x1 = model.find("x1")
 x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1 = la.links.scalar.Switch(x1, switch=True, a=True, output=mu.value_definition)
-mu.x2 = la.links.scalar.Switch(x2, switch=True, a=True, output=mu.value_definition)
+mu.x1 = la.links.scalar.Switch(x1, shift=True, a=True, output=mu.value_definition)
+mu.x2 = la.links.scalar.Switch(x2, shift=True, a=True, output=mu.value_definition)
 
 models["switch(x1) + switch(x2)"] = model
 model.plot()
@@ -383,8 +383,8 @@ del mu.x1
 del mu.x2
 mu.x12 = la.links.scalars.Linear(
     [
-        la.links.scalar.Switch(x1, switch=True, output=mu),
-        la.links.scalar.Switch(x2, switch=True, output=mu),
+        la.links.scalar.Switch(x1, shift=True, output=mu),
+        la.links.scalar.Switch(x2, shift=True, output=mu),
     ],
     a=la.Definition([genes]),
 )
@@ -401,8 +401,8 @@ x1 = model.find("x1")
 x2 = model.find("x2")
 
 mu = model.observation.p.loc
-mu.x1 = la.links.scalar.Switch(x1, switch=True, a=True, output=mu)
-mu.x2 = la.links.scalar.Switch(x2, switch=True, a=True, output=mu)
+mu.x1 = la.links.scalar.Switch(x1, shift=True, a=True, output=mu)
+mu.x2 = la.links.scalar.Switch(x2, shift=True, a=True, output=mu)
 mu.x12 = la.links.scalars.Linear(
     [
         la.links.scalar.Switch(x1, switch=mu.x1.switch),
@@ -460,7 +460,7 @@ del mu.x2
 mu.x12 = la.links.scalars.Linear(
     [
         la.links.scalar.Switch(
-            x1, switch=True, label="x1 activity", symbol="x1_activity", output=mu
+            x1, shift=True, label="x1 activity", symbol="x1_activity", output=mu
         ),
         x2,
     ],

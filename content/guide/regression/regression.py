@@ -86,13 +86,15 @@ sns.heatmap(observation_value.loc[cell_order], ax=ax0)
 
 # %%
 a = la.Parameter(
-    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).transform_to()
 )
 b = la.Parameter(
-    0.0, definition=intercept, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0,
+    definition=intercept,
+    transforms=la.distributions.Normal(scale=1.0).transform_to(),
 )
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
 z = la.links.scalar.Linear(x, a, b)
@@ -140,19 +142,21 @@ parameter_values = la.qa.cookbooks.check_parameters(
 x = la.Parameter(
     0.5,
     definition=x,
-    transforms=la.distributions.Uniform(0.0, 1.0).biject_to(),
+    transforms=la.distributions.Uniform(0.0, 1.0).transform_to(),
     label="x",
 )
 
 # %%
 a = la.Parameter(
-    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).transform_to()
 )
 b = la.Parameter(
-    0.0, definition=intercept, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0,
+    definition=intercept,
+    transforms=la.distributions.Normal(scale=1.0).transform_to(),
 )
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
 z = la.links.scalar.Linear(x, a, b)

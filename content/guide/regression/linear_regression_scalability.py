@@ -67,7 +67,7 @@ dist = la.distributions.Normal(loc=y, scale=scale)
 
 
 # %%
-model_gs = la.Root(dist = dist, label="ground truth", symbol="gs")
+model_gs = la.Root(dist=dist, label="ground truth", symbol="gs")
 model_gs.plot()
 
 # %%
@@ -86,13 +86,15 @@ sns.heatmap(observation_value.loc[cell_order], ax=ax0)
 
 # %%
 a = la.Parameter(
-    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0, definition=slope, transforms=la.distributions.Normal(scale=1.0).transform_to()
 )
 b = la.Parameter(
-    0.0, definition=intercept, transforms=la.distributions.Normal(scale=1.0).biject_to()
+    0.0,
+    definition=intercept,
+    transforms=la.distributions.Normal(scale=1.0).transform_to(),
 )
 s = la.Parameter(
-    1.0, definition=scale, transforms=la.distributions.Exponential().biject_to()
+    1.0, definition=scale, transforms=la.distributions.Exponential().transform_to()
 )
 
 z = la.links.scalar.Linear(x, a, b)
@@ -102,7 +104,7 @@ dist = la.distributions.Normal(loc=z, scale=s)
 observation = la.Observation(observation_value, dist, label="observation")
 
 # %%
-model = la.Root(observation = observation)
+model = la.Root(observation=observation)
 model.plot()
 
 
@@ -116,7 +118,9 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.Posterior(observation, retain_samples = observation.components_upstream().values())
+observed = la.posterior.Posterior(
+    observation, retain_samples=observation.components_upstream().values()
+)
 observed.sample(10, subsample_n=1)
 
 
@@ -138,6 +142,6 @@ causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observe
 causal.sample(10, samples=la.posterior.FileSamples())
 causal.sample_random(10)
 causal.sample_empirical(samples=la.posterior.FileSamples())
-causal.plot_features(observation.p.loc);
+causal.plot_features(observation.p.loc)
 
 # %%

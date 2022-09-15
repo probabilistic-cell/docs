@@ -98,7 +98,7 @@ dispersion = la.Latent(
 dispersion.p
 
 # %% [markdown]
-# Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponential transform:
+# Note the LogNormal prior here: this distribution has a _support_ only for positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponential transform:
 
 # %%
 dispersion.q

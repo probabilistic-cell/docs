@@ -25,7 +25,9 @@ We use github actions to automatically test most packages.
 To develop locally, we typically use a conda environment that installs its own Python and packages. We then clone all the packages using e.g.:
 
 ```
-git clone git@github.com/probabilistic-cell/latenta@devel
+git clone git@github.com/probabilistic-cell/latenta
+cd latenta
+git checkout devel
 ```
 
 We then do `pip install -e ./latenta` to install the package in development mode. This means that all changes made to the package in the latenta folder will be immediately visible. If you then make changes in the latenta folder, or pull changes made by others, the package will be updated automatically without having to reinstall it.
@@ -97,6 +99,15 @@ pip install -e ./lacell
 conda install jupyterlab
 ```
 
-If you run the `jupyter lab` command while in the hca_spatial folder, then check whether the port is correctly forwarden in vs code, and then once your in the jupyter lab go to code/valentine, you will see one notebook there. Open it up and try to run it. If everything runs fine, hurray!
+## Creating your own project
+
+```
+mkdir MYPROJECT
+cd MYPROJECT
+mkdir code
+mkdir output
+```
+
+If you run the `jupyter lab` command, then check whether the port is correctly forwarden in vs code, and then once your in the jupyter lab go to code, you will see one notebook there. Open it up and try to run it. If everything runs fine, hurray!
 
 Now do ctrl+shift+c and select "pair with python script". If this option is not there you will need to install jupytext and restart the jupyter lab server. You can now try to make a change in this notebook and save it (press ctrl+s). This change should normally be reflected in the .py file association with the notebook. If you then check git's status in vs code (or run `git status`) you will see that the file is updated. Add the file by clicking on the plus, write a commit message, press ctrl+enter, synchronize the changes and you will see the file updated on github.

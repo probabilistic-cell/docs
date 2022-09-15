@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.13.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -173,7 +173,6 @@ trace.plot()
 # Several different parameters had to be estimated, remember the ones, in grey, at the top of our graph structure. Let's for example look at the mean values of the slope , we can trace back using the graph structures to access this value: the mean (`.loc`), of the posterior distribution (`.q`) of the slope (`.a`) of the linear model which models the average expression (`.mu`) of the distribution that models our transcriptome (`.p`)
 
 # %%
-transcriptome.p.mu.a.q.loc.run()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
@@ -191,12 +190,12 @@ transcriptome.p.mu.a.q.loc.value_pd.head()
 # * Perturbed posteriors
 
 # %% [markdown]
-# ### 1. Observed posteriors
+# ### 1. Predictive posteriors
 #
 # Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model. We can do this using {class}`~latenta.posterior.Observed` followed by the function `.sample()` which takes n samples.
 
 # %%
-transcriptome_observed = la.posterior.Observed(
+transcriptome_observed = la.posterior.Predictive(
     transcriptome, retain_samples={expression.a}
 )
 transcriptome_observed.sample(5)

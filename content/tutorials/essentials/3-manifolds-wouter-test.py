@@ -122,7 +122,7 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # %% [markdown]
 # We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing the uncertainty.
 #
-# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific nowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
+# Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific knowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 
 # %%
 differentiation = la.Latent(
@@ -196,7 +196,7 @@ sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
 # In this case, we can easily fix this by including some external information. Namely, we know which cells were not perturbed, and we can therefore _nudge_ the differentiation values of those cells close to 0 by specifying an appropriate prior distribution.
 
 # %% [markdown]
-# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. We therefore wants a prior which as the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.  
+# Before we specified the prior $p$ of the differentiation to be a uniform distribution as we argued that we do not know if our cells are more concentrated at any time point in the differentation process. However, this prior is for now set for all the cells (controls or overexpressing *Myod1*) meaning that all the cells are as likely to contribute to any time of the differentiation process. But this is not true, we know that our control cells are concentrated at the very beggining of the differentiation process as they are undifferentiated. Therefore, we want a prior which at the same time is more or less uniform for the *Myod1* cells but close to 0 everywhere except at the very begining for the control cells.  
 
 # %%
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
@@ -209,7 +209,7 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 # beta_go = la.Fixed(pd.Series([1., 100.], index = adata_oi.obs["gene_overexpressed"].cat.categories), label = "beta")
 
 # %% [markdown]
-# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on if it's a control of *Myod1* overexpressing cell. 
+# This nudging is performed by an appropriate prior distribution. A beta distribution becomes very handy here, indeed depending on the parameters it can either be a uniform  distribution or can be concentrated at any value we want! So we will now set the prior of the differentiation as a beta distribution for which its two parameters alpha and beta will depend on wether it's a control or *Myod1* overexpressing cell. 
 
 # %% [markdown]
 # Note that a $\beta$(1,1) is a uniform, and a $\beta$(1,100) is very concentrated at 0. 

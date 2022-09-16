@@ -120,7 +120,7 @@ adata_oi = adata[adata.obs["phase"] == "G1"].copy()
 transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata_oi)
 
 # %% [markdown]
-# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing it uncertainty.
+# We define the differentiation as a _scalar_ latent variable, that assigns to each cell one value. This single value in our case is again modelled as a latent variable, with both a prior and variational distribution, the latter capturing the uncertainty.
 #
 # Crucial here is that we provide an appropriate prior distribution. Given that we assume that differentiation has a start and an end, we want to place the cells somewhere in the  $[0, 1]$ interval. We do not have any specific nowledge if the Myod1 cells are more concentrated at early or late differentiation stage, so we would like to set a prior saying that every time along the differentiation process is equally likely. A uniform distribution is therefore most appropriate. Do note that other cellular processes may have other assumptions or hypotheses, and will therefore require different priors as we will see later.
 

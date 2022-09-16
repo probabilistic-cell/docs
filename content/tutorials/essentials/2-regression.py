@@ -183,7 +183,7 @@ transcriptome.likelihood
 # Note that you need to `.run()` before being able to access the values.
 
 # %% [markdown]
-# Our inference algorithm did not fullfill all 10000 iterations, but has permaturely stopped as it has detected _convergence_. Do note that this converge is not always perfect, and we will see later that there are some circumstances where further training may be advisable.
+# Our inference algorithm did not fullfill all 10000 iterations, but has prematurely stopped as it has detected _convergence_. Do note that this converge is not always perfect, and we will see later that there are some circumstances where further training may be advisable.
 
 # %% [markdown]
 # ## Interpreting a regression model

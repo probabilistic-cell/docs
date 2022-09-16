@@ -347,7 +347,7 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
-# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene within a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
+# Note that this model is a bit more complex than the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene within a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
 #
 # - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
 # - The mean $\mu$ is modelled as a linear combination of the relative expression of a gene in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).

@@ -121,3 +121,10 @@ nav.bd-links p.caption {
 .form-check, .form-check-label, .form-check-input {
     cursor:pointer;
 }
+
+
+/* table overflow x */
+table {
+    display:block;
+    overflow-x: auto;
+}

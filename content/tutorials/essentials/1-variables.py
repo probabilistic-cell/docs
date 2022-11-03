@@ -59,7 +59,7 @@ sc.pl.umap(adata, color=["gene_overexpressed", "batch", "log_overexpression"])
 # ## General definition of a variable
 
 # %% [markdown]
-# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix), or more dimensions. Each dimension of a variable has coordinates (`.coords`) and identifier (`.id`). Furthermore, a dimension can also be annotated with a label, symbol, and/or description.
+# A variable in latenta is a representation of a tensor, meaning it is a set of numbers that live in zero (scalar), one (vector), two (matrix), or more dimensions. Each dimension of a variable has coordinates (`.coords`) and name (`.name`).
 #
 # Let's start with the prototypical variable, a count matrix, which contains the raw genes expressions in all the cells.
 #
@@ -99,7 +99,7 @@ counts_definition
 # %% [markdown]
 # Fixed variables contain a tensor with values that never change.
 #
-# Count matrix is an excellent example of a fixed variable. Let's initialise the variable `counts` containing the raw counts of our data using `la.Fixed()` and by specifying its structure with `counts_definition`:
+# A count matrix is an excellent example of a fixed variable. Let's initialise the variable `counts` containing the raw counts of our data using `la.Fixed()` and by specifying its structure with `counts_definition`:
 
 # %%
 counts = la.Fixed(adata.X, definition=counts_definition)
@@ -111,7 +111,7 @@ counts = la.Fixed(adata.X, definition=counts_definition)
 counts.value
 
 # %% [markdown]
-# Because our variable is annotated, we can also get this same value (these same values?) as a dataframe:
+# Because our variable is annotated, we can also get this same value as a dataframe:
 
 # %%
 counts.value_pd.head()
@@ -169,7 +169,7 @@ slope = la.Parameter(
 slope
 
 # %% [markdown]
-# Although parameters are _free_, not fixed, they can still have constraints. For example, the average expression of a gene can never go below zero, as this would be non-sensical. However, most algorithms cannot directly cope with these constraints and prefer to work with parameters that can go from $-\infty$ to $+\infty$ (especially if you also want flexibility). We can solve this by transforming each parameter to make sure they fit our constraints.
+# Although parameters are _free_, not fixed, they can still have constraints. For example, the average expression of a gene can physically never go below zero. However, most algorithms cannot directly cope with these constraints and prefer to work with parameters that can go from $-\infty$ to $+\infty$. We can solve this by transforming each parameter to make sure they fit our constraints.
 
 # %% [markdown]
 # Frequently used transformations are:
@@ -194,13 +194,13 @@ baseline = la.Parameter(
 baseline
 
 # %% [markdown]
-# A combination of fixed and parameter variables form the leaves of our model. Any other types of variables in our models are ultimately constructed from these leaf variables.
+# A combination of fixed and parameter variables form the leaves of our model. Any other types of variables in our models ultimately depend on these leaf variables.
 
 # %% [markdown]
 # ## 3. Computed variables
 
 # %% [markdown]
-# The variables are used to compute unknown information about our data or to be able to generalise certain results to any future cells. In this case, we create a variable that will depend on other variables, called components. Most of the time, this is done thanks to a regression model and its corresponding link function to modify the input data (see part 2. of the tutorial).
+# The variables are used to compute unknown information about our data or to be able to generalise certain results to any future cells. In this case, we create a variable that will depend on other variables, called components. Most of the time, this is done thanks to a regression model and its corresponding link function to modify the input data (see [2-regression]).
 #
 # Let's take the example of the gene expression which we need to model. In our data for example, we are interested in how the overexpression of *Myod1* (`overexpression`) will affect the gene expression (compare to control, cells overexpressing mCherry) by a certain factor (`slope`) that will be specific to each gene.
 
@@ -354,7 +354,7 @@ transcriptome_p = la.distributions.NegativeBinomial2(mu=expression)
 transcriptome_p.value_pd.head()
 
 # %% [markdown]
-# Because we model an observation as a distribution, we can calculate how likely this observation is according to this distribution. The goal of any modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
+# We can calculate the likelihood of this sample as follows:
 
 # %%
 transcriptome_p.likelihood
@@ -375,7 +375,7 @@ transcriptome_p.likelihood
 # ## 6. Observations
 
 # %% [markdown]
-# Observations are fixed variables that follow a distribution. An observation always has some physical connection to reality, but the problem is that we only observe a noisy variant of this reality. This noise is not always purely technical (due to stochastic sampling of mRNAs) but also typically contains biological components (such as transcriptional bursting). Essentially, any variation that the model cannot explain is explained away as noise. In our case, this noise is in the dispersion component of the Negative Binomial.
+# Observations are fixed variables that follow a distribution. An observation always has some physical connection to reality, but the problem is that we only observe a noisy variant of this reality. This noise is not always purely technical (due to stochastic sampling of mRNAs) but also typically contains biological components (such as transcriptional bursting). Essentially, any variation that the model cannot explain is explained away as noise. In our case, this noise is in the dispersion component of the NegativeBinomial.
 
 # %%
 transcriptome = la.Observation(
@@ -391,7 +391,7 @@ transcriptome.plot()
 transcriptome.value_pd
 
 # %% [markdown]
-# Because we model an observation as a distribution, we can calculate how likely this observation is according to this distribution. The goal of modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
+# What an observation variable does is compare the modelled distribution with what we actually observed.The goal of modelling is to maximize this likelihood, while remaining within the constraints imposed by the model.
 
 # %%
 transcriptome.likelihood
@@ -416,7 +416,7 @@ transcriptome.likelihood
 # :::
 # ::::
 #
-# Let's say we are randomly sampling a cell from a tissue. Every time we take such a sample, we do not know what type of cell it will be, except perhaps that some cell types are more likely to be picked because they are more abundant. This uncertainty is inherent to the population, and nothing we do can change that. We model this uncertainty as an appropriate probability distribution, which can have some known or unknown components.
+# Let's say we are randomly sampling a cell from a tissue. Every time we take such a sample, we do not know what type of cell it will be, except perhaps that some cell types are more likely to be picked because they are more abundant. This uncertainty is inherent to this population, and nothing we do can change that. We model this uncertainty as an appropriate probability distribution, which can have some known or unknown components.
 #
 # This type of uncertainty is often of interest and can provide interesting biological information in more complex models.
 #
@@ -434,11 +434,12 @@ transcriptome.likelihood
 # In general, we call this _epistemic uncertainty_. In bayesian modelling, this type of uncertainty is typically encoded as the posterior.
 # :::
 # ::::
+#
 # Let's say we focus on one particular cell, and we want to know its cell type. Naturally, before we observe anything about this cell, our uncertainty is the same as that inherent to the system (as described above). However, if we now observe some gene expression, our uncertainty for this particular cell decreases. The more genes we observe, the more certain we will become.
 #
-# This type of uncertainty is not inherent to the cell. The cell does not change its cell type just because we are uncertain about it. Therefore it does not have a direct connection to reality but is simply an artefact of us not knowing enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
+# This type of uncertainty is not inherent to the cell. The cell does not change its cell type just because we are uncertain about it. Therefore it does not have a direct connection to the true biology but is simply an artefact of us not knowing enough. Nonetheless, modelling this uncertainty is crucial because it gives us an idea about how certain we are about a variable. For example:
 # - We may be very sure about a cell's cell type but be very uncertain about the cellular state. This could tell us that we do not have enough sequencing depth to assign a cell's state.
-# - If a gene's fold-change has a distribution spreading over both negative and positive we might not have enough data. This does not necessarily mean that the gene is not differentially expressed, but rather that we do not have enough data to know whether it is.
+# - If a gene's fold-change has a distribution spreading over both negative and positive we might not have enough data. This does not necessarily mean that the gene is not differentially expressed, but rather that we do not have enough data.
 # - It may be that two transcription factors can equally regulate gene expression in the model and that we do not have enough data to say which one is more likely.
 
 # %% [markdown]
@@ -453,7 +454,7 @@ transcriptome.likelihood
 # Variational distribution | `.q` | $q$ | An approximation of the posterior distribution, i.e. the distribution followed by a variable after observing the data. The parameters of this distribution can be estimated directly (i.e. as one or more Parameter) or through the observed data using amortization
 #
 # A prototypical example of a latent variable is the slope (i.e. fold-change) in a linear model.
-# We indeed want to put some constraints on the fold-changes of genes. It is a reasonable assumption that most gene will not be very affected by the overexpression of *Myod1*. Therefore, we want to add some "prior" knowledge/constraints to not allow the model to find/fit enormous fold-changes, except if the data provides strong evidence that it is indeed the case (we will discuss further in the regression part). Let's now redefine the slope as a latent variable:
+# It is a reasonable assumption that most gene will not be very affected by the overexpression of *Myod1*. Therefore, we want to add some "prior" knowledge/constraints to not allow the model to find/fit enormous fold-changes, except if the data provides strong evidence that it is indeed the case (we will discuss further in the regression part). Let's now redefine the slope as a latent variable:
 
 # %%
 slope_p = la.distributions.Normal(

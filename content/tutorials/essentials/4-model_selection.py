@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.10.3
+#       jupytext_version: 1.13.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -263,7 +263,7 @@ models["constant"] = {
 #
 # > Extraordinary claims require extraordinary evidence
 #
-# You may have noticed a pattern here: in the [regression tutorial](2-regression) tutorial we also talked about balancing the needs of the priors . This is no coincidence as both model inference and model comparison are highly linked mathematically. Indeed, to estimate Bayes factors we use exactly the same loss function as we typically use for inference: the evidence lower bound or ELBO. This is only an estimation of this measure, as calculating the exact Bayes factor is both mathematically impossible and computationally intractable even for moderately complex models.
+# You may have noticed a pattern here: in the [regression tutorial](2-regression) tutorial we also talked about balancing the needs of the priors in the context of training a model. This is no coincidence as both model inference and model comparison are highly linked mathematically. Indeed, to estimate Bayes factors we use exactly the same loss function as we typically use for inference: the evidence lower bound or ELBO. This is only an estimation of this measure, as calculating the exact Bayes factor is typically computationally intractable even for moderately complex models.
 #
 # One final note: in the presence of very large data, almost every more complex model will be significant. You may have already seen this when doing differential expression in single-cell data, as a large number of genes are significant even though the differences between populations may be minor. This is not a problem of design per se (although some may disagree :citel:{squair_confronting_2021}). Rather, we also need to consider biological significance in our models, such as requiring at least a twofold difference.
 
@@ -373,11 +373,11 @@ plot.suptitle("Linear genes")
 plot = models["spline"]["overexpression_causal"].plot_features(
     feature_ids=unclear.index[:5], show = True
 )
-plot.suptitle("Unclear genes")
+plot.suptitle("Unclear genes, spline model")
 plot = models["linear"]["overexpression_causal"].plot_features(
     feature_ids=unclear.index[:5], show = True
 )
-plot.suptitle("Unclear genes")
+plot.suptitle("Unclear genes, linear model")
 
 # %%
 

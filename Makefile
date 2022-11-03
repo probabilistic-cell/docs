@@ -1,8 +1,10 @@
 all: compile clean build
 
-build:
+build_notebooks:
 	rsync -rav --update --delete --exclude '.ipynb_checkpoints' content/* _book/
 	python scripts/build.py
+
+build: build_notebooks
 	jb build --path-output ./ _book
 
 clean:

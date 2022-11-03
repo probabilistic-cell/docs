@@ -109,4 +109,10 @@ nav.bd-links p.caption {
   cursor: pointer;
 }
 
+/* table overflow x */
+table {
+  display: block;
+  overflow-x: auto;
+}
+
 /*# sourceMappingURL=custom.css.map */

@@ -18,13 +18,15 @@
 # # Regression
 
 # %%
-# %load_ext autoreload
-# %autoreload 2
+from IPython import get_ipython
+if get_ipython():
+    get_ipython().run_line_magic("load_ext", "autoreload")
+    get_ipython().run_line_magic("autoreload", "2")
 import latenta as la
 import numpy as np
 
 # %% [markdown]
-# We'll use the same dataset as [before](./1-variables)...
+# We'll use the same dataset as [before](./1-variables)
 
 # %%
 import scanpy as sc
@@ -98,7 +100,7 @@ dispersion = la.Latent(
 dispersion.p
 
 # %% [markdown]
-# Note the LogNormal prior here: this distribution has a _support_ only positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponention transform:
+# Note the LogNormal prior here: this distribution has a _support_ only in positive numbers, and latenta will automatically try to match this support in the variational distribution $q$, in this case by adding an exponention transform:
 
 # %%
 dispersion.q
@@ -135,8 +137,8 @@ transcriptome.plot()
 #
 # So we don't just want a model, we want a model that can explain our observation well, while being both generalizeable and interpretable. And to accomplish this, we have to limit the flexibility that our model can have. You have already done this by specifying two types of priors:
 #
-# - "Hard" priors are those that completely constrain the model. For example, by specifying a linear function to model our average expression for example, we don't allow any non-linearities. There is no way for the model to move beyond these constraints.
-# - "Soft" priors are those that push the latent variables towards more likely values. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0 (as it's unlikely for most genes), unless the data provides strong evidence for a gene to have an extrem slope. We can do so by specifying a distribution of likely slope values using the prior distribution $p$.
+# - "Hard" priors are those that completely constrain the model. For example, by specifying a linear function to model our average expression for example, we don't allow any non-linearities. There is no way for the model to move beyond these constraints. Because a hard prior is part of the model $M$, the prior probability is often denoted by $P(M)$.
+# - "Soft" priors are those that affect latent variables. For example, as we discussed previously, we want to discourage extreme slopes that are far away from 0, given that this is unlikely to happen, and if it happens, we need strong evidence from the data. We can do so by specifying a distribution of likely slope values using the prior distribution $p$. Given that these priors are often part of the  priors are often denoted by $\Theta$.
 #
 # The free parameters will then be estimated so that they balance the wishes of the soft priors to the wishes of the observations:
 # * the parameters of the variational distributions $q$ will try to explain the observations while also remaining faithful to the prior distributions $p$.
@@ -156,7 +158,7 @@ transcriptome.plot()
 
 # %%
 inference = la.infer.svi.SVI(
-    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+    transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05), device = la.config.device
 )
 trainer = la.infer.trainer.Trainer(inference)
 
@@ -164,8 +166,9 @@ trainer = la.infer.trainer.Trainer(inference)
 # We can now train for a couple of iterations or until the loss function has reached convergence:
 
 # %%
-trace = trainer.train(10000)
-trace.plot()
+with transcriptome.switch(la.config.device):
+    trace = trainer.train(1000)
+    trace.plot()
 
 # %% [markdown]
 # We can see that the values have changed.
@@ -176,23 +179,21 @@ trace.plot()
 transcriptome.p.mu.a.q.loc.value_pd.head()
 
 # %% [markdown]
-# Note that you need to `.run()` before being able to access the values.
-
-# %% [markdown]
 # Our inference algorithm did not fullfill all 10000 iterations, but has permaturely stopped as it has detected _convergence_. Do note that this converge is not always perfect, and we will see later that there are some circumstances where further training may be advisable.
 
 # %% [markdown]
 # ## Interpreting a regression model
 #
-# For interpretation of the model, we can then use 3 main types of posteriors:
-# * Observed posterios
-# * Causal posteriors
+# For interpretation of the model, we can then use 4 main types of posteriors:
+# * Predictive posterios
+# * Conditional posteriors
 # * Perturbed posteriors
+# * Empirical posteriors
 
 # %% [markdown]
 # ### 1. Predictive posteriors
 #
-# Because we are working with a probabilistic model, every time we run through the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model. We can do this using {class}`~latenta.posterior.Observed` followed by the function `.sample()` which takes n samples.
+# Because we are working with a probabilistic model, every time we sample from the (latent) variables in the model our results will change. For example, each time we sample from variational distribution of the slope $q$ the output will be different, which will affect any downstream variables even if they are themselves deterministic. To interpret the results, we thus have to sample multiple times from the model. We can do this using {class}`~latenta.posterior.Predictive` followed by the function `.sample()` which takes n samples.
 
 # %%
 transcriptome_observed = la.posterior.Predictive(
@@ -233,33 +234,33 @@ scores["symbol"] = adata.var["symbol"][scores.index]
 scores
 
 # %% [markdown]
-# ### 2. Causal posteriors
+# ### 2. Conditional posteriors
 #
-# To know how one variable influences another, we use a causal posterior. In essence, this posterior will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of causal posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorCausal` posterior, because we are studying how a **scalar** variable (one value for each cell, i.e. the overexpression of *Myod1*) impacts a **vector** (gene expression for each cell):
+# To know how one variable influences another, we use a conditional posterior. This posterior object will set a variable of your choice to particular values, and then see how an output variables (and any intermediates) are affected. Latenta contains many different types of conditional posteriors, which mainly differ in their visualization capabilities. Here we will use a {class}`~latenta.posterior.scalar.ScalarVectorConditional` posterior, because we are studying how a **scalar** variable (one value for each cell, i.e. the overexpression of *Myod1*) impacts a **vector** (gene expression for each cell):
 
 # %%
-overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+overexpression_conditional = la.posterior.scalar.ScalarVectorConditional(
     overexpression, transcriptome
 )
-overexpression_causal.sample(10)
+overexpression_conditional.sample(10)
 
 # %% [markdown]
 # This posterior also contains samples, but now for some _pseudocells_ with each a distinct value for the `overexpression` variable:
 
 # %%
-overexpression_causal.samples[overexpression].mean("sample")
+overexpression_conditional.samples[overexpression, "mean"]
 
 # %% [markdown]
-# Depending on the type of causal posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorCausal` can for example plot each individual _feature_, in this case genes, across all cells:
+# Depending on the type of conditional posterior, you can plot the outcome. The {class}`~latenta.posterior.scalar.ScalarVectorConditional` can for example plot each individual _feature_, in this case genes, across all cells:
 
 # %%
-overexpression_causal.plot_features()
+overexpression_conditional.plot_features()
 
 # %% [markdown]
-# Note that if you don't specify any features to plot to `plot_features()` it will by default display the 10 features with the highest likelihood ratio.
+# Note that if you don't specify any features to plot to `plot_features()` it will by default display the 10 features with the highest fold change.
 
 # %% [markdown]
-# This plot shows both the _median_ value of each gene across different doses of the transcription factor, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of soft and hard priors, where the actual average value of the gene expression will lie.
+# This plot shows both the _mean_ value of each gene across different doses of the transcription factor, together with several _credible intervals_ as shades areas. The credible interval shows, within the constraints of the priors and model, where the actual average value of the gene expression will lie.
 #
 # ::::{margin}
 # :::{seealso}
@@ -273,12 +274,12 @@ overexpression_causal.plot_features()
 # $$P(\mu|\text{overexpression} = ...)$$
 
 # %% [markdown]
-# the probability distribution of the mean expression given the observed overexpression.
+# , i.e. the probability distribution of the mean expression given a value of overexpression.
 #
-# A causal posterior can also provide a score dataframe that will rank each _feature_ (gene). In this case, this also includes columns for the maximal fold change (`fc`), absolute change (`ab`) and peak input value (`peak`).
+# A conditional posterior can also provide a score dataframe that will rank each _feature_ (gene). In this case, this also includes columns for the maximal fold change (`fc`), absolute change (`ab`) and peak input value (`peak`).
 
 # %%
-overexpression_causal.scores
+overexpression_conditional.scores
 
 # %% [markdown]
 # ### 3. Perturbed posteriors
@@ -286,16 +287,16 @@ overexpression_causal.scores
 # %% [markdown]
 # To understand whether a variable has an important impact on the downstream variable, we use perturbed posteriors. These posteriors work in a very similar way as the observed posterior, but rather than using the actual value of the variable, it uses a perturbed version. The type of perturbation varies depending on which question we want to address, and can include random shuffling, random sampling from the prior, or conditionalizing on a fixed value.
 #
-# While you can independently construct a perturbed posterior, you will typically create it indirectly through a causal posterior. For example, we can do random sampling from the prior using:
+# While you can independently construct a perturbed posterior, you will typically create it indirectly through a conditional posterior. For example, we can do random sampling from the prior using:
 
 # %%
-overexpression_causal.sample_random()
+overexpression_conditional.sample_random()
 
 # %% [markdown]
 # To check the impact of a variable on our observation, we calculate a (log-)likelihood ratio: how likely is the observed expression compared to a random result (where we randomly perturbed the upstream variable)?
 
 # %%
-overexpression_causal.likelihood_ratio
+overexpression_conditional.likelihood_ratio
 
 # %% [markdown]
 # Mathematically, these values represents the ratio between posteriors probabilities:
@@ -306,7 +307,7 @@ overexpression_causal.likelihood_ratio
 # These likelihood ratios were also automatically added to our scores table:
 
 # %%
-overexpression_causal.scores.head()
+overexpression_conditional.scores.head()
 
 # %% [markdown]
 # :::{note}
@@ -314,22 +315,22 @@ overexpression_causal.scores.head()
 # :::
 
 # %% [markdown]
-# ### Empirical posteriors
+# ### 4. Empirical posteriors
 
 # %% [markdown]
-# Instead of moving down from our model, starting from latent variables towards observation, we can also to some extent move up the tree starting from the observations. For example, for transcriptomics data, we can move up from the observations through the NegativeBinomial2 distribution, towards the expression. To calculate  
+# For visualizations purposes, we may be interested in extracting "normalized" expression values. In such case, we would need to move up (instead of down) the graph starting from the transcriptome observation, towards the gene expression. This can be done using an `Empirical` posterior, which will move up the graph as long as a bijective (i.e. bidirectional) operation is implemented for (computed) variables and distributions. For gene expression we can do:
 
 # %%
-overexpression_causal.observed.sample()
+overexpression_conditional.observed.sample()
 
 # %%
-overexpression_causal.sample_empirical()
+overexpression_conditional.sample_empirical()
 
 # %% [markdown]
-# An empirical posterior can be used to visualize the "empirical" values for a causal posterior:
+# An empirical posterior can be used to visualize the "empirical" values for a conditional posterior:
 
 # %%
-overexpression_causal.plot_features()
+overexpression_conditional.plot_features()
 
 # %% [markdown]
 # ## Using _lacell_ to make model creation easier
@@ -343,12 +344,10 @@ transcriptome = lac.transcriptome.TranscriptomeObservation.from_adata(adata)
 transcriptome.plot()
 
 # %% [markdown]
-# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene within a cell to the cell's total counts. However, the main ideas remain the same. Let's go through the graph from bottom to top:
+# Note that this model is a bit more complex that the model we created before. In particular, it contains a library size normalization that will normalize the counts of each gene within a cell to the cell's total counts. However, the main ideas remain the same. You can find an explanation of what each variable means by hovering over the variable, or by printing it:
 #
-# - We model the transcriptome as a negative binomial distributions, with a dispersion $\theta$ and mean $\mu$.
-# - The mean $\mu$ is modelled as a linear combination of the relative expression of a gene in a cell, $\rho$, and its library size, $\textit{lib}$. The library size is set to the empirical library size (i.e. simply the sum of the counts in each cell).
-# - The relative expression in a cell $\rho$ is itself a linear combination of the average expression (or baseline) of each gene in the cell, $\nu$, modelled as a latent variable, and the log-fold change $\delta$. Note: exp(log$\rho$ + $\delta$) = $\rho$\*exp($\delta$)
-# - When modelling cellular processes, we typically adapt the log-fold change $\delta$, that is why it is for now empty. However, you can also adapt any other variables, such as the library size or dispersion, if this makes sense from a biological or technical perspective.
+# %%
+transcriptome.p.mu.expression
 
 # %% [markdown]
 # :::{seealso}
@@ -419,7 +418,7 @@ with transcriptome.switch(la.config.device):
         transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
     )
     trainer = la.infer.trainer.Trainer(inference)
-    trace = trainer.train(10000)
+    trace = trainer.train(1000)
     trace.plot()
 
 # %% [markdown]
@@ -481,15 +480,15 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %%
-overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+overexpression_conditional = la.posterior.scalar.ScalarVectorConditional(
     overexpression, transcriptome
 )
-overexpression_causal.observed.sample()
-overexpression_causal.sample(30)
-overexpression_causal.sample_empirical()
+overexpression_conditional.observed.sample()
+overexpression_conditional.sample(30)
+overexpression_conditional.sample_empirical()
 
 # %%
-overexpression_causal.plot_features()
+overexpression_conditional.plot_features()
 
 # %% [markdown]
 # ### Discrete
@@ -597,39 +596,42 @@ with transcriptome.switch(la.config.device):
 # We can now observed the posterior for the overexpression:
 
 # %%
-overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
-    overexpression, transcriptome
-)
-overexpression_causal.observed.sample()
-overexpression_causal.sample(30)
-overexpression_causal.sample_empirical()
-overexpression_causal.sample_random()
+with transcriptome.switch(la.config.device):
+    overexpression_conditional = la.posterior.scalar.ScalarVectorConditional(
+        overexpression, transcriptome
+    )
+    overexpression_conditional.observed.sample()
+    overexpression_conditional.sample(30)
+    overexpression_conditional.sample_empirical()
+    overexpression_conditional.sample_random()
 
 # %%
-overexpression_causal.plot_features()
+overexpression_conditional.plot_features()
 
 # %% [markdown]
 # But also for the different cycle phases:
 
 # %%
-G2M_causal = la.posterior.scalar.ScalarVectorCausal(G2M, transcriptome)
-G2M_causal.observed.sample()
-G2M_causal.sample(30)
-G2M_causal.sample_empirical()
-G2M_causal.sample_random()
+with transcriptome.switch(la.config.device):
+    G2M_conditional = la.posterior.scalar.ScalarVectorConditional(G2M, transcriptome)
+    G2M_conditional.observed.sample()
+    G2M_conditional.sample(30)
+    G2M_conditional.sample_empirical()
+    G2M_conditional.sample_random()
 
 # %%
-G2M_causal.plot_features()
+G2M_conditional.plot_features()
 
 # %%
-S_causal = la.posterior.scalar.ScalarVectorCausal(S, transcriptome)
-S_causal.observed.sample()
-S_causal.sample(30)
-S_causal.sample_empirical()
-S_causal.sample_random()
+with transcriptome.switch(la.config.device):
+    S_conditional = la.posterior.scalar.ScalarVectorConditional(S, transcriptome)
+    S_conditional.observed.sample()
+    S_conditional.sample(30)
+    S_conditional.sample_empirical()
+    S_conditional.sample_random()
 
 # %%
-S_causal.plot_features()
+S_conditional.plot_features()
 
 # %% [markdown]
 # ## Main points
@@ -642,7 +644,7 @@ S_causal.plot_features()
 # - To find optimal values, we typically perform gradient descent
 # - To interpret a model, we sample from the posterior and track intermediate values and/or probabilities:
 #    - An observed posterior is used to check out the values of one variable, such as the observations or latent variables
-#    - A causal posterior is used to check out the effect of one variable on another, such as how a latent variable affects the mean of an observation's distribution
+#    - A conditional posterior is used to check out the effect of one variable on another, such as how a latent variable affects the mean of an observation's distribution
 #    - A perturbed posterior is used to quantify the effect that one variable has on the likelihood of another, such as how a latent variable affects an observation
 # - _lacell_ contains many modules that make the creation of models for single-cell omics easier
 # - With latenta we can also do non-linear regression, use multiple variables as input, and/or discrete variables as input

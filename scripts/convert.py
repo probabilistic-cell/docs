@@ -1,4 +1,5 @@
 # %%
+# When running from IPython
 try:
     from IPython import get_ipython
 
@@ -9,7 +10,9 @@ try:
         print("running from IPython")
         import os
 
-        os.chdir("../")
+        import laflow
+
+        os.chdir(laflow.get_git_root())
 except:
     # We do not even have IPython installed
     pass
@@ -30,3 +33,5 @@ for path in Path("content").rglob("./*.ipynb"):
             path.touch()
             pypath.touch()
             os.system(f"jupytext --sync {path}")
+
+# %%

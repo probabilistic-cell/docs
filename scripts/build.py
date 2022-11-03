@@ -1,4 +1,5 @@
 # %%
+# When running from IPython
 try:
     from IPython import get_ipython
 
@@ -11,7 +12,7 @@ try:
 
         import laflow
 
-        os.chdir(laflow.get_project_root())
+        os.chdir(laflow.get_git_root())
 except:
     # We do not even have IPython installed
     pass
@@ -33,6 +34,7 @@ else:
         cache = json.load(f)
 
 # %%
+# Looks in the _book folder
 notebooks = []
 for path in Path("_book").rglob("./*.ipynb"):
     if ".ipynb_checkpoints" in str(path):
@@ -41,8 +43,8 @@ for path in Path("_book").rglob("./*.ipynb"):
 
 # %%
 skip = False
-if skip:
-    for notebook in notebooks:
+for notebook in notebooks:
+    if skip:
         cache[str(notebook)] = os.path.getmtime(notebook)
 
 # %%

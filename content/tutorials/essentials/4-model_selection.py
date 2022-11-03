@@ -37,17 +37,17 @@ adata.raw = adata
 
 
 # %% [markdown]
-# When we say that a model is statistically significant, what we actually mean is that one model is much more likely to be true than another _simpler_ model. In classical statistical testing these two models are called the alternative hypothesis and the null hypothesis.
+# When we say that a model is statistically significant, what we actually mean is that one model is much more likely to be true than another _simpler_ model. In classical statistical testing these two models are called the alternative and the null hypothesis.
 #
-# While statistical testing is powerful for some models, it often falls short when we try to do anything more complex. If we for example include any cellular latent variables, it becomes impossible to calculate any reasonable p-value. Furthermore, if we want to compare many different models.
+# While statistical testing is powerful for some models, it often falls short when we try to do anything more complex. If we for example include any cellular latent variables, it becomes impossible to calculate any reasonable p-value.
 #
-# One main reason to thus use probabilistic modelling is that it allows us to generalize statistical testing to a technique called model selection. In this way, we can even In a probabilistic setting, the generalization of statistical testing is called model selection.
+# One main reason to thus use probabilistic modelling is that it allows us to generalize statistical testing to a technique called model selection. 
 
 # %% [markdown]
 # ## Creating the models
 
 # %% [markdown]
-# We will illustrate model selection with perhaps the simplest model possible: differential expression. We are given an outcome, the overexpression of Myod1, and now want to know which genes are differential. To do this, we will create 3 models: a linear response, a non-linear spline response, and a constant response.
+# We will illustrate model selection with perhaps the simplest model possible: differential expression. We are given an outcome, the overexpression of *Myod1*, and now want to know which genes are differential. To do this, we will create 3 models: a linear response, a non-linear spline response, and a constant response.
 
 # %% [markdown]
 # At this stage, the following model-building sections should not hold any mysteries for you and are undocumented. Feel free to try out any extra models, e.g. a {class}`latenta.links.scalar.Switch`, or play with some of the parameters of the spline function to see how this affects the outcome.
@@ -101,6 +101,9 @@ overexpression_causal.sample_empirical()
 
 # %%
 overexpression_causal.plot_features()
+
+# %% [markdown]
+# Let's now add our results for a linear model in `models["linear"]`
 
 # %%
 models["linear"] = {
@@ -156,6 +159,9 @@ overexpression_causal.sample_empirical()
 # %%
 overexpression_causal.plot_features()
 
+# %% [markdown]
+# Let's now add our results for a linear model in `models["spline"]`
+
 # %%
 models["spline"] = {
     "root": transcriptome,
@@ -165,6 +171,9 @@ models["spline"] = {
 
 # %% [markdown] tags=[]
 # ### Model 3: Constant
+
+# %% [markdown]
+# We want to compare our models to a null hypothesis. Since our model we want to find the genes that are differential with *Myod1* overexpression (and how, linear, spline) our null hypothesis is that there is no change with overexpression, i.e the fold change is null.
 
 # %%
 overexpression = overexpression.reset().clone()
@@ -210,6 +219,9 @@ overexpression_causal.sample_empirical()
 # %%
 overexpression_causal.plot_features()
 
+# %% [markdown]
+# We can now add our null hypothesis in `models["constant"]`
+
 # %%
 models["constant"] = {
     "root": transcriptome,
@@ -224,13 +236,13 @@ models["constant"] = {
 # ### The Bayes factor
 
 # %% [markdown]
-# How do we compare models? Because we are creating probabilistic models, it makes sense to also compare models using with probabilities. But how to define such a measure?
+# How do we compare models? Because we are creating probabilistic models, it makes sense to also compare models using probabilities. But how to define such a measure?
 #
 # Let's again remind ourselves what we're trying to do. All we have is two things:
 # - The data, which we further denote as $\mathcal{D}$. This contains both the values that we observe, but also the values that we inferred for the latent variables
 # - One or more models, which we further denote as $\mathcal{M_i}$. This contains both the priors and structure ("hard" priors) of the model.
 #
-# To calculate the quality of a model $\mathcal{M_i}$, we have to calculate a probability of how well it explains the data $\mathcal{D}$ given the  model, which we call the evidence:
+# To calculate the quality of a model $\mathcal{M_i}$, we have to calculate a probability of how well it explains the data $\mathcal{D}$ given the model, which we call the model evidence (or marginal likelihood):
 #
 # $$
 # \mathit{evidence} = P(\mathcal{D} | \mathcal{M_i})
@@ -263,9 +275,9 @@ models["constant"] = {
 #
 # > Extraordinary claims require extraordinary evidence
 #
-# You may have noticed a pattern here: in the [regression tutorial](2-regression) tutorial we also talked about balancing the needs of the priors in the context of training a model. This is no coincidence as both model inference and model comparison are highly linked mathematically. Indeed, to estimate Bayes factors we use exactly the same loss function as we typically use for inference: the evidence lower bound or ELBO. This is only an estimation of this measure, as calculating the exact Bayes factor is typically computationally intractable even for moderately complex models.
+# You may have noticed a pattern here: in the [regression tutorial](2-regression) we also talked about balancing the needs of the priors. This is no coincidence as both model inference and model comparison are highly linked mathematically. Indeed, to estimate Bayes factors we use exactly the same loss function as we typically use for inference: the evidence lower bound or ELBO. This is only an estimation of this measure, as calculating the exact Bayes factor is both mathematically impossible and computationally intractable even for moderately complex models.
 #
-# One final note: in the presence of very large data, almost every more complex model will be significant. You may have already seen this when doing differential expression in single-cell data, as a large number of genes are significant even though the differences between populations may be minor. This is not a problem of design per se (although some may disagree :citel:{squair_confronting_2021}). Rather, we also need to consider biological significance in our models, such as requiring at least a twofold difference.
+# One final note: in the presence of very large data, almost every more complex model will be significant. You may have already seen this when doing differential expression in single-cell data, as a large number of genes are significant even though the differences between populations may be minor. This is not a problem of design per se (although some may disagree :citel:{squair_confronting_2021}). Rather, we also need to consider biological significance in our models, such as requiring at least a two fold difference.
 
 # %%
 import pandas as pd
@@ -294,31 +306,31 @@ elbo_genes
 # ### Comparing constant versus all other models
 
 # %% [markdown]
-# First, we can find generally differentially expressed genes by simply comparing the constant model with all other models:
+# First, we can find generally differentially expressed genes by simply comparing the constant model (null hypothesis) with all other models:
 
 # %%
-bfs = elbo_genes.drop(columns="constant") - elbo_genes["constant"].values[:, None]
-scores = bfs.max(1).rename("bf").to_frame()
+bfs_vsHo = elbo_genes.drop(columns="constant") - elbo_genes["constant"].values[:, None]
+scores_vsHo = bfs_vsCst.max(1).rename("bf").to_frame()
 
 # %%
-bfs.plot(kind="kde")
+bfs_vsHo.plot(kind="kde")
 
 # %%
-scores["symbol"] = adata.var["symbol"][scores.index]
-scores = scores.sort_values("bf", ascending=False)
-scores
+scores_vsHo["symbol"] = adata.var["symbol"][scores_vsHo.index]
+scores_vsHo = scores_vsHo.sort_values("bf", ascending=False)
+scores_vsHo
 
 # %%
 plot = models["spline"]["overexpression_causal"].plot_features(
-    feature_ids=scores.index[:5]
+    feature_ids=scores_vsHo.index[:5], show = True
 )
 plot.suptitle("Differential genes")
 plot = models["spline"]["overexpression_causal"].plot_features(
-    feature_ids=scores.query("bf > log(10)").index[-5:]
+    feature_ids=scores.query("bf > log(10)").index[-5:], show = True
 )
 plot.suptitle("Barely differential genes")
 plot = models["spline"]["overexpression_causal"].plot_features(
-    feature_ids=scores.index[-5:]
+    feature_ids=scores.index[-5:], show = True
 )
 plot.suptitle("Non-differential genes")
 
@@ -377,8 +389,4 @@ plot.suptitle("Unclear genes, spline model")
 plot = models["linear"]["overexpression_causal"].plot_features(
     feature_ids=unclear.index[:5], show = True
 )
-plot.suptitle("Unclear genes, linear model")
-
-# %%
-
-# %%
+plot.suptitle("Unclear genes")

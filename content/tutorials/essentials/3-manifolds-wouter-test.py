@@ -171,10 +171,10 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %% [markdown]
-# We can extract the inferred values using a `~latenta.posterior.scalar.ScalarObserved` posterior:
+# We can extract the inferred values using a `~latenta.posterior.scalar.ScalarPredictive` posterior:
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
@@ -268,7 +268,7 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
@@ -289,7 +289,7 @@ sc.pl.umap(
 # Let's investigate which genes are driven by differentiation:
 
 # %%
-differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
+differentiation_causal = la.posterior.scalar.ScalarVectorConditional(
     differentiation,
     transcriptome,
     observed=differentiation_observed,
@@ -365,7 +365,7 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
@@ -375,7 +375,7 @@ adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 sc.pl.umap(adata_oi, color=["differentiation", "batch"])
 
 # %%
-differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
+differentiation_causal = la.posterior.scalar.ScalarVectorConditional(
     differentiation,
     transcriptome,
     observed=differentiation_observed,

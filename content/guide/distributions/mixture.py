@@ -92,7 +92,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(3000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
+posterior = la.posterior.scalar.ScalarPredictiveve(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -130,7 +130,7 @@ np.sqrt(((evaluated_modelled - evaluated_groundtruth) ** 2).sum()) < 0.1
 # Assess how x changes the observation
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
@@ -170,7 +170,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
+posterior = la.posterior.scalar.ScalarPredictiveve(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -184,7 +184,7 @@ modelled_x = posterior.samples[x].stack(cells=("sample", "cell")).to_pandas()
 sns.kdeplot(x=modelled_x, y=modelled_value)
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
@@ -223,7 +223,7 @@ trace = trainer.train(10000)
 {dist.loc.prior() for dist in distributions.values()}
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
+posterior = la.posterior.scalar.ScalarPredictiveve(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -264,7 +264,7 @@ assert (evaluated_modelled - evaluated_groundtruth).sum() > -0.5
 # Assess how x changes the observation
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.sample(100)
 causal.observed.sample()
 
@@ -304,7 +304,7 @@ trainer = la.infer.trainer.Trainer(inference)
 trace = trainer.train(10000)
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(observation, retain_samples = {observation.p, x})
+posterior = la.posterior.scalar.ScalarPredictiveve(observation, retain_samples = {observation.p, x})
 posterior.sample(10)
 
 # %%
@@ -348,7 +348,7 @@ assert (evaluated_modelled - evaluated_groundtruth).sum() > -1.
 # Assess how x changes the observation
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.sample(100)
 causal.observed.sample()
 

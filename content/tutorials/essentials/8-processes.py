@@ -81,10 +81,10 @@ dataset = laf.Dataset("dataset")
 dataset
 
 # %% [markdown]
-# A dataset contains one or more modalities. In single-cell data, we often use a {class}`laflow.dataset.MatrixModality`, or if we're working with transcriptome data, a {class}`lacell.transcriptome.TranscriptomeModality`:
+# A dataset contains one or more modalities. In single-cell data, we often use a {class}`laflow.dataset.MatrixModality`, or if we're working with transcriptome data, a {class}`lacell.transcriptome.Modality`:
 
 # %%
-modality = lac.transcriptome.TranscriptomeModality("transcriptome")
+modality = lac.transcriptome.Modality("transcriptome")
 
 # %%
 modality
@@ -123,7 +123,7 @@ model.dataset = dataset
 model.add_process(lac.transcriptome.Transcriptome())
 
 # %%
-model.add_process(lac.cell.batch.Batch())
+model.add_process(lac.cell.batch.Given())
 
 # %%
 model.add_process(lac.cell.gradient.GradientLatent(label="differentiation"))
@@ -176,7 +176,7 @@ model = laf.Model("model_manual_adjustments", dataset=dataset, reset=True)
 
 model.add_process(lac.transcriptome.Transcriptome())
 
-model.add_process(lac.cell.batch.Batch())
+model.add_process(lac.cell.batch.Given())
 model.add_process(lac.cell.gradient.GradientLatent(label="differentiation"))
 
 # %%
@@ -298,7 +298,7 @@ model = laf.Model("model_custom_process", dataset=dataset, reset=True)
 # %%
 model.add_process(lac.transcriptome.Transcriptome())
 
-model.add_process(lac.cell.batch.Batch())
+model.add_process(lac.cell.batch.Given())
 model.add_process(DifferentiationLatent())
 
 # %%
@@ -354,7 +354,7 @@ model = laf.Model("model_custom_effect", dataset=dataset, reset=True)
 # %%
 model.add_process(lac.transcriptome.Transcriptome())
 
-model.add_process(lac.cell.batch.Batch())
+model.add_process(lac.cell.batch.Given())
 model.add_process(DifferentiationLatent())
 
 # %%

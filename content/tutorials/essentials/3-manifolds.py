@@ -15,7 +15,7 @@
 # ---
 
 # %% [markdown]
-# # Manifolds
+# # Manifolds: differentiation
 
 # %%
 # %load_ext autoreload
@@ -65,7 +65,7 @@ adata.obs["log_overexpression"] = np.log1p(adata.obs["overexpression"])
 # In this case, apart from learning a latent space about genes, we _at the same time_ also try to learn a latent space on cells, also known as the "cellular manifold". There are many different ways to represent this manifold, and how to do this depends on what we know about the cells and what we try to accomplish:
 #
 # - **embedding**: Each cell is placed in an n-dimensional space, with only a few restrictions, such as the cell positions are all centered around 0. This space is very flexible, but is harder to interpret because each dimension is not necessarily linked to a particular biological function. Interpretation is therefore typically done subjectively, i.e. by converting this n-dimensional space to a 2D representation.
-# - **scalar** (differentiation, cell cycle, ...): Each cell is placed in a one-dimensional space, with a single scalar value associated to each cell (e.g. a pseudotime). Often simple to interpret, but can be difficult to infer given that a cell may be part of many different processes.
+# - **scalar** (differentiation, cell cycle, ...): Each cell is placed in a one-dimensional space, with a single scalar value associated to each cell (e.g. a pseudotime). Often simple to interpret, but can be difficult to infer and overly simplistic, given that a cell may be part of many different processes.
 # - **discrete** (cell type, batch, ...): Each cell is part of a single cluster. While simple to interpret, this does put a strong assumption on the underlying biology.
 
 # %% [markdown]
@@ -173,10 +173,10 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %% [markdown]
-# We can extract the inferred values using a {class}`~latenta.posterior.scalar.ScalarObserved` posterior:
+# We can extract the inferred values using a {class}`~latenta.posterior.scalar.ScalarPredictive` posterior:
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
@@ -186,7 +186,7 @@ differentiation_observed.plot()
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
+sc.pl.umap(adata_oi, color=["differentiation", "batch", "log_overexpression"])
 
 # %% [markdown]
 # This may look good at first sight, but not if we take a closer look. After all, about half of the differentiation is used up by cells coming from the control cells!
@@ -227,7 +227,7 @@ differentiation_p = la.distributions.Beta(
         definition=[transcriptome["cell"]],
     ),
     beta=la.Fixed(
-        pd.Series([1.0, 100.0], index=["Myod1", "mCherry"])[
+        pd.Series([1.0, 500.0], index=["Myod1", "mCherry"])[
             adata_oi.obs["gene_overexpressed"]
         ].values,
         definition=[transcriptome["cell"]],
@@ -270,7 +270,7 @@ with transcriptome.switch(la.config.device):
     trace.plot()
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
@@ -280,18 +280,13 @@ differentiation_observed.plot()
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color=["differentiation", "gene_overexpressed"])
-
-# %%
-sc.pl.umap(
-    adata_oi, color=adata.var.reset_index().set_index("symbol").loc[["Myog"]].gene
-)
+sc.pl.umap(adata_oi, color=["differentiation", "batch", "log_overexpression"])
 
 # %% [markdown]
 # Let's investigate which genes are driven by differentiation:
 
 # %%
-differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
+differentiation_causal = la.posterior.scalar.ScalarVectorConditional(
     differentiation,
     transcriptome,
     observed=differentiation_observed,
@@ -308,9 +303,9 @@ differentiation_causal.plot_features()
 # ## Differentiation: increasing scalability and robustness through amortization
 
 # %% [markdown]
-# Because the model has to infer both cell- and gene-specific latent variables at the same time, finding a robust solution for this model may be tricky. One reason for this is that during optimization, both groups of latent variables have to follow each other, and can easily get stuck together in suboptimal solutions. Indeed, if you would run the above model a couple of times, you might notice that sometimes the inferred differentiation values are completely different from the "expected" situation.
+# Because the model has to infer both cell- and gene-specific latent variables at the same time, finding a robust solution for this model may be tricky. One reason for this is that during optimization, both groups of latent variables have to follow each other, and can easily get stuck together in suboptimal solutions. Indeed, if you would run the above model a couple of times, you might notice that sometimes the inferred differentiation values are completely different from the expected situation.
 #
-# One main way to make inference of a latent space more robust is to not directly infer the latent variables for each cell individually, but instead train a _amortization function_ that provides this latent space for us. This function will typically use our observation, in this case the transcriptome's count matrix, and predict the components of the variational distribution, i.e. $\mu$ and $\sigma$. We, of course, still have to train some parameters, namely the parameters of this amortization function, but this makes training much easier as the information is shared between all cells.
+# One main way to make inference of a latent space more robust is to not directly infer the latent variables for each cell individually, but instead train a _amortization function_ $f_\zeta(x)$ that provides this latent space for us. This function will typically use our observation $x$, in this case the transcriptome's count matrix, and predict the components of the variational distribution, i.e. $\mu$ and $\sigma$. We, of course, still have to train some parameters, namely the parameters of this amortization function $\zeta$, but these parameters are shared across cells which makes training much easier.
 #
 # The main challenge with amortization is that we need to choose a function that is extremely flexible, as it needs to combine information coming from all genes into a probably highly non-linear model. We therefore typically choose a neural network. The number of layers of this function depends on the complexity of the data, or more specifically, how all features in the observation are related. A transcriptomics count matrix has fairly simple "co-expression" structure and therefore typically on requires two layers. The pixels and channels in imaging data on the other hand have a more intracate and hierarchical structure that is best captured by many layers (i.e. deep learning).
 
@@ -332,10 +327,14 @@ differentiation = la.Latent(
 )
 
 # %%
+amortization_input = la.Fixed(transcriptome.loader, definition=transcriptome)
+
+# %%
 encoder = la.amortization.Encoder(
-    la.Fixed(transcriptome.loader, definition=transcriptome),
+    amortization_input,
     differentiation,
     pretrain=False,
+    n_layers = 2,
     lr=1e-3,
 )
 
@@ -360,24 +359,24 @@ foldchange.plot()
 # %%
 with transcriptome.switch(la.config.device):
     inference = la.infer.svi.SVI(
-        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam(lr=0.05)
+        transcriptome, [la.infer.loss.ELBO()], la.infer.optim.Adam()
     )
     trainer = la.infer.trainer.Trainer(inference)
     trace = trainer.train(10000)
     trace.plot()
 
 # %%
-differentiation_observed = la.posterior.scalar.ScalarObserved(differentiation)
+differentiation_observed = la.posterior.scalar.ScalarPredictive(differentiation)
 differentiation_observed.sample(10)
 
 # %%
 adata_oi.obs["differentiation"] = differentiation_observed.mean.to_pandas()
 
 # %%
-sc.pl.umap(adata_oi, color=["differentiation", "batch"])
+sc.pl.umap(adata_oi, color=["differentiation", "batch", "log_overexpression"])
 
 # %%
-differentiation_causal = la.posterior.scalar.ScalarVectorCausal(
+differentiation_causal = la.posterior.scalar.ScalarVectorConditional(
     differentiation,
     transcriptome,
     observed=differentiation_observed,
@@ -393,5 +392,27 @@ differentiation_causal.plot_features()
 # %% [markdown]
 # Apart from a more robust training, amortization also has a couple of additional advantages:
 # - Scalability, because we no longer train the variational distribution's parameters for each individual cell, which can easily go into hundreds of thousands to millions. Instead, we only infer a few dozen to a few hundred parameters of the neural network.
-# - We get a function that can predict the latent space even on unseen cells "for free". Note however, that this does not necessarily mean that our function is generalizable, as this may depend on the assumptions, hyperparameters and structure of the neural network.
+# - We get a function that can predict the latent space even on unseen cells. Whether this function is generalizablestill has to be seen
 
+
+# %% [markdown]
+# ## Using `lacell`
+
+# %%
+
+# %%
+
+# %% [markdown]
+# ## Main points
+
+# %% [markdown]
+# - Because of the flexibility of probabilistic modeling, we can learn a latent variables both for cells and features (genes).
+# - The difficulty is twofold:
+#    - A model will try to explain as much of the data, including any processes that are active in the sample in parallel.
+#    - A model may get stuck in suboptimal local minima, making inference difficult
+#    
+# - We can fix this using
+#    - Providing prior knowledge
+#    - Amortization
+
+# %%

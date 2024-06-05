@@ -177,13 +177,13 @@ for model_id, model in models.items():
 
 # %%
 for model_id, model in models.items():
-    observed = la.posterior.vector.VectorObserved(
+    observed = la.posterior.vector.VectorPredictive(
         model.observation, retain_samples=model.components_upstream().values()
     )
     observed.sample(30, subsample_n=1)
     model["observed"] = observed
     
-    causal = la.posterior.scalar.ScalarVectorCausal(x, model.observation)
+    causal = la.posterior.scalar.ScalarVectorConditional(x, model.observation)
     causal.observed.sample()
     causal.sample(10)
     causal.sample_empirical()

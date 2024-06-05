@@ -334,7 +334,7 @@ trace.plot()
 
 
 # %%
-observed = la.posterior.vector.VectorObserved(observation, retain_samples = observation.components_upstream().values())
+observed = la.posterior.vector.VectorPredictive(observation, retain_samples = observation.components_upstream().values())
 observed.sample(10)
 
 
@@ -347,7 +347,7 @@ la.qa.cookbooks.check_parameters(
 
 # %%
 z.empirical = xr.DataArray(observation_value)
-causal_x2 = la.posterior.scalar.ScalarVectorCausal(x2, observation, observed=observed)
+causal_x2 = la.posterior.scalar.ScalarVectorConditional(x2, observation, observed=observed)
 causal_x2.sample(10)
 causal_x2.sample_random(10)
 causal_x2.sample_empirical()
@@ -357,14 +357,14 @@ causal_x2.plot_features();
 causal_x2.scores
 
 # %%
-causal_x1 = la.posterior.scalar.ScalarVectorCausal(x1, observation, observed=observed)
+causal_x1 = la.posterior.scalar.ScalarVectorConditional(x1, observation, observed=observed)
 causal_x1.sample(10)
 causal_x1.sample_random(10)
 causal_x1.sample_empirical()
 causal_x1.plot_features();
 
 # %%
-causal_x1_x2 = la.posterior.scalarscalar.ScalarScalarVectorCausal(causal_x1, causal_x2)
+causal_x1_x2 = la.posterior.scalarscalar.ScalarScalarVectorConditional(causal_x1, causal_x2)
 causal_x1_x2.sample(10)
 causal_x1_x2.plot_likelihood_ratio();
 

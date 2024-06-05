@@ -226,7 +226,7 @@ sns.heatmap(modelled_value.loc[cell_order], ax=ax1)
 
 
 # %%
-x_causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+x_causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 x_causal.sample(10)
 x_causal.observed.sample()
 x_causal.sample_empirical()

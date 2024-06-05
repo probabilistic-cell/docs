@@ -259,11 +259,11 @@ output.empirical = observation_value
 
 
 # %%
-x1_causal = la.posterior.scalar.ScalarVectorCausal(x1, dist, observed=posterior)
+x1_causal = la.posterior.scalar.ScalarVectorConditional(x1, dist, observed=posterior)
 x1_causal.sample(5)
-x2_causal = la.posterior.scalar.ScalarVectorCausal(x2, dist, observed=posterior)
+x2_causal = la.posterior.scalar.ScalarVectorConditional(x2, dist, observed=posterior)
 x2_causal.sample(5)
-x1_x2_causal = la.posterior.scalarscalar.ScalarScalarVectorCausal(x1_causal, x2_causal)
+x1_x2_causal = la.posterior.scalarscalar.ScalarScalarVectorConditional(x1_causal, x2_causal)
 x1_x2_causal.sample(5, n_batch=40)
 
 
@@ -527,12 +527,12 @@ for model_ix, (model_id, model) in enumerate(models.items()):
 
     #     if "observed" in model: del model["observed"]
     if "observed" not in model:
-        model["observed"] = la.posterior.vector.VectorObserved(model.observation)
+        model["observed"] = la.posterior.vector.VectorPredictive(model.observation)
         model["observed"].sample(5)
 
     #     if "x1_causal" in model: del model["x1_causal"]
     if "x1_causal" not in model:
-        x1_causal = la.posterior.scalar.ScalarVectorCausal(
+        x1_causal = la.posterior.scalar.ScalarVectorConditional(
             x1, model.observation, observed=model["observed"]
         )
         x1_causal.sample(20)
@@ -541,7 +541,7 @@ for model_ix, (model_id, model) in enumerate(models.items()):
 
     #     if "x2_causal" in model: del model["x2_causal"]
     if "x2_causal" not in model:
-        x2_causal = la.posterior.scalar.ScalarVectorCausal(
+        x2_causal = la.posterior.scalar.ScalarVectorConditional(
             x2, model.observation, observed=model["observed"]
         )
         x2_causal.sample(20)
@@ -550,7 +550,7 @@ for model_ix, (model_id, model) in enumerate(models.items()):
 
     #     if "x1_x2_causal" in model: del model["x1_x2_causal"]
     if "x1_x2_causal" not in model:
-        x1_x2_causal = la.posterior.scalarscalar.ScalarScalarVectorCausal(
+        x1_x2_causal = la.posterior.scalarscalar.ScalarScalarVectorConditional(
             model["x1_causal"], model["x2_causal"]
         )
         x1_x2_causal.sample(20, n_batch=20)

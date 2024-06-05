@@ -69,17 +69,17 @@ class LinearModel(laf.Flow):
         laf.Outputs(transcriptome_observed, overexpression_observed, overexpression_causal)
     )
     def interpret(self, output, model):
-        transcriptome_observed = la.posterior.vector.VectorObserved(model)
+        transcriptome_observed = la.posterior.vector.VectorPredictive(model)
         transcriptome_observed.sample(5)
         output.transcriptome_observed = transcriptome_observed
 
         overexpression = model.find("overexpression")
 
-        overexpression_observed = la.posterior.scalar.ScalarObserved(overexpression)
+        overexpression_observed = la.posterior.scalar.ScalarPredictive(overexpression)
         overexpression_observed.sample(5)
         output.overexpression_observed = overexpression_observed
 
-        overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+        overexpression_causal = la.posterior.scalar.ScalarVectorConditional(
             overexpression,
             model,
             interpretable=model.p.mu.expression,

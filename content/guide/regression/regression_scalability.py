@@ -247,7 +247,7 @@ parameter_values = la.qa.cookbooks.check_parameters(
 # %%
 z.empirical = xr.DataArray(observation_value)
 x.distribution = la.distributions.Uniform(0.0, 3.0)
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation, observed=observed)
 causal.sample(10)
 causal.sample_random(10)
 causal.plot_features(observation.p.loc)
@@ -294,7 +294,7 @@ sns.heatmap(modelled_value.loc[cell_order], ax=ax1)
 # %%
 z.empirical = xr.DataArray(observation_value)
 x.distribution = la.distributions.Uniform(0.0, 3.0)
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation, observed=observed)
 causal.sample(10)
 causal.sample_random(10)
 causal.plot_features()

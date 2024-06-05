@@ -25,7 +25,7 @@ import laflow as laf
 import numpy as np
 
 # %% [markdown]
-# lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we're working with transcriptomics data, we will often inherit from {class}`~lac.transcriptome.TranscriptomeDataset` and {class}`~laf.Model`. These already contain the core elements for storing and inferring transcriptomics models.
+# lacell not only contains classes that help with model creation, but also with workflow creation. For example, if we're working with transcriptomics data, we will often inherit from {class}`~lac.transcriptome.Dataset` and {class}`~laf.Model`. These already contain the core elements for storing and inferring transcriptomics models.
 
 # %% [markdown]
 # We'll will showcase this with the same dataset as from the [essentials tutorial](/tutorials/essentials/0-modelling.html).
@@ -58,7 +58,7 @@ project_root.mkdir()
 laf.set_project_root(project_root)  # sets the default project root
 
 # %%
-dataset = lac.transcriptome.TranscriptomeDataset("dataset")
+dataset = lac.transcriptome.Dataset("dataset")
 
 # %% [markdown]
 # It contains information from one modality, namely the transcriptome:
@@ -107,11 +107,11 @@ dataset
 #     def interpret_overexpression(self, output, root):
 #         overexpression = root.find("overexpression")
 
-#         overexpression_observed = la.posterior.scalar.ScalarObserved(overexpression)
+#         overexpression_observed = la.posterior.scalar.ScalarPredictive(overexpression)
 #         overexpression_observed.sample(5)
 #         output.overexpression_observed = overexpression_observed
 
-#         overexpression_causal = la.posterior.scalar.ScalarVectorCausal(
+#         overexpression_causal = la.posterior.scalar.ScalarVectorConditional(
 #             overexpression,
 #             model,
 #             interpretable=model.p.mu.expression,

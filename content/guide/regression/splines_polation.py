@@ -147,7 +147,7 @@ for model in models.values():
 # retrain = False
 for model in models.values():
     if ("observed" not in model) or retrain:
-        model["observed"] = la.posterior.Observed(model.observation)
+        model["observed"] = la.posterior.Predictive(model.observation)
         model["observed"].sample(100)
 
         if "causal" in model:
@@ -157,7 +157,7 @@ for model in models.values():
 for model in models.values():
     #     del model["causal"]
     if ("causal" not in model) or retrain:
-        causal = la.posterior.scalar.ScalarVectorCausal(x, model.observation)
+        causal = la.posterior.scalar.ScalarVectorConditional(x, model.observation)
         causal.observed.sample(1)
         causal.sample(100)
         causal.sample_bootstrap(10)
@@ -291,7 +291,7 @@ for model in models.values():
 # retrain = False
 for model in models.values():
     if ("observed" not in model) or retrain:
-        model["observed"] = la.posterior.Observed(model.observation)
+        model["observed"] = la.posterior.Predictive(model.observation)
         model["observed"].sample(100)
 
         if "causal" in model:
@@ -301,7 +301,7 @@ for model in models.values():
 for model in models.values():
     #     del model["causal"]
     if ("causal" not in model) or retrain:
-        causal = la.posterior.scalar.ScalarVectorCausal(
+        causal = la.posterior.scalar.ScalarVectorConditional(
             x, model.observation, observed=model["observed"]
         )
         causal.sample(100)

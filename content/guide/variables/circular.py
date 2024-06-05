@@ -212,7 +212,7 @@ trace = trainer.train(3000)
 
 
 # %%
-observed = la.posterior.Observed(observation)
+observed = la.posterior.Predictive(observation)
 observed.sample(10)
 
 
@@ -248,7 +248,7 @@ sns.scatterplot(x=beta.prior_pd(), y=observed.samples[z.b].mean("sample").to_pan
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.observed.sample(1)
 causal.sample(20)
 causal.sample_bootstrap(10)
@@ -299,7 +299,7 @@ assert (
 )
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.observed.sample(1)
 causal.sample(100)
 causal.sample_bootstrap(10)

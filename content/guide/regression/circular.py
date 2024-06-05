@@ -214,7 +214,7 @@ trace = trainer.train(3000)
 
 
 # %%
-observed = la.posterior.Observed(observation, retain_samples = {observation.p, x, z.b, z.a})
+observed = la.posterior.Predictiveveveve(observation, retain_samples = {observation.p, x, z.b, z.a})
 observed.sample(10)
 
 
@@ -239,7 +239,7 @@ sns.scatterplot(x=beta.prior_pd(), y=observed.samples[z.b].mean("sample").to_pan
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.observed.sample(1)
 causal.sample(20)
 causal.sample_bootstrap(10)
@@ -279,7 +279,7 @@ sns.scatterplot(x=angle.prior_pd(), y=posterior.samples[x].mean("sample").to_pan
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.observed.sample(1)
 causal.sample(100)
 causal.sample_bootstrap(10)

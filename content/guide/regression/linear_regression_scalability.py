@@ -138,7 +138,7 @@ parameter_values = la.qa.cookbooks.check_parameters(
 )
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation, observed=observed)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation, observed=observed)
 causal.sample(10, samples=la.posterior.FileSamples())
 causal.sample_random(10)
 causal.sample_empirical(samples=la.posterior.FileSamples())

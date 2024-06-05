@@ -123,7 +123,7 @@ sns.heatmap(modelled_value.iloc[np.argsort(x.prior().numpy())])
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(
+causal = la.posterior.scalar.ScalarVectorConditional(
     x, observation, observed=posterior, retain_samples={probs.concentration}
 )
 # causal.observed.sample(1)
@@ -182,7 +182,7 @@ sns.heatmap(modelled_value.iloc[np.argsort(x.prior().numpy())])
 
 
 # %%
-causal = la.posterior.scalar.ScalarVectorCausal(x, observation)
+causal = la.posterior.scalar.ScalarVectorConditional(x, observation)
 causal.observed.sample(1)
 causal.sample(100)
 causal.plot_features()

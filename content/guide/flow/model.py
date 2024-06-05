@@ -78,7 +78,7 @@ model.infer()
 model.trace.plot()
 
 # %%
-posterior = la.posterior.scalar.ScalarObserved(model.root.q)
+posterior = la.posterior.scalar.ScalarPredictiveve(model.root.q)
 posterior.sample(1)
 
 # %% [markdown]
